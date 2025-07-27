@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DFX - Animation & VFX</title>
+
+  <!-- Bebas Neue font -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Bebas Neue', sans-serif;
+      background: linear-gradient(to bottom, #2f1c52, #cd1f85);
+      color: white;
+      scroll-behavior: smooth;
+    }
+
+    header {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 120px;
+      height: auto;
+    }
+
+    header h1 {
+      font-size: 4rem;
+      animation: fadeInUp 2s ease-out;
+    }
+
+    header p {
+      font-size: 1.3rem;
+      color: #ddd;
+      margin-top: 1rem;
+      animation: fadeInUp 3s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    section {
+      padding: 80px 20px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .service {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      border-radius: 12px;
+      width: 250px;
+      text-align: center;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .service:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-8px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      background: #00000070;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <img src="logo.png" alt="DFX Logo" class="logo">
+
+  <header>
+    <div>
+      <h1>Welcome to DFX</h1>
+      <p>Where Animation Meets Imagination</p>
+    </div>
+  </header>
+
+  <section class="fade-in">
+    <h2>About DFX</h2>
+    <p>We are a creative studio specializing in animation, VFX, and visual storytelling. Our mission is to turn imagination into motion and bring visual magic to every frame.</p>
+  </section>
+
+  <section class="fade-in">
+    <h2>Our Services</h2>
+    <div class="services">
+      <div class="service">
+        <h3>3D Animation</h3>
+        <p>High-end 3D animation for film, games, and ads.</p>
+      </div>
+      <div class="service">
+        <h3>Visual Effects</h3>
+        <p>Seamless VFX integration for cinematic storytelling.</p>
+      </div>
+      <div class="service">
+        <h3>Motion Graphics</h3>
+        <p>Stylish motion graphics for brands and promos.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2025 DFX Studio. All rights reserved.
+  </footer>
+
+  <script>
+    // Scroll animation
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOptions = {
+      threshold: 0.2,
+      rootMargin: "0px 0px -20px 0px"
+    };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, appearOptions);
+
+    faders.forEach(fade => {
+      appearOnScroll.observe(fade);
+    });
+  </script>
+
+</body>
+</html>
