@@ -1,369 +1,237 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DFX - Animation & VFX</title>
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DFX | Cinematic Post Production Studio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background:#2f1c52;
-      color: white;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    .intro-screen {
-      position: fixed;
-      top: 0; left: 0;
+    html, body {
       width: 100%;
       height: 100%;
-      background: #2f1c52;
-      backdrop-filter: blur(250px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    .intro-screen video {
-      width: 1000px;
-      height: auto;
-      background: none;
-    }
-
-    .hidden { display: none; }
-
-    .main-content {
-      opacity: 0;
-      transition: opacity 1.5s ease;
-    }
-
-    .main-content.visible {
-      opacity: 1;
-    }
-
-    .logo {
-      position: fixed;
-      top: 30px;
-      left: 30px;
-      width: 120px;
-      height: auto;
-      opacity: 0;
-      transition: opacity 1s ease;
-      z-index: 10;
-    }
-
-    section {
-      padding: 80px 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .video-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .video-thumb {
-      position: relative;
-      padding-top: 56.25%;
-      cursor: pointer;
-    }
-
-    .video-thumb iframe {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      border: none;
-      border-radius: 10px;
-      pointer-events: none;
-    }
-
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0,0,0,0.75);
-      backdrop-filter: blur(12px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal iframe {
-      width: 75vw;
-      height: 75vh;
-      border: none;
-      border-radius: 10px;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      font-size: 30px;
+      font-family: Arial, sans-serif;
+      background: black;
       color: white;
-      cursor: pointer;
-      z-index: 1001;
+      overflow: hidden;
     }
-
-    footer {
-      text-align: center;
-      padding: 40px;
-      background: #00000070;
-      color: #ccc;
-    }
-
-    /* Navbar from First HTML */
-    .main-nav {
+    nav {
       position: fixed;
-      top: 20px;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
       z-index: 9999;
-    }
-
-    .main-nav ul {
       display: flex;
-      background: #4b2e1f;
-      border-radius: 50px;
-      overflow: hidden;
-      padding: 0;
-      margin: 0;
-      list-style: none;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      gap: 2rem;
+      padding: 1rem;
     }
-
-    .main-nav li {
-      flex: 1;
+    nav button {
+      background: none;
+      border: none;
+      color: gray;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.3s, color 0.3s;
     }
-
-    .main-nav a {
-      display: block;
-      padding: 10px 25px;
+    nav button:hover, nav button.active {
       color: white;
-      font-weight: bold;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      text-align: center;
+      transform: scale(1.35);
     }
-
-    .main-nav .active a,
-    .main-nav a:hover {
-      background: #e6dcd4;
-      color: black;
-      border-radius: 50px;
-    }
-
-    @media (max-width: 768px) {
-      .main-nav ul {
-        flex-direction: column;
-        align-items: center;
-        border-radius: 20px;
-      }
-
-      .main-nav a {
-        padding: 10px 20px;
-      }
-    }
-
     section {
-      border-bottom: 1px solid #333;
+      display: none;
+      height: 100vh;
+      padding: 2rem;
+      position: relative;
+    }
+    section.active {
+      display: block;
+    }
+    .section-title {
+      position: absolute;
+      right: 2rem;
+      top: 2rem;
+      font-size: 2rem;
+      text-align: right;
+      color: white;
+    }
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      overflow-y: scroll;
+      height: calc(100vh - 6rem);
+    }
+    .video-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 75vw;
+      height: 75vh;
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    .video-popup iframe {
+      width: 100%;
+      height: 100%;
+    }
+    .blur-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: none;
+    }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .image-grid img, .image-grid video {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .contact-icons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .contact-icons a, .contact-icons button {
+      color: white;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .email-form input, .email-form textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
-<body>
-
-  <div class="intro-screen" id="introScreen">
+<body>  <!-- Logo Intro (5s) -->  <div class="intro-screen" id="introScreen">
     <video autoplay muted playsinline id="introVideo">
       <source src="DFX LOGO Intro.webm" type="video/webm">
       Your browser does not support the video tag.
     </video>
-  </div>
-
-  <img src="logo.png" alt="DFX Logo" class="logo" id="staticLogo">
-
-  <!-- ✅ Navigation -->
-  <nav class="main-nav">
-    <ul>
-      <li class="nav-item active"><a href="#home">Home</a></li>
-      <li class="nav-item"><a href="#services">Services</a></li>
-      <li class="nav-item"><a href="#clients">Clients</a></li>
-      <li class="nav-item"><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
-
-  <div class="main-content" id="mainContent">
-    <!-- ✅ Sections -->
- 
-    <section class="fade-in">
-       <h2>Projects</h2>
-      <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/FVNMLvH35Ys" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/xFwnun3zMH4" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/wREenI4RRgc" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/QlsWKDEJWtk" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/Gh-8nJfbSVs" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/vuNy4gvvoZc" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/_WI1QZTFXX4" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/2r1lr7dLano" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/9ktiKThBwZA" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/N5D2_bK5RNM" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/nO72m__mcew" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/OvFSsmLqyCc" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/bL5uI2NAKDM" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/kAshuCi6UJw" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/5gf0Icoizs8" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/S-bsAyqS4KY" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/1Cdo8-VwHpY" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/dxb-3G4qYyo" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/STtoeP24j4g" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/Ehn5iVm0Ox0" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/d-gbIabi8ok" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/ziI3mLHN3YA" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/YzyzPK16Slc" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/JdCC1Xld15Q" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/L2_iRJjAJZ0" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/3brG7XOeVog" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/WxYedjhxj1A" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/fA6Jvc7mxxY" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/Jxiy-f9NkJo" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/ekxCVhuoOOw" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/SOeBXI2d26I" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/CZ4GzZjTPj4" allowfullscreen></iframe>
-      </div>
-    </section>
-    <section id="services" class="fade-in">Services</section>
-    <section id="clients" class="fade-in">Clients</section>
-    <section id="contact" class="fade-in">Contact</section>
-
-
-    <footer>
-      © 2025 DFX Studio. All rights reserved.
-    </footer>
-  </div>
-
-  <div class="modal" id="videoModal">
-    <div class="modal-close" onclick="closeModal()">×</div>
-    <iframe id="modalPlayer" src="" allowfullscreen></iframe>
-  </div>
-
-  <script>
-    setTimeout(() => {
-      document.getElementById('introScreen').classList.add('hidden');
-      document.getElementById('mainContent').classList.add('visible');
-      document.getElementById('staticLogo').style.opacity = 1;
-    }, 5000);
-
-    const faders = document.querySelectorAll('.fade-in');
-    const appearOptions = {
-      threshold: 0.2,
-      rootMargin: "0px 0px -20px 0px"
-    };
-
-    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    }, appearOptions);
-
-    faders.forEach(fade => {
-      appearOnScroll.observe(fade);
-    });
-
-    const videoThumbs = document.querySelectorAll('.video-thumb');
-    const modal = document.getElementById('videoModal');
-    const modalPlayer = document.getElementById('modalPlayer');
-    let currentVideoId = '';
-
-    function pauseAllVideos() {
-      document.querySelectorAll('.video-thumb iframe').forEach(iframe => {
-        iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-      });
+  </div>  <!-- Navigation -->  <nav>
+    <button onclick="showSection('home')" id="btn-home" class="active">Home</button>
+    <button onclick="showSection('services')" id="btn-services">Service</button>
+    <button onclick="showSection('clients')" id="btn-clients">Clients</button>
+    <button onclick="showSection('contact')" id="btn-contact">Contact</button>
+  </nav>  <!-- Project Section (Home) -->  <section id="home" class="active">
+    <h2 class="section-title">Home</h2>
+    <div class="video-grid" id="videoGrid">
+      <!-- YouTube iframe links will be inserted here -->
+    </div>
+  </section>  <!-- Services Section -->  <section id="services">
+    <h2 class="section-title">Service</h2>
+    <div class="image-grid">
+      <img src="service1.jpg" alt="Service 1">
+      <img src="service2.jpg" alt="Service 2">
+      <video src="service3.webm" autoplay loop muted></video>
+    </div>
+  </section>  <!-- Clients Section -->  <section id="clients">
+    <h2 class="section-title">Clients</h2>
+    <div class="image-grid">
+      <img src="client1.jpg" alt="Client 1">
+      <img src="client2.png" alt="Client 2">
+      <video src="client3.webm" autoplay loop muted></video>
+    </div>
+  </section>  <!-- Contact Section -->  <section id="contact">
+    <h2 class="section-title">Contact</h2>
+    <div class="contact-icons">
+      <a href="https://www.facebook.com/DFX.anime" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.youtube.com/DFX.studio" target="_blank"><i class="fab fa-youtube"></i></a>
+      <button onclick="window.location.href='tel:+8809639194746'"><i class="fas fa-phone"></i></button>
+      <button onclick="window.location.href='https://wa.me/8801738194746'"><i class="fab fa-whatsapp"></i></button>
+    </div>
+    <div class="email-form">
+      <input type="text" id="subject" placeholder="Subject">
+      <textarea id="message" rows="4" placeholder="Message"></textarea>
+      <button onclick="promptAndSendEmail()">Send</button>
+    </div>
+  </section>  <!-- Popup Video Elements -->  <div class="blur-bg" id="blurBg" onclick="closePopup()"></div>
+  <div class="video-popup" id="videoPopup">
+    <iframe id="popupIframe" frameborder="0" allowfullscreen></iframe>
+  </div>  <script>
+    const sections = ['home', 'services', 'clients', 'contact'];
+    const navButtons = document.querySelectorAll('nav button');
+    
+    function showSection(id) {
+      sections.forEach(sec => document.getElementById(sec).classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      navButtons.forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`btn-${id}`).classList.add('active');
     }
 
-    videoThumbs.forEach(thumb => {
-      thumb.addEventListener('click', () => {
-        const videoId = thumb.dataset.videoId;
-        if (videoId !== currentVideoId) {
-          pauseAllVideos();
-          modalPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0&enablejsapi=1`;
-          currentVideoId = videoId;
-        }
-        modal.classList.add('active');
-      });
+    const videoData = [
+      'https://www.youtube.com/embed/RiDyR1pKIlo',
+      'https://www.youtube.com/embed/yH-fBFG0XaY',
+      'https://www.youtube.com/embed/yH-fBFG0XaY'
+    ];
+
+    const videoGrid = document.getElementById('videoGrid');
+    videoData.forEach(link => {
+      const iframe = document.createElement('iframe');
+      iframe.src = link;
+      iframe.width = 320;
+      iframe.height = 180;
+      iframe.allowFullscreen = true;
+      iframe.style.cursor = 'pointer';
+      iframe.addEventListener('click', () => openPopup(link));
+      videoGrid.appendChild(iframe);
     });
 
-    function closeModal() {
-      modal.classList.remove('active');
-      modalPlayer.src = '';
-      currentVideoId = '';
+    const popup = document.getElementById('videoPopup');
+    const popupIframe = document.getElementById('popupIframe');
+    const blurBg = document.getElementById('blurBg');
+
+    function openPopup(link) {
+      popup.style.display = 'flex';
+      blurBg.style.display = 'block';
+      popupIframe.src = link + '?autoplay=1';
+      pauseAllVideos();
+    }
+
+    function closePopup() {
+      popup.style.display = 'none';
+      blurBg.style.display = 'none';
+      popupIframe.src = '';
+    }
+
+    function pauseAllVideos() {
+      document.querySelectorAll('#videoGrid iframe').forEach(f => f.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*'));
     }
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') closePopup();
     });
 
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
+    function promptAndSendEmail() {
+      const subject = document.getElementById('subject').value;
+      const message = document.getElementById('message').value;
+      const sender = prompt("Enter your email address to send this message:");
+      if (!sender || !sender.includes('@')) return alert("Please enter a valid email.");
+      window.location.href = `mailto:dfx.studio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message + '\n\nFrom: ' + sender)}`;
+    }
 
-    // Highlight on click (Navbar Active State)
-    const navItems = document.querySelectorAll('.main-nav .nav-item');
-    const sections = document.querySelectorAll('section');
-
-    navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        navItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-      });
-    });
-
-    // Update Active on Scroll
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (pageYOffset >= sectionTop - 200) {
-          current = section.getAttribute('id');
-        }
-      });
-
-      navItems.forEach(li => {
-        li.classList.remove('active');
-        if (li.querySelector('a').getAttribute('href') === `#${current}`) {
-          li.classList.add('active');
-        }
-      });
-    });
-  </script>
-</body>
+    // Intro screen timing
+    const introScreen = document.getElementById('introScreen');
+    setTimeout(() => {
+      introScreen.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }, 5000);
+  </script></body>
 </html>
