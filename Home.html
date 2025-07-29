@@ -35,21 +35,22 @@
     }
     nav {
       position: fixed;
-      top: 20px;
+      top: 30px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
       display: flex;
-      gap: 30px;
+      gap: 40px;
       font-family: 'Rai Lowercase', sans-serif;
     }
     nav button {
       background: none;
       border: none;
-      color: #ccc;
-      font-size: 22px;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 24px;
       cursor: pointer;
-      transition: transform 0.3s ease, color 0.3s;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
     }
     nav button:hover,
     nav button.active {
@@ -65,24 +66,26 @@
     section.active {
       display: block;
     }
-    #videoGallery {
+    .video-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
       padding: 20px;
     }
-    iframe {
+    .video-container iframe {
       width: 100%;
       height: 200px;
+      cursor: pointer;
     }
     .video-popup {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 75vw;
-      height: 75vh;
-      background: rgba(0,0,0,0.75);
+      width: 90vw;
+      height: 90vh;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
       display: none;
       justify-content: center;
       align-items: center;
@@ -91,6 +94,7 @@
     .video-popup iframe {
       width: 100%;
       height: 100%;
+      border: none;
     }
     .contact-icons {
       text-align: center;
@@ -127,99 +131,37 @@
     }
   </style>
 </head>
-<body><!-- Intro --><div class="intro-screen" id="introScreen">
+<body>
+<div class="intro-screen" id="introScreen">
   <video autoplay muted playsinline id="introVideo">
     <source src="DFX LOGO Intro.webm" type="video/webm">
     Your browser does not support the video tag.
   </video>
-</div><!-- Navbar --><nav id="navbar" style="display: none">
+</div>
+<nav id="navbar" style="display: none">
   <button data-target="home">Home</button>
   <button data-target="service">Service</button>
   <button data-target="clients">Clients</button>
   <button data-target="contact">Contact</button>
-</nav><!-- Sections --><section id="home" class="active">
-  
+</nav>
+<section id="home" class="active">
   <h2>Projects</h2>
-
-  <div class="video-container">
-
-    <iframe src="https://www.youtube.com/embed/FVNMLvH35Ys" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/xFwnun3zMH4" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/wREenI4RRgc" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/QlsWKDEJWtk" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/Gh-8nJfbSVs" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/vuNy4gvvoZc" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/_WI1QZTFXX4" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/2r1lr7dLano" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/9ktiKThBwZA" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/N5D2_bK5RNM" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/nO72m__mcew" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/OvFSsmLqyCc" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/bL5uI2NAKDM" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/kAshuCi6UJw" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/5gf0Icoizs8" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/S-bsAyqS4KY" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/1Cdo8-VwHpY" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/dxb-3G4qYyo" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/STtoeP24j4g" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/Ehn5iVm0Ox0" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/d-gbIabi8ok" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/ziI3mLHN3YA" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/YzyzPK16Slc" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/JdCC1Xld15Q" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/L2_iRJjAJZ0" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/3brG7XOeVog" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/WxYedjhxj1A" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/fA6Jvc7mxxY" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/Jxiy-f9NkJo" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/ekxCVhuoOOw" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/SOeBXI2d26I" allowfullscreen></iframe>
-
-    <iframe src="https://www.youtube.com/embed/CZ4GzZjTPj4" allowfullscreen></iframe>
-
+  <div class="video-container" id="videoGallery">
+    <!-- Injected by JS -->
   </div>
-
 </section>
-</section><section id="service">
+<section id="service">
   <h2>Service</h2>
   <img src="service1.jpg" alt="Service 1">
   <img src="service2.gif" alt="Service 2">
   <video src="service.webm" autoplay muted loop></video>
-</section><section id="clients">
+</section>
+<section id="clients">
   <h2>Clients</h2>
   <img src="client1.jpg" alt="Client 1">
   <img src="client2.png" alt="Client 2">
-</section><section id="contact">
+</section>
+<section id="contact">
   <h2>Contact</h2>
   <div class="contact-icons">
     <a href="https://www.facebook.com/DFX.anime" target="_blank">📘</a>
@@ -232,62 +174,35 @@
     <textarea id="body" rows="4" placeholder="Message"></textarea>
     <button onclick="sendMail()">Send</button>
   </div>
-</section><div class="video-popup" id="popup">
-  <iframe id="popupVideo" frameborder="0" allowfullscreen></iframe>
-</div><script>
-  const sections = document.querySelectorAll('section');
-  const buttons = document.querySelectorAll('nav button');
-  const introScreen = document.getElementById('introScreen');
-  const navbar = document.getElementById('navbar');
+</section>
+<div class="video-popup" id="popup">
+  <iframe id="popupVideo" allowfullscreen></iframe>
+</div>
+<script>
+  const videoLinks = [
+    "FVNMLvH35Ys", "xFwnun3zMH4", "wREenI4RRgc", "QlsWKDEJWtk", "Gh-8nJfbSVs",
+    "vuNy4gvvoZc", "_WI1QZTFXX4", "2r1lr7dLano", "9ktiKThBwZA", "N5D2_bK5RNM",
+    "nO72m__mcew", "OvFSsmLqyCc", "bL5uI2NAKDM", "kAshuCi6UJw", "5gf0Icoizs8",
+    "S-bsAyqS4KY", "1Cdo8-VwHpY", "dxb-3G4qYyo", "STtoeP24j4g", "Ehn5iVm0Ox0",
+    "d-gbIabi8ok", "ziI3mLHN3YA", "YzyzPK16Slc", "JdCC1Xld15Q", "L2_iRJjAJZ0",
+    "3brG7XOeVog", "WxYedjhxj1A", "fA6Jvc7mxxY", "Jxiy-f9NkJo", "ekxCVhuoOOw",
+    "SOeBXI2d26I", "CZ4GzZjTPj4"
+  ];
+  const gallery = document.getElementById('videoGallery');
   const popup = document.getElementById('popup');
-  const popupVideo = document.getElementById('popupVideo');
+  const popupVideo = document.getElementById('popupVideo');videoLinks.forEach(id => { const iframe = document.createElement('iframe'); iframe.src = https://www.youtube.com/embed/${id}; iframe.allowFullscreen = true; iframe.addEventListener('click', e => { e.preventDefault(); popup.style.display = 'flex'; popupVideo.src = https://www.youtube.com/embed/${id}?autoplay=1; }); gallery.appendChild(iframe); });
 
-  // Intro hide after 7 sec
-  setTimeout(() => {
-    introScreen.style.display = 'none';
-    navbar.style.display = 'flex';
-  }, 7000);
+popup.addEventListener('click', () => { popup.style.display = 'none'; popupVideo.src = ''; });
 
-  // Section button nav
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const target = btn.getAttribute('data-target');
-      sections.forEach(sec => sec.classList.remove('active'));
-      document.getElementById(target).classList.add('active');
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { popup.style.display = 'none'; popupVideo.src = ''; } });
 
-  // Video click to popup
-  document.querySelectorAll('#videoGallery iframe').forEach(iframe => {
-    iframe.addEventListener('click', e => {
-      e.preventDefault();
-      popup.style.display = 'flex';
-      popupVideo.src = iframe.src + "?autoplay=1";
-    });
-  });
-  popup.addEventListener('click', () => {
-    popup.style.display = 'none';
-    popupVideo.src = '';
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-      popup.style.display = 'none';
-      popupVideo.src = '';
-    }
-  });
+setTimeout(() => { document.getElementById('introScreen').style.display = 'none'; document.getElementById('navbar').style.display = 'flex'; }, 7000);
 
-  // Send email
-  function sendMail() {
-    const subject = document.getElementById('subject').value;
-    const body = document.getElementById('body').value;
-    const sender = prompt("Enter your email:");
-    if (!sender || !sender.includes('@')) {
-      alert("Invalid email");
-      return;
-    }
-    window.location.href = `mailto:dfx.studio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body + '\n\nSender: ' + sender)}`;
-  }
-</script></body>
+const sections = document.querySelectorAll('section'); const buttons = document.querySelectorAll('nav button');
+
+buttons.forEach(btn => { btn.addEventListener('click', () => { const target = btn.getAttribute('data-target'); sections.forEach(sec => sec.classList.remove('active')); document.getElementById(target).classList.add('active'); buttons.forEach(b => b.classList.remove('active')); btn.classList.add('active'); }); });
+
+function sendMail() { const subject = document.getElementById('subject').value; const body = document.getElementById('body').value; const sender = prompt("Enter your email:"); if (!sender || !sender.includes('@')) { alert("Invalid email"); return; } window.location.href = mailto:dfx.studio@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body + '\n\nSender: ' + sender)}; } </script>
+
+</body>
 </html>
