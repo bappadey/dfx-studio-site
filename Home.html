@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DFX - Animation & VFX</title>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
@@ -13,7 +12,7 @@
 
     body {
       font-family: 'Montserrat', sans-serif;
-      background:#2f1c52;
+      background: #2f1c52;
       color: white;
       scroll-behavior: smooth;
       overflow-x: hidden;
@@ -77,7 +76,6 @@
       transform: translateY(0);
     }
 
-    /* 🔳 Responsive Video Grid */
     .video-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -89,6 +87,34 @@
       aspect-ratio: 16 / 9;
       border: none;
       border-radius: 10px;
+      transition: transform 0.5s ease;
+      cursor: pointer;
+      z-index: 1;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(25px);
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      padding: 20px;
+    }
+
+    .overlay iframe {
+      width: 75vw;
+      height: 75vh;
+      border-radius: 12px;
+      z-index: 10001;
+    }
+
+    .overlay.hidden {
+      display: none;
     }
 
     footer {
@@ -111,7 +137,7 @@
 
   <img src="logo.png" alt="DFX Logo" class="logo" id="staticLogo">
 
-  <!-- Main Content (Landing Page Starts at Projects) -->
+  <!-- Main Content -->
   <div class="main-content" id="mainContent">
     <section class="fade-in">
       <h2>Projects</h2>
@@ -156,19 +182,22 @@
     </footer>
   </div>
 
+  <!-- Fullscreen Video Popup -->
+  <div class="overlay hidden" id="videoOverlay">
+    <iframe src="" allowfullscreen></iframe>
+  </div>
+
   <script>
+    // Intro
     setTimeout(() => {
       document.getElementById('introScreen').classList.add('hidden');
       document.getElementById('mainContent').classList.add('visible');
       document.getElementById('staticLogo').style.opacity = 1;
     }, 5000);
 
+    // Scroll Animation
     const faders = document.querySelectorAll('.fade-in');
-    const appearOptions = {
-      threshold: 0.2,
-      rootMargin: "0px 0px -20px 0px"
-    };
-
+    const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -20px 0px" };
     const appearOnScroll = new IntersectionObserver(function(entries, observer) {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -177,11 +206,43 @@
         }
       });
     }, appearOptions);
+    faders.forEach(fade => appearOnScroll.observe(fade));
 
-    faders.forEach(fade => {
-      appearOnScroll.observe(fade);
+    // Ensure only one video plays
+    const iframes = document.querySelectorAll('iframe');
+    function pauseAllVideos(except) {
+      iframes.forEach(iframe => {
+        if (iframe !== except) {
+          iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        }
+      });
+    }
+
+    // Fullscreen Popup
+    const overlay = document.getElementById('videoOverlay');
+    const overlayFrame = overlay.querySelector('iframe');
+
+    document.getElementById('videoGrid').addEventListener('click', function(e) {
+      if (e.target.tagName === 'IFRAME') {
+        const src = e.target.getAttribute('src');
+        pauseAllVideos(e.target);
+        overlayFrame.src = src + "?autoplay=1&enablejsapi=1";
+        overlay.classList.remove('hidden');
+      }
+    });
+
+    // Close overlay on click or ESC
+    overlay.addEventListener('click', () => {
+      overlayFrame.src = '';
+      overlay.classList.add('hidden');
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        overlayFrame.src = '';
+        overlay.classList.add('hidden');
+      }
     });
   </script>
-
 </body>
 </html>
