@@ -138,10 +138,67 @@
       background: #00000070;
       color: #ccc;
     }
+
+    /* Navbar from First HTML */
+    .main-nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+    }
+
+    .main-nav ul {
+      display: flex;
+      background: #4b2e1f;
+      border-radius: 50px;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .main-nav li {
+      flex: 1;
+    }
+
+    .main-nav a {
+      display: block;
+      padding: 10px 25px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .main-nav .active a,
+    .main-nav a:hover {
+      background: #e6dcd4;
+      color: black;
+      border-radius: 50px;
+    }
+
+    @media (max-width: 768px) {
+      .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+        border-radius: 20px;
+      }
+
+      .main-nav a {
+        padding: 10px 20px;
+      }
+    }
+
+    section {
+      border-bottom: 1px solid #333;
+    }
   </style>
 </head>
-
 <body>
+
   <div class="intro-screen" id="introScreen">
     <video autoplay muted playsinline id="introVideo">
       <source src="DFX LOGO Intro.webm" type="video/webm">
@@ -151,7 +208,23 @@
 
   <img src="logo.png" alt="DFX Logo" class="logo" id="staticLogo">
 
+  <!-- ✅ Navigation -->
+  <nav class="main-nav">
+    <ul>
+      <li class="nav-item active"><a href="#home">Home</a></li>
+      <li class="nav-item"><a href="#services">Services</a></li>
+      <li class="nav-item"><a href="#clients">Clients</a></li>
+      <li class="nav-item"><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
   <div class="main-content" id="mainContent">
+    <!-- ✅ Sections -->
+    <section id="home" class="fade-in">Welcome to Post Dhaka</section>
+    <section id="services" class="fade-in">Our Services</section>
+    <section id="clients" class="fade-in">Our Clients</section>
+    <section id="contact" class="fade-in">Contact Us</section>
+
     <section class="fade-in">
       <h2>Projects</h2>
       <div class="video-container">
@@ -232,6 +305,35 @@
 
     modal.addEventListener('click', (e) => {
       if (e.target === modal) closeModal();
+    });
+
+    // Highlight on click (Navbar Active State)
+    const navItems = document.querySelectorAll('.main-nav .nav-item');
+    const sections = document.querySelectorAll('section');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        navItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // Update Active on Scroll
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navItems.forEach(li => {
+        li.classList.remove('active');
+        if (li.querySelector('a').getAttribute('href') === `#${current}`) {
+          li.classList.add('active');
+        }
+      });
     });
   </script>
 </body>
