@@ -54,7 +54,7 @@
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 40px;
+      gap: 20px;
       opacity: 0;
       animation: fadeIn 1s ease-in-out 4.5s forwards;
     }
@@ -63,10 +63,17 @@
       font-size: 20px;
       color: #cd1f85;
       text-decoration: none;
+      padding: 10px 20px;
+      border: 2px solid #cd1f85;
+      border-radius: 12px;
       transition: all 0.3s ease;
     }
+    nav a.active {
+      background-color: #cd1f85;
+      color: white;
+    }
     nav a:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
       color: white;
     }
     .section {
@@ -89,11 +96,12 @@
     }
     .video-popup {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.6);
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      height: 80%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0,0,0,0.9);
       display: none;
       justify-content: center;
       align-items: center;
@@ -117,6 +125,14 @@
     }
     .contact-icons img:hover {
       transform: scale(1.2);
+    }
+    .footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
     }
     @keyframes fadeOut {
       to { opacity: 0; visibility: hidden; }
@@ -147,7 +163,7 @@
 
   <!-- Navigation -->
   <nav>
-    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" class="active" onclick="showSection('home')">Home</a>
     <a href="#" onclick="showSection('services')">Service</a>
     <a href="#" onclick="showSection('clients')">Clients</a>
     <a href="#" onclick="showSection('contact')">Contact</a>
@@ -156,54 +172,52 @@
   <!-- Sections -->
   <div class="section active" id="home">
     <div class="projects-grid">
-      <iframe src="https://www.youtube.com/embed/FVNMLvH35Ys" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/xFwnun3zMH4" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/wREenI4RRgc" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/QlsWKDEJWtk" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/Gh-8nJfbSVs" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/vuNy4gvvoZc" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/_WI1QZTFXX4" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/2r1lr7dLano" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/9ktiKThBwZA" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/N5D2_bK5RNM" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/nO72m__mcew" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/OvFSsmLqyCc" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/bL5uI2NAKDM" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/kAshuCi6UJw" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/5gf0Icoizs8" frameborder="0" allowfullscreen></iframe> 
-      <iframe src="https://www.youtube.com/embed/S-bsAyqS4KY" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/1Cdo8-VwHpY" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/dxb-3G4qYyo" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/STtoeP24j4g" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/Ehn5iVm0Ox0" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/d-gbIabi8ok" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/ziI3mLHN3YA" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/YzyzPK16Slc" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/JdCC1Xld15Q" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/L2_iRJjAJZ0" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/3brG7XOeVog" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/WxYedjhxj1A" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/fA6Jvc7mxxY" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/Jxiy-f9NkJo" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/ekxCVhuoOOw" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/SOeBXI2d26I" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/CZ4GzZjTPj4" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/FVNMLvH35Ys" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/xFwnun3zMH4" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/wREenI4RRgc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/QlsWKDEJWtk" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/Gh-8nJfbSVs" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/vuNy4gvvoZc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/_WI1QZTFXX4" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/2r1lr7dLano" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/9ktiKThBwZA" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/N5D2_bK5RNM" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/nO72m__mcew" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/OvFSsmLqyCc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/bL5uI2NAKDM" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/kAshuCi6UJw" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/5gf0Icoizs8" frameborder="0" allowfullscreen></iframe> 
+<iframe src="https://www.youtube.com/embed/S-bsAyqS4KY" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/1Cdo8-VwHpY" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/dxb-3G4qYyo" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/STtoeP24j4g" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/Ehn5iVm0Ox0" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/d-gbIabi8ok" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/ziI3mLHN3YA" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/YzyzPK16Slc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/JdCC1Xld15Q" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/L2_iRJjAJZ0" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/3brG7XOeVog" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/WxYedjhxj1A" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/fA6Jvc7mxxY" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/Jxiy-f9NkJo" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/ekxCVhuoOOw" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/SOeBXI2d26I" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/CZ4GzZjTPj4" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
   <div class="section" id="services">
     <h2>Our Services</h2>
     <p>Video Editing, Color Grading, VFX, Animation...</p>
-    <!-- Add slideshow or static images here -->
   </div>
   <div class="section" id="clients">
     <h2>Our Clients</h2>
-    <!-- Add client logos here -->
   </div>
   <div class="section" id="contact">
     <h2>Contact Us</h2>
     <div class="contact-icons">
       <a href="https://www.facebook.com/DFX.anime" target="_blank"><img src="FB.png" alt="Facebook"></a>
-      <a href="https://www.youtube.com/DFX-Studio" target="_blank"><img src="YT.png" alt="YouTube"></a>
+      <a href="https://www.youtube.com/@DFX-studio" target="_blank"><img src="YT.png" alt="YouTube"></a>
       <a href="tel:+8809639194746"><img src="Call.png" alt="Call"></a>
       <a href="https://wa.me/8801738194746" target="_blank"><img src="WA.png" alt="WhatsApp"></a>
       <a href="mailto:dfx.studio.bd@gmail.com"><img src="Mail.png" alt="Email"></a>
@@ -215,7 +229,12 @@
     <iframe id="popupVideo" src="" frameborder="0" allowfullscreen></iframe>
   </div>
 
+  <!-- Footer -->
+  <div class="footer">© Copyright DFX. All rights reserved.</div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
+    // Intro Screen Fade Out
     setTimeout(() => {
       document.getElementById('introScreen').style.animation = 'fadeOut 1s forwards';
       setTimeout(() => {
@@ -224,11 +243,54 @@
       }, 1000);
     }, 4000);
 
+    // Section Navigation + Active Button Highlight
     function showSection(sectionId) {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
       document.getElementById(sectionId).classList.add('active');
       document.getElementById('sectionTitle').textContent = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
+      document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+      document.querySelectorAll('nav a').forEach(link => {
+        if (link.textContent.toLowerCase() === sectionId) link.classList.add('active');
+      });
     }
+
+    // YouTube API - Play One Video at a Time
+    let players = [];
+    function onYouTubeIframeAPIReady() {
+      document.querySelectorAll('.projects-grid iframe').forEach((iframe, index) => {
+        let player = new YT.Player(iframe, {
+          events: {
+            'onStateChange': (event) => onPlayerStateChange(event, index)
+          }
+        });
+        players.push(player);
+      });
+    }
+
+    function onPlayerStateChange(event, currentIndex) {
+      if (event.data == YT.PlayerState.PLAYING) {
+        players.forEach((p, i) => {
+          if (i !== currentIndex) p.pauseVideo();
+        });
+        showPopup(players[currentIndex].getVideoData().video_id);
+      }
+    }
+
+    // Show Popup Video
+    function showPopup(videoId) {
+      const popup = document.getElementById('videoPopup');
+      const popupVideo = document.getElementById('popupVideo');
+      popupVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      popup.style.display = 'flex';
+    }
+
+    // Close Popup on Outside Click
+    document.getElementById('videoPopup').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+        document.getElementById('popupVideo').src = '';
+      }
+    });
   </script>
 </body>
 </html>
