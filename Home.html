@@ -1,296 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DFX | Cinematic Post Production Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Raleway&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DFX | Cinematic Post Production</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg-color: #2f1c52;
+      --secondary-color: #cd1f85;
+      --font-color: white;
+      --blur-bg: rgba(0,0,0,0.6);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Bebas Neue', sans-serif;
     }
-    body, html {
-      width: 100%;
-      height: 100%;
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--font-color);
       overflow: hidden;
-      background-color: #2f1c52;
-      font-family: 'Raleway', sans-serif;
-      color: white;
     }
+
     .intro-screen {
       position: fixed;
-      width: 100%;
-      height: 100%;
-      background-color: #2f1c52;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: var(--bg-color);
+      z-index: 9999;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
     }
-    .logo-bar {
+
+    #introVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: absolute;
-      top: 0;
-      width: 100%;
-      padding: 20px;
-      opacity: 0;
-      animation: fadeIn 1s ease-in-out 4s forwards;
+      z-index: 100;
+      display: none;
     }
-    .logo-bar img {
-      height: 60px;
+
+    header img {
+      height: 50px;
     }
-    .section-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      color: #cd1f85;
+
+    .page-title {
+      font-size: 1.5rem;
+      color: var(--secondary-color);
     }
+
     nav {
-      position: absolute;
-      bottom: 10px;
+      position: fixed;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 20px;
+      gap: 30px;
+      z-index: 100;
       opacity: 0;
-      animation: fadeIn 1s ease-in-out 4.5s forwards;
     }
-    nav a {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 20px;
-      color: #cd1f85;
-      text-decoration: none;
-      padding: 10px 20px;
-      border: 2px solid #cd1f85;
-      border-radius: 12px;
-      transition: all 0.3s ease;
+
+    nav button {
+      background: none;
+      border: none;
+      color: var(--secondary-color);
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: transform 0.3s;
     }
-    nav a.active {
-      background-color: #cd1f85;
-      color: white;
+
+    nav button:hover,
+    nav button.active {
+      transform: scale(1.2);
+      color: var(--font-color);
+      border-bottom: 2px solid var(--secondary-color);
     }
-    nav a:hover {
-      transform: scale(1.1);
-      color: white;
-    }
-    .section {
+
+    section {
       display: none;
       position: absolute;
-      top: 80px;
+      top: 70px;
       width: 100%;
-      height: calc(100% - 160px);
+      height: calc(100vh - 150px);
       overflow-y: auto;
-      padding: 20px;
+      padding: 1rem;
     }
-    .section.active {
+
+    section.active {
       display: block;
     }
-    .projects-grid {
+
+    /* Home/Project */
+    .video-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      animation: slideIn 1s ease-out 4.5s forwards;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1rem;
+      animation: slideUp 2s ease forwards;
     }
-    .video-popup {
+
+    .video-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .video-popup-wrapper {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 80%;
-      height: 80%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(0,0,0,0.9);
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--blur-bg);
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 10000;
+      z-index: 2000;
     }
-    .video-popup iframe {
-      width: 80%;
-      height: 80%;
+
+    .video-popup-wrapper video {
+      width: 85vw;
+      height: 85vh;
     }
+
+    /* Service Slideshow */
+    .slideshow {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slide.active {
+      opacity: 1;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slide-text {
+      position: absolute;
+      bottom: 20%;
+      left: 10%;
+      font-size: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 1rem;
+      color: white;
+    }
+
+    .clients-logos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      align-items: center;
+      padding-top: 2rem;
+    }
+
+    .clients-logos img {
+      height: 60px;
+    }
+
     .contact-icons {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 30px;
-      margin-top: 60px;
+      flex-wrap: wrap;
+      margin-top: 100px;
     }
+
     .contact-icons img {
-      width: 40px;
-      height: 40px;
-      transition: transform 0.3s ease;
+      height: 50px;
       cursor: pointer;
+      transition: transform 0.2s;
     }
+
     .contact-icons img:hover {
       transform: scale(1.2);
     }
-    .footer {
-      position: absolute;
+
+    footer {
+      position: fixed;
       bottom: 0;
       width: 100%;
       text-align: center;
+      font-size: 0.8rem;
+      color: #aaa;
+      background-color: transparent;
       padding: 10px;
-      font-size: 14px;
     }
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    @keyframes slideIn {
-      from { transform: translateY(100px); opacity: 0; }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .slide-text { font-size: 1.2rem; }
+      nav { gap: 15px; font-size: 1rem; }
     }
   </style>
 </head>
+
 <body>
-  <!-- Logo Intro -->
+  <!-- Intro -->
   <div class="intro-screen" id="introScreen">
     <video autoplay muted playsinline id="introVideo">
       <source src="DFX LOGO Intro.webm" type="video/webm">
-      Your browser does not support the video tag.
     </video>
   </div>
 
-  <!-- Logo and Section Name -->
-  <div class="logo-bar">
+  <!-- Header -->
+  <header id="mainHeader">
     <img src="Logo.png" alt="DFX Logo">
-    <div class="section-name" id="sectionTitle">Projects</div>
-  </div>
+    <div class="page-title" id="pageTitle">Home</div>
+  </header>
 
-  <!-- Navigation -->
-  <nav>
-    <a href="#" class="active" onclick="showSection('home')">Home</a>
-    <a href="#" onclick="showSection('services')">Service</a>
-    <a href="#" onclick="showSection('clients')">Clients</a>
-    <a href="#" onclick="showSection('contact')">Contact</a>
+  <!-- Nav Bar -->
+  <nav id="mainNav">
+    <button data-target="home" class="active">Home</button>
+    <button data-target="service">Service</button>
+    <button data-target="clients">Clients</button>
+    <button data-target="contact">Contact</button>
   </nav>
 
-  <!-- Sections -->
-  <div class="section active" id="home">
-    <div class="projects-grid">
-<iframe src="https://www.youtube.com/embed/FVNMLvH35Ys" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/xFwnun3zMH4" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/wREenI4RRgc" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/QlsWKDEJWtk" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/Gh-8nJfbSVs" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/vuNy4gvvoZc" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/_WI1QZTFXX4" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/2r1lr7dLano" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/9ktiKThBwZA" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/N5D2_bK5RNM" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/nO72m__mcew" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/OvFSsmLqyCc" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/bL5uI2NAKDM" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/kAshuCi6UJw" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/5gf0Icoizs8" frameborder="0" allowfullscreen></iframe> 
-<iframe src="https://www.youtube.com/embed/S-bsAyqS4KY" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/1Cdo8-VwHpY" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/dxb-3G4qYyo" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/STtoeP24j4g" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/Ehn5iVm0Ox0" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/d-gbIabi8ok" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/ziI3mLHN3YA" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/YzyzPK16Slc" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/JdCC1Xld15Q" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/L2_iRJjAJZ0" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/3brG7XOeVog" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/WxYedjhxj1A" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/fA6Jvc7mxxY" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/Jxiy-f9NkJo" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/ekxCVhuoOOw" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/SOeBXI2d26I" frameborder="0" allowfullscreen></iframe>
-<iframe src="https://www.youtube.com/embed/CZ4GzZjTPj4" frameborder="0" allowfullscreen></iframe>
+  <!-- Home Section -->
+  <section id="home" class="active">
+    <div class="video-grid">
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/LXb3EKWsInQ" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
-  </div>
-  <div class="section" id="services">
-    <h2>Our Services</h2>
-    <p>Video Editing, Color Grading, VFX, Animation...</p>
-  </div>
-  <div class="section" id="clients">
-    <h2>Our Clients</h2>
-  </div>
-  <div class="section" id="contact">
-    <h2>Contact Us</h2>
-    <div class="contact-icons">
-      <a href="https://www.facebook.com/DFX.anime" target="_blank"><img src="FB.png" alt="Facebook"></a>
-      <a href="https://www.youtube.com/@DFX-studio" target="_blank"><img src="YT.png" alt="YouTube"></a>
-      <a href="tel:+8809639194746"><img src="Call.png" alt="Call"></a>
-      <a href="https://wa.me/8801738194746" target="_blank"><img src="WA.png" alt="WhatsApp"></a>
-      <a href="mailto:dfx.studio.bd@gmail.com"><img src="Mail.png" alt="Email"></a>
-    </div>
-  </div>
+  </section>
 
-  <!-- Popup Video -->
-  <div class="video-popup" id="videoPopup">
-    <iframe id="popupVideo" src="" frameborder="0" allowfullscreen></iframe>
-  </div>
+  <!-- Service Section -->
+  <section id="service">
+    <div class="slideshow">
+      <div class="slide active">
+        <img src="service1.jpg" alt="Service 1">
+        <div class="slide-text">Creative Editing</div>
+      </div>
+      <div class="slide">
+        <img src="service2.jpg" alt="Service 2">
+        <div class="slide-text">Advanced Color Grading</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Clients Section -->
+  <section id="clients">
+    <div class="clients-logos">
+      <img src="client1.png" alt="Grameenphone">
+      <img src="client2.png" alt="Unilever">
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="contact-icons">
+      <a href="https://facebook.com/DFX.anime" target="_blank"><img src="FB.png" alt="Facebook"></a>
+      <a href="https://youtube.com/DFX-Studio" target="_blank"><img src="YT.png" alt="YouTube"></a>
+      <a href="https://wa.me/8801738194746" target="_blank"><img src="WA.png" alt="WhatsApp"></a>
+      <a href="tel:+8809639194746"><img src="Call.png" alt="Call"></a>
+      <a href="mailto:dfx.studio.bd@gmail.com"><img src="Mail.png" alt="Mail"></a>
+    </div>
+  </section>
 
   <!-- Footer -->
-  <div class="footer">© Copyright DFX. All rights reserved.</div>
+  <footer>© 2025 DFX Studio. All rights reserved.</footer>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
+  <!-- Video Popup -->
+  <div class="video-popup-wrapper" id="videoPopup">
+    <video controls id="popupVideo"></video>
+  </div>
+
   <script>
-    // Intro Screen Fade Out
+    const intro = document.getElementById("introScreen");
+    const header = document.getElementById("mainHeader");
+    const nav = document.getElementById("mainNav");
+    const sections = document.querySelectorAll("section");
+    const navButtons = document.querySelectorAll("nav button");
+    const pageTitle = document.getElementById("pageTitle");
+
     setTimeout(() => {
-      document.getElementById('introScreen').style.animation = 'fadeOut 1s forwards';
-      setTimeout(() => {
-        document.getElementById('introScreen').style.display = 'none';
-        document.body.style.overflow = 'auto';
-      }, 1000);
+      intro.style.display = "none";
+      header.style.display = "flex";
+      nav.style.opacity = 1;
+      document.getElementById("home").classList.add("active");
     }, 4000);
 
-    // Section Navigation + Active Button Highlight
-    function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(sectionId).classList.add('active');
-      document.getElementById('sectionTitle').textContent = sectionId.charAt(0).toUpperCase() + sectionId.slice(1);
-      document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
-      document.querySelectorAll('nav a').forEach(link => {
-        if (link.textContent.toLowerCase() === sectionId) link.classList.add('active');
+    navButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        navButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        sections.forEach(sec => sec.classList.remove("active"));
+        document.getElementById(btn.dataset.target).classList.add("active");
+
+        pageTitle.textContent = btn.textContent;
       });
-    }
-
-    // YouTube API - Play One Video at a Time
-    let players = [];
-    function onYouTubeIframeAPIReady() {
-      document.querySelectorAll('.projects-grid iframe').forEach((iframe, index) => {
-        let player = new YT.Player(iframe, {
-          events: {
-            'onStateChange': (event) => onPlayerStateChange(event, index)
-          }
-        });
-        players.push(player);
-      });
-    }
-
-    function onPlayerStateChange(event, currentIndex) {
-      if (event.data == YT.PlayerState.PLAYING) {
-        players.forEach((p, i) => {
-          if (i !== currentIndex) p.pauseVideo();
-        });
-        showPopup(players[currentIndex].getVideoData().video_id);
-      }
-    }
-
-    // Show Popup Video
-    function showPopup(videoId) {
-      const popup = document.getElementById('videoPopup');
-      const popupVideo = document.getElementById('popupVideo');
-      popupVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-      popup.style.display = 'flex';
-    }
-
-    // Close Popup on Outside Click
-    document.getElementById('videoPopup').addEventListener('click', function(e) {
-      if (e.target === this) {
-        this.style.display = 'none';
-        document.getElementById('popupVideo').src = '';
-      }
     });
+
+    // Slideshow logic
+    let slides = document.querySelectorAll(".slide");
+    let index = 0;
+    setInterval(() => {
+      slides[index].classList.remove("active");
+      index = (index + 1) % slides.length;
+      slides[index].classList.add("active");
+    }, 4000);
   </script>
 </body>
 </html>
