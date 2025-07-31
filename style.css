@@ -1,0 +1,153 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  background: #2f1c52;
+  font-family: 'Bebas Neue', sans-serif;
+  overflow: hidden;
+}
+
+#intro video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.hidden { display: none; }
+
+#logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+#navbar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+#navbar img {
+  width: 130px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.section {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0; left: 0;
+  justify-content: center;
+  align-items: center;
+  background: #2f1c52;
+  overflow: hidden;
+}
+
+.section.active { display: flex; }
+
+.section.scroll { overflow-y: auto; }
+
+#home video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Service Slide */
+.slideshow {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+#slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#slide-text {
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+  font-size: 3vw;
+  color: white;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px 20px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+/* Projects */
+.project-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+}
+.video-box {
+  width: 300px;
+  height: 170px;
+  background: #444;
+  cursor: pointer;
+}
+
+/* Popup */
+#video-popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+#video-popup iframe {
+  width: 85vw;
+  height: 48vw;
+}
+
+/* Clients */
+.client-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  padding: 40px;
+}
+.client-grid img {
+  width: 150px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+/* Contact */
+.contact-icons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+.contact-icons img {
+  width: 70px;
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
