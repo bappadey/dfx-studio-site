@@ -3,402 +3,226 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DFX | Cinematic Post Production</title>
+  <title>DFX Studio</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg-color: #2f1c52;
-      --secondary-color: #cd1f85;
-      --font-color: white;
-      --blur-bg: rgba(0,0,0,0.6);
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Bebas Neue', sans-serif; background-color: #2f1c52; color: white; overflow: hidden; }
+    a { text-decoration: none; color: #cd1f85; }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Bebas Neue', sans-serif;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--font-color);
-      overflow: hidden;
-    }
-
+    /* INTRO */
     .intro-screen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background-color: var(--bg-color);
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background-color: #2f1c52; display: flex; justify-content: center; align-items: center;
       z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    }
+    .intro-screen video {
+      width: 100%; height: 100%; object-fit: cover;
     }
 
-    #introVideo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
+    /* LOGO + NAV */
+    .top-bar {
+      position: fixed; top: 0; left: 0; width: 100%;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 30px; z-index: 10;
       display: none;
     }
-
-    header img {
+    .logo img {
       height: 50px;
     }
-
-    .page-title {
-      font-size: 1.5rem;
-      color: var(--secondary-color);
+    .nav {
+      display: flex; gap: 30px;
     }
-
-    nav {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 30px;
-      z-index: 100;
-      opacity: 0;
+    .nav a {
+      position: relative; font-size: 20px; color: #cd1f85;
+      transition: transform 0.2s ease;
     }
-
-    nav button {
-      background: none;
-      border: none;
-      color: var(--secondary-color);
-      font-size: 1.3rem;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-
-    nav button:hover,
-    nav button.active {
+    .nav a:hover {
       transform: scale(1.2);
-      color: var(--font-color);
-      border-bottom: 2px solid var(--secondary-color);
+    }
+    .nav a.active::after {
+      content: ''; position: absolute; bottom: -5px; left: 0;
+      width: 100%; height: 3px; background: #cd1f85;
     }
 
-    section {
-      display: none;
-      position: absolute;
-      top: 70px;
-      width: 100%;
-      height: calc(100vh - 150px);
-      overflow-y: auto;
-      padding: 1rem;
+    /* SECTIONS */
+    section { display: none; height: 100vh; width: 100vw; }
+    section.active { display: block; }
+
+    #home video {
+      width: 100vw; height: 100vh; object-fit: cover;
     }
 
-    section.active {
-      display: block;
+    #service, #clients, #contact {
+      display: flex; justify-content: center; align-items: center;
+      background: #2f1c52; height: 100vh; text-align: center;
+      flex-direction: column;
     }
 
-    /* Home/Project */
+    #service img {
+      max-width: 90%; height: auto; border-radius: 8px;
+    }
+
+    #clients img {
+      max-width: 150px; margin: 20px; transition: transform 0.3s;
+    }
+
+    #clients img:hover {
+      transform: scale(1.1);
+    }
+
+    /* CONTACT */
+    #contact .icons {
+      display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;
+    }
+    #contact img {
+      width: 60px; height: 60px; transition: transform 0.3s;
+    }
+    #contact img:hover {
+      transform: scale(1.2);
+    }
+
+    /* PROJECTS SCROLL */
+    #projects {
+      overflow-y: scroll;
+      padding: 40px;
+    }
     .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1rem;
-      animation: slideUp 2s ease forwards;
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+    }
+    .video-grid iframe {
+      width: 320px; height: 180px;
     }
 
-    .video-container {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .video-popup-wrapper {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: var(--blur-bg);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-
-    .video-popup-wrapper video {
-      width: 85vw;
-      height: 85vh;
-    }
-
-    /* Service Slideshow */
-    .slideshow {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .slide {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-
-    .slide.active {
-      opacity: 1;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .slide-text {
-      position: absolute;
-      bottom: 20%;
-      left: 10%;
-      font-size: 2rem;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 1rem;
-      color: white;
-    }
-
-    .clients-logos {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-      align-items: center;
-      padding-top: 2rem;
-    }
-
-    .clients-logos img {
-      height: 60px;
-    }
-
-    .contact-icons {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 30px;
-      flex-wrap: wrap;
-      margin-top: 100px;
-    }
-
-    .contact-icons img {
-      height: 50px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-
-    .contact-icons img:hover {
-      transform: scale(1.2);
-    }
-
+    /* FOOTER */
     footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      font-size: 0.8rem;
-      color: #aaa;
-      background-color: transparent;
-      padding: 10px;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    @media (max-width: 768px) {
-      .slide-text { font-size: 1.2rem; }
-      nav { gap: 15px; font-size: 1rem; }
+      position: fixed; bottom: 5px; width: 100%;
+      text-align: center; font-size: 14px; color: #888;
     }
   </style>
 </head>
-
 <body>
-  <!-- Intro -->
-  <div class="intro-screen" id="introScreen">
-    <video autoplay muted playsinline id="introVideo">
-      <source src="DFX LOGO Intro.webm" type="video/webm">
-    </video>
-  </div>
 
-  <!-- Header -->
-  <header id="mainHeader">
-    <img src="Logo.png" alt="DFX Logo">
-    <div class="page-title" id="pageTitle">Home</div>
-  </header>
-
-  <!-- Nav Bar -->
-  <nav id="mainNav">
-    <button data-target="home" class="active">Home</button>
-    <button data-target="service">Service</button>
-    <button data-target="service">Projects</button>
-    <button data-target="clients">Clients</button>
-    <button data-target="contact">Contact</button>
-  </nav>
-  
- <!-- Home Section -->
-  <section id="home" class="active">
-  <video autoplay muted loop playsinline style="width: 100vw; height: 100vh; object-fit: cover;">
-    <source src="DFX Showreel 2024.mp4" type="video/mp4">
+<!-- INTRO -->
+<div class="intro-screen" id="introScreen">
+  <video autoplay muted playsinline id="introVideo">
+    <source src="DFX LOGO Intro.webm" type="video/webm">
     Your browser does not support the video tag.
   </video>
-</section>  
-
-  <!-- Project Section -->
-  <h2>Projects</h2>
-<div class="video-container">
-  <iframe src="https://www.youtube.com/embed/FVNMLvH35Ys" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/xFwnun3zMH4" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/wREenI4RRgc" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/QlsWKDEJWtk" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/Gh-8nJfbSVs" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/vuNy4gvvoZc" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/_WI1QZTFXX4" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/2r1lr7dLano" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/9ktiKThBwZA" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/N5D2_bK5RNM" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/nO72m__mcew" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/OvFSsmLqyCc" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/bL5uI2NAKDM" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/kAshuCi6UJw" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/5gf0Icoizs8" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/S-bsAyqS4KY" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/1Cdo8-VwHpY" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/dxb-3G4qYyo" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/STtoeP24j4g" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/Ehn5iVm0Ox0" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/d-gbIabi8ok" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/ziI3mLHN3YA" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/YzyzPK16Slc" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/JdCC1Xld15Q" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/L2_iRJjAJZ0" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/3brG7XOeVog" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/WxYedjhxj1A" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/fA6Jvc7mxxY" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/Jxiy-f9NkJo" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/ekxCVhuoOOw" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/SOeBXI2d26I" allowfullscreen></iframe>
-  <iframe src="https://www.youtube.com/embed/CZ4GzZjTPj4" allowfullscreen></iframe>
 </div>
 
-<style>
-  .video-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
-
-  .video-container iframe {
-    width: 100%;
-    height: 200px;
-    border: none;
-    border-radius: 8px;
-  }
-
-  @media (max-width: 768px) {
-    .video-container {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .video-container {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
-
-
-  <!-- Service Section -->
-  <section id="service">
-    <div class="slideshow">
-      <div class="slide active">
-        <img src="service1.jpg" alt="Service 1">
-        <div class="slide-text">Creative Editing</div>
-      </div>
-      <div class="slide">
-        <img src="service2.jpg" alt="Service 2">
-        <div class="slide-text">Advanced Color Grading</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Clients Section -->
-  <section id="clients">
-    <div class="clients-logos">
-      <img src="client1.png" alt="Grameenphone">
-      <img src="client2.png" alt="Unilever">
-    </div>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact">
-    <div class="contact-icons">
-      <a href="https://facebook.com/DFX.anime" target="_blank"><img src="FB.png" alt="Facebook"></a>
-      <a href="https://youtube.com/DFX-Studio" target="_blank"><img src="YT.png" alt="YouTube"></a>
-      <a href="https://wa.me/8801738194746" target="_blank"><img src="WA.png" alt="WhatsApp"></a>
-      <a href="tel:+8809639194746"><img src="Call.png" alt="Call"></a>
-      <a href="mailto:dfx.studio.bd@gmail.com"><img src="Mail.png" alt="Mail"></a>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>© 2025 DFX Studio. All rights reserved.</footer>
-
-  <!-- Video Popup -->
-  <div class="video-popup-wrapper" id="videoPopup">
-    <video controls id="popupVideo"></video>
+<!-- TOP BAR -->
+<div class="top-bar" id="topBar">
+  <div class="logo"><img src="Logo.png" alt="DFX Logo"></div>
+  <div class="nav">
+    <a href="#" class="nav-link active" data-target="home">Home</a>
+    <a href="#" class="nav-link" data-target="service">Service</a>
+    <a href="#" class="nav-link" data-target="projects">Projects</a>
+    <a href="#" class="nav-link" data-target="clients">Clients</a>
+    <a href="#" class="nav-link" data-target="contact">Contact</a>
   </div>
+</div>
 
-  <script>
-    const intro = document.getElementById("introScreen");
-    const header = document.getElementById("mainHeader");
-    const nav = document.getElementById("mainNav");
-    const sections = document.querySelectorAll("section");
-    const navButtons = document.querySelectorAll("nav button");
-    const pageTitle = document.getElementById("pageTitle");
+<!-- HOME -->
+<section id="home" class="active">
+  <video src="DFX Showreel 2024.mp4" autoplay muted loop></video>
+</section>
 
-    setTimeout(() => {
-      intro.style.display = "none";
-      header.style.display = "flex";
-      nav.style.opacity = 1;
-      document.getElementById("home").classList.add("active");
-    }, 4000);
+<!-- SERVICE -->
+<section id="service">
+  <h2></h2>
+  <img src="Service/ser-image.jpg" alt="Service Image">
+</section>
 
-    navButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        navButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
+<!-- PROJECTS -->
+<section id="projects">
+  <h2></h2>
+  <div class="video-grid">
+    <iframe src="https://www.youtube.com/embed/FVNMLvH35Ys" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/xFwnun3zMH4" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/wREenI4RRgc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/QlsWKDEJWtk" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/Gh-8nJfbSVs" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/vuNy4gvvoZc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/_WI1QZTFXX4" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/2r1lr7dLano" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/9ktiKThBwZA" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/N5D2_bK5RNM" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/nO72m__mcew" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/OvFSsmLqyCc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/bL5uI2NAKDM" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/kAshuCi6UJw" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/5gf0Icoizs8" frameborder="0" allowfullscreen></iframe> 
+<iframe src="https://www.youtube.com/embed/S-bsAyqS4KY" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/1Cdo8-VwHpY" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/dxb-3G4qYyo" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/STtoeP24j4g" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/Ehn5iVm0Ox0" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/d-gbIabi8ok" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/ziI3mLHN3YA" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/YzyzPK16Slc" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/JdCC1Xld15Q" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/L2_iRJjAJZ0" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/3brG7XOeVog" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/WxYedjhxj1A" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/fA6Jvc7mxxY" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/Jxiy-f9NkJo" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/ekxCVhuoOOw" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/SOeBXI2d26I" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/CZ4GzZjTPj4" frameborder="0" allowfullscreen></iframe>
+  </div>
+</section>
 
-        sections.forEach(sec => sec.classList.remove("active"));
-        document.getElementById(btn.dataset.target).classList.add("active");
+<!-- CLIENTS -->
+<section id="clients">
+  <h2></h2>
+  <div>
+    <img src="Client/client-logo.png" alt="Client 1">
+    <img src="Client/client-logo.png" alt="Client 2">
+    <img src="Client/client-logo.png" alt="Client 3">
+  </div>
+</section>
 
-        pageTitle.textContent = btn.textContent;
-      });
+<!-- CONTACT -->
+<section id="contact">
+  <h2></h2>
+  <div class="icons">
+    <a href="https://facebook.com/DFX.anime" target="_blank"><img src="FB.png" alt="Facebook"></a>
+    <a href="https://youtube.com/DFX-Studio" target="_blank"><img src="YT.png" alt="YouTube"></a>
+    <a href="https://wa.me/8801738194746" target="_blank"><img src="WA.png" alt="WhatsApp"></a>
+    <a href="tel:+8809639194746"><img src="Call.png" alt="Call"></a>
+    <a href="mailto:dfx.studio.bd@gmail.com"><img src="Mail.png" alt="Mail"></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  &copy; 2025 DFX Studio. All Rights Reserved.
+</footer>
+
+<script>
+  // Intro Screen Hide
+  setTimeout(() => {
+    document.getElementById("introScreen").style.display = "none";
+    document.getElementById("topBar").style.display = "flex";
+  }, 4000);
+
+  // Nav Handling
+  const navLinks = document.querySelectorAll(".nav-link");
+  const sections = document.querySelectorAll("section");
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const target = link.getAttribute("data-target");
+
+      sections.forEach(sec => sec.classList.remove("active"));
+      document.getElementById(target).classList.add("active");
+
+      navLinks.forEach(l => l.classList.remove("active"));
+      link.classList.add("active");
     });
-
-    // Slideshow logic
-    let slides = document.querySelectorAll(".slide");
-    let index = 0;
-    setInterval(() => {
-      slides[index].classList.remove("active");
-      index = (index + 1) % slides.length;
-      slides[index].classList.add("active");
-    }, 4000);
-  </script>
+  });
+</script>
 </body>
 </html>
