@@ -1,46 +1,63 @@
+
 window.onload = function () {
+  const sections = document.querySelectorAll('.section');
+  const buttons = {
+    home: document.getElementById('btn-home'),
+    service: document.getElementById('btn-service'),
+    projects: document.getElementById('btn-projects'),
+    clients: document.getElementById('btn-clients'),
+    contact: document.getElementById('btn-contact')
+  };
+
+  function showSection(id) {
+    sections.forEach(sec => sec.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    for (const key in buttons) {
+      const img = buttons[key];
+      img.src = img.src.replace('_1.png', '_0.png');
+    }
+    buttons[id].src = buttons[id].src.replace('_0.png', '_1.png');
+  }
+
+  for (const id in buttons) {
+    buttons[id].addEventListener('click', () => showSection(id));
+  }
+
+  // Hide intro after 4s
   setTimeout(() => {
     document.getElementById('intro').style.display = 'none';
-    document.getElementById('main').classList.remove('hidden');
+    showSection('home');
   }, 4000);
-};
 
-function showSection(sectionId) {
-  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-  document.getElementById(sectionId).classList.add('active');
-
-  // Nav button highlight swap
-  ['home', 'service', 'projects', 'clients', 'contact'].forEach(id => {
-    const btn = document.getElementById(`nav-${id}`);
-    const src = btn.src;
-    btn.src = src.replace('_1.png', '_0.png');
-  });
-  const activeBtn = document.getElementById(`nav-${sectionId}`);
-  activeBtn.src = activeBtn.src.replace('_0.png', '_1.png');
-}
-
-// Video Popup
-function openVideo(url) {
-  const iframe = document.getElementById("popup-video");
-  iframe.src = url + "?autoplay=1";
-  document.getElementById("video-popup").style.display = "flex";
-}
-function closeVideo() {
-  document.getElementById("popup-video").src = "";
-  document.getElementById("video-popup").style.display = "none";
-}
-
-// Load client logos
-window.addEventListener("DOMContentLoaded", () => {
-  const clientDiv = document.getElementById("client-logos");
+  // Load client logos dynamically
   fetch('Clients/')
     .then(res => res.text())
-    .then(data => {
-      const files = [...data.matchAll(/href="(.*?\.png)"/g)].map(m => m[1]);
-      files.forEach(file => {
-        const img = document.createElement("img");
-        img.src = "Clients/" + file;
-        clientDiv.appendChild(img);
+    .then(html => {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      const logos = [...div.querySelectorAll('a')]
+        .map(a => a.href)
+        .filter(href => href.match(/\.(png|jpg|jpeg)$/i));
+      const container = document.getElementById('client-logos');
+      logos.forEach(logo => {
+        const img = document.createElement('img');
+        img.src = logo;
+        container.appendChild(img);
       });
     });
-});
+
+  // Example slideshow images & text
+  const serviceImages = ['Servic/ser-image.jpg'];
+  const texts = ['Professional Editing', 'Color Grading', 'Sound Design'];
+  let slideIndex = 0;
+  const slideshow = document.getElementById('service-slideshow');
+  function showSlide() {
+    slideshow.innerHTML = `
+      <img src="${serviceImages[slideIndex % serviceImages.length]}" />
+      <div class="slideshow-text">${texts[slideIndex % texts.length]}</div>
+    `;
+    slideIndex++;
+    setTimeout(showSlide, 3000);
+  }
+  showSlide();
+};
