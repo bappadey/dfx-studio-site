@@ -91,15 +91,3 @@ body, html {
   width: 50px;
   cursor: pointer;
 }
-
-#site-footer {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  color: white;
-  font-size: 14px;
-  padding: 20px 0;
-  font-family: 'Courier New', Courier, monospace; /* Or any distinct font you like */
-  background: transparent; /* Optional: or #000 for solid look */
-  z-index: 1;
-}
