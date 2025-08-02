@@ -1,115 +1,58 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DFX</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DFX Studio</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-<!-- Intro Page -->
-<div id="intro">
-  <video src="DFX LOGO Intro.webm" autoplay muted playsinline></video>
-</div>
-
-<!-- Main Page Wrapper -->
-<div id="main" class="hidden">
-  <!-- Logo -->
-  <div id="logo">
-    <img src="Logo.png" alt="DFX Logo">
+  <!-- Intro -->
+  <div id="intro">
+    <video src="DFX LOGO Intro.webm" autoplay muted playsinline></video>
   </div>
 
-  <!-- Nav -->
+  <!-- Navigation -->
   <div id="navbar">
-    <img src="Home_1.png" id="nav-home" onclick="showSection('home')">
-    <img src="Service_0.png" id="nav-service" onclick="showSection('service')">
-    <img src="Projects_0.png" id="nav-projects" onclick="showSection('projects')">
-    <img src="Client_0.png" id="nav-clients" onclick="showSection('clients')">
-    <img src="Contact_0.png" id="nav-contact" onclick="showSection('contact')">
+    <img src="Home_0.png" id="btn-home" />
+    <img src="Service_0.png" id="btn-service" />
+    <img src="Projects_0.png" id="btn-projects" />
+    <img src="Client_0.png" id="btn-clients" />
+    <img src="Contact_0.png" id="btn-contact" />
   </div>
 
-  <!-- Sections -->
-  <section id="home" class="section active">
+  <!-- Home Section -->
+  <section id="home" class="section">
     <video src="DFX Showreel for website.mp4" autoplay loop muted playsinline></video>
   </section>
 
+  <!-- Service Section -->
   <section id="service" class="section">
-    <div class="slideshow">
-      <img id="slide-image" src="Servic/ser-image 01.jpg">
-      <div id="slide-text">Rotoscopy</div>   
-    </div>
-      <div class="slideshow">
-      <img id="slide-image" src="Servic/ser-image 02.jpg">
-      <div id="slide-text">VFXy</div>   
-    </div>
+    <div class="slideshow-container" id="service-slideshow"></div>
   </section>
 
-  <section id="projects" class="section scroll">
-    <div class="project-grid">
-      <!-- YouTube Embed -->
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/FVNMLvH35Ys')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/xFwnun3zMH4')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/wREenI4RRgc')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/QlsWKDEJWtk')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/Gh-8nJfbSVs')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/vuNy4gvvoZc')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/_WI1QZTFXX4')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/2r1lr7dLano')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/9ktiKThBwZA')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/N5D2_bK5RNM')"></div>
-        <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/nO72m__mcew')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/OvFSsmLqyCc')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/wREenI4RRgc')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/bL5uI2NAKDM')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/kAshuCi6UJw')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/5gf0Icoizs8')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/S-bsAyqS4KY')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/1Cdo8-VwHpY')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/dxb-3G4qYyo')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/STtoeP24j4g')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/Ehn5iVm0Ox0')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/d-gbIabi8ok')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/ziI3mLHN3YA')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/YzyzPK16Slc')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/JdCC1Xld15Q')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/L2_iRJjAJZ0')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/3brG7XOeVog')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/WxYedjhxj1A')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/fA6Jvc7mxxY')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/Jxiy-f9NkJo')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/ekxCVhuoOOw')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/SOeBXI2d26I')"></div>
-      <div class="video-box" onclick="openVideo('https://www.youtube.com/embed/CZ4GzZjTPj4')"></div>
-      
-      
-      <!-- Add more by duplicating -->
-    </div>
+  <!-- Projects Section -->
+  <section id="projects" class="section">
+    <div class="project-grid" id="project-grid"></div>
   </section>
 
+  <!-- Clients Section -->
   <section id="clients" class="section">
     <div class="client-grid" id="client-logos"></div>
   </section>
 
+  <!-- Contact Section -->
   <section id="contact" class="section">
     <div class="contact-icons">
-      <a href="https://facebook.com/DFX.anime"><img src="FB.png" alt="Facebook"></a>
-      <a href="https://youtube.com/@DFX-studio"><img src="YT.png" alt="YouTube"></a>
-      <a href="tel:+8809639194746"><img src="Call.png" alt="Call"></a>
-      <a href="https://wa.me/8801738194746"><img src="WA.png" alt="WhatsApp"></a>
-      <a href="mailto:dfx.studio.bd@gmail.com?subject=Message from Site"><img src="Mail.png" alt="Mail"></a>
+      <img src="FB.png" onclick="window.open('https://facebook.com/DFX.anime')" />
+      <img src="YT.png" onclick="window.open('https://youtube.com/@DFX-studio')" />
+      <img src="WA.png" onclick="window.open('https://wa.me/+8801738194746')" />
+      <img src="Call.png" onclick="window.open('tel:+8809639194746')" />
+      <img src="Mail.png" onclick="window.open('mailto:dfx.studio@gmail.com')" />
     </div>
   </section>
 
-  <!-- Video Popup -->
-  <div id="video-popup" onclick="closeVideo()">
-    <iframe id="popup-video" frameborder="0" allowfullscreen></iframe>
-  </div>
-
-  <!-- Footer -->
-  <footer>© DFX Studio. All rights reserved.</footer>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
