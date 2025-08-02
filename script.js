@@ -38,7 +38,7 @@ window.onload = function () {
       const logos = [...div.querySelectorAll('a')]
         .map(a => a.href)
         .filter(href => href.match(/\.(png|jpg|jpeg)$/i));
-      const container = document.getElementById('client-logos');
+      const container = document.getElementById('Clients');
       logos.forEach(logo => {
         const img = document.createElement('img');
         img.src = logo;
@@ -47,8 +47,8 @@ window.onload = function () {
     });
 
   // Example slideshow images & text
-  const serviceImages = ['Servic/ser-image.jpg'];
-  const texts = ['Professional Editing', 'Color Grading', 'Sound Design'];
+  const serviceImages = ['Servic/ser-image 01.jpg, ser-image 02.jpg, ser-image 03.jpg,'];
+  const texts = ['VFX', '3D Animation', 'Composite'];
   let slideIndex = 0;
   const slideshow = document.getElementById('service-slideshow');
   function showSlide() {
