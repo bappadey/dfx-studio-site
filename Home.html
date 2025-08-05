@@ -49,18 +49,24 @@
       top: 20px;
       right: 20px;
       display: flex;
-      gap: 2px;
+      gap: 10px;
       z-index: 5;
     }
 
     #navbar img {
-      height: 20px;
+      height: 30px;
       cursor: pointer;
-      transition: transform 0.3s;
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
 
     #navbar img:hover {
-      transform: scale(1.2);
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+    }
+
+    #navbar img.active-btn {
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
     }
 
     .section {
@@ -91,8 +97,6 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      background-size: cover;
-      background-position: center;
       opacity: 0;
       transition: opacity 1s;
     }
@@ -108,6 +112,7 @@
       text-align: left;
       color: white;
       font-size: 4em;
+      padding-left: 30px;
       opacity: 0;
       transition: opacity 1s;
     }
@@ -156,7 +161,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 20px;
-      padding: 30px;
+      padding: 30px 30px 30px 30px;
       animation: fadeIn 1s ease-in-out forwards;
     }
 
@@ -211,11 +216,11 @@
 
   <!-- Navbar -->
   <div id="navbar">
-    <img src="Home_0.png" data-section="home">
-    <img src="Service_0.png" data-section="service">
-    <img src="Projects_0.png" data-section="projects">
-    <img src="Client_0.png" data-section="clients">
-    <img src="Contact_0.png" data-section="contact">
+    <img src="Home_0.png" data-section="home" data-default="Home_0.png" data-hover="Home_1.png">
+    <img src="Service_0.png" data-section="service" data-default="Service_0.png" data-hover="Service_1.png">
+    <img src="Projects_0.png" data-section="projects" data-default="Projects_0.png" data-hover="Projects_1.png">
+    <img src="Client_0.png" data-section="clients" data-default="Client_0.png" data-hover="Client_1.png">
+    <img src="Contact_0.png" data-section="contact" data-default="Contact_0.png" data-hover="Contact_1.png">
   </div>
 
   <!-- Sections -->
@@ -224,7 +229,7 @@
   </section>
 
   <section id="service" class="section">
-    <!-- Slides added via JS -->
+    <!-- Slides will be added via JS -->
   </section>
 
   <section id="projects" class="section">
@@ -257,28 +262,46 @@
     document.getElementById('main').style.display = 'block';
   }, 4000);
 
-  // Navbar click
+  // Navbar Buttons Hover & Active Toggle
   document.querySelectorAll('#navbar img').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      btn.src = btn.dataset.hover;
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (!btn.classList.contains('active-btn')) {
+        btn.src = btn.dataset.default;
+      }
+    });
     btn.addEventListener('click', () => {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
       document.getElementById(btn.dataset.section).classList.add('active');
+      document.querySelectorAll('#navbar img').forEach(b => {
+        b.classList.remove('active-btn');
+        b.src = b.dataset.default;
+      });
+      btn.classList.add('active-btn');
+      btn.src = btn.dataset.hover;
     });
   });
 
-  // Service Slideshow
-  const serviceImages = ['Rotoscopy for web.mp4', 'Composite For Web.mp4', '3D & Liquid For Web.mp4']; // update if needed
-  const serviceTexts = ['Rotoscopy: Frame by frame, DFX isolate the impossible.From clean mattes to seamless composites -our precision rotoscopy brings your VFX to life.', 'Composite: DFX craft stunning visual effects that blend seamlessly with your footage — from explosions to environments, turning imagination into cinematic reality.', '3D & Simulation'];
+  // Service Section Video Slides
+  const serviceVideos = ['Rotoscopy for web.mp4', 'Composite For Web.mp4', '3D & Liquid For Web.mp4'];
+  const serviceTexts = [
+    'Rotoscopy: Frame by frame, DFX isolate the impossible. From clean mattes to seamless composites — our precision rotoscopy brings your VFX to life.',
+    'Composite: DFX craft stunning visual effects that blend seamlessly with your footage — from explosions to environments, turning imagination into cinematic reality.',
+    '3D & Simulation'
+  ];
   const serviceContainer = document.getElementById('service');
-
-  serviceImages.forEach((img, i) => {
+  serviceVideos.forEach((vid, i) => {
     const slide = document.createElement('div');
     slide.className = 'service-slide';
-    slide.style.backgroundImage = `url('Servic/${img}')`;
     if (i === 0) slide.classList.add('active');
-    slide.innerHTML = `<div class="service-text">${serviceTexts[i]}</div>`;
+    slide.innerHTML = `
+      <video src="Servic/${vid}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;"></video>
+      <div class="service-text">${serviceTexts[i]}</div>
+    `;
     serviceContainer.appendChild(slide);
   });
-
   let currentSlide = 0;
   setInterval(() => {
     const slides = document.querySelectorAll('.service-slide');
@@ -287,21 +310,20 @@
     slides[currentSlide].classList.add('active');
   }, 4000);
 
-  // Clients Loader
+  // Clients Logos
   const clientLogos = [
-  'Clients/Dettol.png', 'Clients/LUX_(soap)_logo.png', 'Clients/NESTLElogo-Alternative-with-wordmark-signature-oak.png',
-  'Clients/Vim.png', 'Clients/drug.svg', 'Clients/Aarong Dairy.jpg', 'Clients/Ama.png', 'Clients/Asian Paints.png',
-  'Clients/bKash.png', 'Clients/Brac.png', 'Clients/BritishCouncil.png', 'Clients/CartUP.png', 'Clients/CEAT.png',
-  'Clients/Chaka.jpg', 'Clients/Chefchoice.png', 'Clients/Clear Men.jpeg', 'Clients/Clemon.jpeg', 'Clients/closeup.png',
-  'Clients/Daraz.png', 'Clients/Electromart.png', 'Clients/Farmfresh.jpeg', 'Clients/Finlay.webp', 'Clients/Foodi.svg',
-  'Clients/Foton.png', 'Clients/Freedom.png', 'Clients/Fresh anonna.jpeg', 'Clients/fresh_lp_gas.png', 'Clients/Frutika.jpeg',
-  'Clients/Goldmark.jpeg', 'Clients/goodknight.png', 'Clients/Gozayaan.jpg', 'Clients/GP.png', 'Clients/GPH.jpg',
-  'Clients/Harpic.png', 'Clients/Honor.png', 'Clients/IDLC.png', 'Clients/IPDC.png', 'Clients/KSRM.png',
-  'Clients/lee cooper.png', 'Clients/Link3.png', 'Clients/Lotto.png', 'Clients/Parachute Skinpure.jpg', 'Clients/Pathao.png',
-  'Clients/Power.jpeg', 'Clients/SSL.png', 'Clients/Starline.jpeg', 'Clients/Sunquick.png', 'Clients/Sylon tea.jpeg',
-  'Clients/TikTok.png', 'Clients/TSports.png', 'Clients/Veet.png', 'Clients/Walton.png', 'Clients/Yamaha.png'
-];
- // You must manually add or fetch via backend
+    'Clients/Dettol.png', 'Clients/LUX_(soap)_logo.png', 'Clients/NESTLElogo-Alternative-with-wordmark-signature-oak.png',
+    'Clients/Vim.png', 'Clients/drug.svg', 'Clients/Aarong Dairy.jpg', 'Clients/Ama.png', 'Clients/Asian Paints.png',
+    'Clients/bKash.png', 'Clients/Brac.png', 'Clients/BritishCouncil.png', 'Clients/CartUP.png', 'Clients/CEAT.png',
+    'Clients/Chaka.jpg', 'Clients/Chefchoice.png', 'Clients/Clear Men.jpeg', 'Clients/Clemon.jpeg', 'Clients/closeup.png',
+    'Clients/Daraz.png', 'Clients/Electromart.png', 'Clients/Farmfresh.jpeg', 'Clients/Finlay.webp', 'Clients/Foodi.svg',
+    'Clients/Foton.png', 'Clients/Freedom.png', 'Clients/Fresh anonna.jpeg', 'Clients/fresh_lp_gas.png', 'Clients/Frutika.jpeg',
+    'Clients/Goldmark.jpeg', 'Clients/goodknight.png', 'Clients/Gozayaan.jpg', 'Clients/GP.png', 'Clients/GPH.jpg',
+    'Clients/Harpic.png', 'Clients/Honor.png', 'Clients/IDLC.png', 'Clients/IPDC.png', 'Clients/KSRM.png',
+    'Clients/lee cooper.png', 'Clients/Link3.png', 'Clients/Lotto.png', 'Clients/Parachute Skinpure.jpg', 'Clients/Pathao.png',
+    'Clients/Power.jpeg', 'Clients/SSL.png', 'Clients/Starline.jpeg', 'Clients/Sunquick.png', 'Clients/Sylon tea.jpeg',
+    'Clients/TikTok.png', 'Clients/TSports.png', 'Clients/Veet.png', 'Clients/Walton.png', 'Clients/Yamaha.png'
+  ];
   const clientGrid = document.getElementById('clientGrid');
   clientLogos.forEach(logo => {
     const img = document.createElement('img');
@@ -311,40 +333,18 @@
 
   // Projects: YouTube Popup
   const videoLinks = [
-    'https://www.youtube.com/embed/FVNMLvH35Ys',
-'https://www.youtube.com/embed/xFwnun3zMH4',
-'https://www.youtube.com/embed/wREenI4RRgc',
-'https://www.youtube.com/embed/QlsWKDEJWtk',
-'https://www.youtube.com/embed/Gh-8nJfbSVs',
-'https://www.youtube.com/embed/vuNy4gvvoZc',
-'https://www.youtube.com/embed/_WI1QZTFXX4',
-'https://www.youtube.com/embed/2r1lr7dLano',
-'https://www.youtube.com/embed/9ktiKThBwZA',
-'https://www.youtube.com/embed/N5D2_bK5RNM',
-'https://www.youtube.com/embed/nO72m__mcew',
-'https://www.youtube.com/embed/OvFSsmLqyCc',
-'https://www.youtube.com/embed/bL5uI2NAKDM',
-'https://www.youtube.com/embed/kAshuCi6UJw',
-'https://www.youtube.com/embed/5gf0Icoizs8',
-'https://www.youtube.com/embed/S-bsAyqS4KY',
-'https://www.youtube.com/embed/1Cdo8-VwHpY',
-'https://www.youtube.com/embed/dxb-3G4qYyo',
-'https://www.youtube.com/embed/STtoeP24j4g',
-'https://www.youtube.com/embed/Ehn5iVm0Ox0',
-'https://www.youtube.com/embed/d-gbIabi8ok',
-'https://www.youtube.com/embed/ziI3mLHN3YA',
-'https://www.youtube.com/embed/YzyzPK16Slc',
-'https://www.youtube.com/embed/JdCC1Xld15Q',
-'https://www.youtube.com/embed/L2_iRJjAJZ0',
-'https://www.youtube.com/embed/3brG7XOeVog',
-'https://www.youtube.com/embed/WxYedjhxj1A',
-'https://www.youtube.com/embed/fA6Jvc7mxxY',
-'https://www.youtube.com/embed/Jxiy-f9NkJo',
-'https://www.youtube.com/embed/ekxCVhuoOOw',
-'https://www.youtube.com/embed/SOeBXI2d26I',
-'https://www.youtube.com/embed/CZ4GzZjTPj4'
+    'https://www.youtube.com/embed/FVNMLvH35Ys', 'https://www.youtube.com/embed/xFwnun3zMH4', 'https://www.youtube.com/embed/wREenI4RRgc',
+    'https://www.youtube.com/embed/QlsWKDEJWtk', 'https://www.youtube.com/embed/Gh-8nJfbSVs', 'https://www.youtube.com/embed/vuNy4gvvoZc',
+    'https://www.youtube.com/embed/_WI1QZTFXX4', 'https://www.youtube.com/embed/2r1lr7dLano', 'https://www.youtube.com/embed/9ktiKThBwZA',
+    'https://www.youtube.com/embed/N5D2_bK5RNM', 'https://www.youtube.com/embed/nO72m__mcew', 'https://www.youtube.com/embed/OvFSsmLqyCc',
+    'https://www.youtube.com/embed/bL5uI2NAKDM', 'https://www.youtube.com/embed/kAshuCi6UJw', 'https://www.youtube.com/embed/5gf0Icoizs8',
+    'https://www.youtube.com/embed/S-bsAyqS4KY', 'https://www.youtube.com/embed/1Cdo8-VwHpY', 'https://www.youtube.com/embed/dxb-3G4qYyo',
+    'https://www.youtube.com/embed/STtoeP24j4g', 'https://www.youtube.com/embed/Ehn5iVm0Ox0', 'https://www.youtube.com/embed/d-gbIabi8ok',
+    'https://www.youtube.com/embed/ziI3mLHN3YA', 'https://www.youtube.com/embed/YzyzPK16Slc', 'https://www.youtube.com/embed/JdCC1Xld15Q',
+    'https://www.youtube.com/embed/L2_iRJjAJZ0', 'https://www.youtube.com/embed/3brG7XOeVog', 'https://www.youtube.com/embed/WxYedjhxj1A',
+    'https://www.youtube.com/embed/fA6Jvc7mxxY', 'https://www.youtube.com/embed/Jxiy-f9NkJo', 'https://www.youtube.com/embed/ekxCVhuoOOw',
+    'https://www.youtube.com/embed/SOeBXI2d26I', 'https://www.youtube.com/embed/CZ4GzZjTPj4'
   ];
-
   const projectGrid = document.getElementById('projectGrid');
   videoLinks.forEach(link => {
     const div = document.createElement('div');
@@ -356,8 +356,6 @@
     };
     projectGrid.appendChild(div);
   });
-
-  // Close popup on click
   document.getElementById('popup').addEventListener('click', () => {
     document.getElementById('popup').style.display = 'none';
     document.querySelector('#popup iframe').src = '';
@@ -366,10 +364,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
