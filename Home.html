@@ -11,40 +11,43 @@
       padding: 0;
       background: #2f1c52;
       font-family: Arial, sans-serif;
-      overflow: hidden;
+    }
+
+    /* Ensure all sections fit the device */
+    body, .section {
+      width: 100%;
+      height: 100%;
     }
 
     /* Intro */
     #intro {
       position: fixed;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: #2f1c52;
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 10;
     }
-
     #intro video {
-      width: 65%;
-      height: 65%;
-      object-fit: cover;
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
     }
 
     /* Main Content */
-    #main {
-      display: none;
-    }
+    #main { display: none; }
 
     #logo {
       position: fixed;
       top: 20px;
       left: 20px;
       z-index: 5;
-      height: 100px;
+      height: 70px;
+      max-width: 40vw;
     }
 
+    /* Navbar */
     #navbar {
       position: fixed;
       top: 20px;
@@ -52,22 +55,20 @@
       display: flex;
       gap: 10px;
       z-index: 5;
+      flex-wrap: wrap;
     }
-
     #navbar img {
       height: 30px;
       cursor: pointer;
       transition: transform 0.3s ease, filter 0.3s ease;
     }
-
     #navbar img:hover {
       transform: scale(1.3);
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
     }
-
     #navbar img.active-btn {
       transform: scale(1.3);
-      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+      filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));
     }
 
     .section {
@@ -76,10 +77,7 @@
       height: 100vh;
       overflow: auto;
     }
-
-    .active {
-      display: block;
-    }
+    .active { display: block; }
 
     /* Home Video */
     #home video {
@@ -90,37 +88,27 @@
     }
 
     /* Service */
-    #service {
-      position: relative;
-    }
-
+    #service { position: relative; }
     .service-slide {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       opacity: 0;
       transition: opacity 1s;
     }
-
-    .service-slide.active {
-      opacity: 1;
-    }
-
+    .service-slide.active { opacity: 1; }
     .service-text {
       position: absolute;
       bottom: 10%;
-      width: 100%;
+      left: 5%;
+      right: 5%;
       text-align: left;
       color: white;
-      font-size: 4em;
-      padding-left: 30px;
+      font-size: 2em;
+      max-width: 90%;
       opacity: 0;
       transition: opacity 1s;
     }
-
-    .service-slide.active .service-text {
-      opacity: 1;
-    }
+    .service-slide.active .service-text { opacity: 1; }
 
     /* Projects */
     #projects .grid {
@@ -129,45 +117,43 @@
       gap: 15px;
       padding: 20px;
     }
-
     .project-thumb {
       position: relative;
       cursor: pointer;
     }
-
-    .project-thumb iframe {
+    .project-thumb img {
       width: 100%;
-      height: 180px;
+      display: block;
+      object-fit: cover;
     }
-
     .video-popup {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 85%;
-      height: 85%;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
       z-index: 20;
       display: none;
-      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
     }
-
     .video-popup iframe {
       width: 100%;
       height: 100%;
+      max-width: 1280px;
+      max-height: 720px;
     }
 
     /* Clients */
     #clients .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 20px;
-      padding: 30px 30px 30px 30px;
-      animation: fadeIn 1s ease-in-out forwards;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      justify-items: center;
+      align-items: center;
     }
-
     #clients img {
-      width: 100px;
+      max-width: 100px;
       max-height: 100px;
       object-fit: contain;
     }
@@ -178,29 +164,28 @@
       justify-content: center;
       align-items: center;
       flex-wrap: wrap;
-      gap: 30px;
-      height: 100vh;
+      gap: 20px;
+      padding: 20px;
+      height: 100%;
     }
-
     #contact img {
-      height: 60px;
+      height: 50px;
       cursor: pointer;
     }
 
     /* Footer */
     footer {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
       text-align: center;
       font-family: 'Courier New', monospace;
       color: #aaa;
-      z-index: 2;
+      padding: 10px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .service-text { font-size: 1.2em; }
+      #logo { height: 50px; }
+      #navbar img { height: 25px; }
     }
   </style>
 </head>
@@ -229,15 +214,10 @@
     <video src="DFX Showreel for website.mp4" autoplay loop muted playsinline></video>
   </section>
 
-  <section id="service" class="section">
-    <!-- Slides will be added via JS -->
-  </section>
+  <section id="service" class="section"></section>
 
   <section id="projects" class="section">
     <div class="grid" id="projectGrid"></div>
-    <div class="video-popup" id="popup">
-      <iframe src="" frameborder="0" allowfullscreen></iframe>
-    </div>
   </section>
 
   <section id="clients" class="section">
@@ -250,11 +230,15 @@
     <img src="WA.png" onclick="window.open('https://wa.me/+8801738194746')">
     <img src="Call.png" onclick="window.open('tel:+8809639194746')">
     <img src="Mail.png" onclick="window.open('mailto:info@dfxbd.com')">
-
   </section>
 
   <!-- Footer -->
   <footer>© DFX Studio. All rights reserved.</footer>
+</div>
+
+<!-- Video Popup -->
+<div class="video-popup" id="popup">
+  <iframe src="" frameborder="0" allowfullscreen></iframe>
 </div>
 
 <script>
@@ -264,15 +248,11 @@
     document.getElementById('main').style.display = 'block';
   }, 4000);
 
-  // Navbar Buttons Hover & Active Toggle
+  // Navbar Controls
   document.querySelectorAll('#navbar img').forEach(btn => {
-    btn.addEventListener('mouseenter', () => {
-      btn.src = btn.dataset.hover;
-    });
+    btn.addEventListener('mouseenter', () => btn.src = btn.dataset.hover);
     btn.addEventListener('mouseleave', () => {
-      if (!btn.classList.contains('active-btn')) {
-        btn.src = btn.dataset.default;
-      }
+      if (!btn.classList.contains('active-btn')) btn.src = btn.dataset.default;
     });
     btn.addEventListener('click', () => {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
@@ -286,7 +266,7 @@
     });
   });
 
-  // Service Section Video Slides
+  // Service Section
   const serviceVideos = ['Rotoscopy for web.mp4', 'Composite For Web.mp4', '3D & Liquid For Web.mp4'];
   const serviceTexts = [
     'Rotoscopy: Frame by frame, DFX isolate the impossible. From clean mattes to seamless composites — our precision rotoscopy brings your VFX to life.',
@@ -296,10 +276,9 @@
   const serviceContainer = document.getElementById('service');
   serviceVideos.forEach((vid, i) => {
     const slide = document.createElement('div');
-    slide.className = 'service-slide';
-    if (i === 0) slide.classList.add('active');
+    slide.className = 'service-slide' + (i === 0 ? ' active' : '');
     slide.innerHTML = `
-      <video src="Servic/${vid}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;"></video>
+      <video src="Servic/${vid}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:contain; background:#2f1c52;"></video>
       <div class="service-text">${serviceTexts[i]}</div>
     `;
     serviceContainer.appendChild(slide);
@@ -312,7 +291,7 @@
     slides[currentSlide].classList.add('active');
   }, 4000);
 
-  // Clients Logos
+  // Clients
   const clientLogos = [
     'Clients/Dettol.png', 'Clients/LUX_(soap)_logo.png', 'Clients/NESTLElogo-Alternative-with-wordmark-signature-oak.png',
     'Clients/Vim.png', 'Clients/drug.svg', 'Clients/Aarong Dairy.jpg', 'Clients/Ama.png', 'Clients/Asian Paints.png',
@@ -333,27 +312,49 @@
     clientGrid.appendChild(img);
   });
 
-  // Projects: YouTube Popup
+  // Projects - Thumbnail Click Opens Popup
   const videoLinks = [
-    'https://www.youtube.com/embed/FVNMLvH35Ys', 'https://www.youtube.com/embed/xFwnun3zMH4', 'https://www.youtube.com/embed/wREenI4RRgc',
-    'https://www.youtube.com/embed/QlsWKDEJWtk', 'https://www.youtube.com/embed/Gh-8nJfbSVs', 'https://www.youtube.com/embed/vuNy4gvvoZc',
-    'https://www.youtube.com/embed/_WI1QZTFXX4', 'https://www.youtube.com/embed/2r1lr7dLano', 'https://www.youtube.com/embed/9ktiKThBwZA',
-    'https://www.youtube.com/embed/N5D2_bK5RNM', 'https://www.youtube.com/embed/nO72m__mcew', 'https://www.youtube.com/embed/OvFSsmLqyCc',
-    'https://www.youtube.com/embed/bL5uI2NAKDM', 'https://www.youtube.com/embed/kAshuCi6UJw', 'https://www.youtube.com/embed/5gf0Icoizs8',
-    'https://www.youtube.com/embed/S-bsAyqS4KY', 'https://www.youtube.com/embed/1Cdo8-VwHpY', 'https://www.youtube.com/embed/dxb-3G4qYyo',
-    'https://www.youtube.com/embed/STtoeP24j4g', 'https://www.youtube.com/embed/Ehn5iVm0Ox0', 'https://www.youtube.com/embed/d-gbIabi8ok',
-    'https://www.youtube.com/embed/ziI3mLHN3YA', 'https://www.youtube.com/embed/YzyzPK16Slc', 'https://www.youtube.com/embed/JdCC1Xld15Q',
-    'https://www.youtube.com/embed/L2_iRJjAJZ0', 'https://www.youtube.com/embed/3brG7XOeVog', 'https://www.youtube.com/embed/WxYedjhxj1A',
-    'https://www.youtube.com/embed/fA6Jvc7mxxY', 'https://www.youtube.com/embed/Jxiy-f9NkJo', 'https://www.youtube.com/embed/ekxCVhuoOOw',
-    'https://www.youtube.com/embed/SOeBXI2d26I', 'https://www.youtube.com/embed/CZ4GzZjTPj4'
+    'https://www.youtube.com/embed/FVNMLvH35Ys',
+'https://www.youtube.com/embed/xFwnun3zMH4',
+'https://www.youtube.com/embed/wREenI4RRgc',
+'https://www.youtube.com/embed/QlsWKDEJWtk',
+'https://www.youtube.com/embed/Gh-8nJfbSVs',
+'https://www.youtube.com/embed/vuNy4gvvoZc',
+'https://www.youtube.com/embed/_WI1QZTFXX4',
+'https://www.youtube.com/embed/2r1lr7dLano',
+'https://www.youtube.com/embed/9ktiKThBwZA',
+'https://www.youtube.com/embed/N5D2_bK5RNM',
+'https://www.youtube.com/embed/nO72m__mcew',
+'https://www.youtube.com/embed/OvFSsmLqyCc',
+'https://www.youtube.com/embed/bL5uI2NAKDM',
+'https://www.youtube.com/embed/kAshuCi6UJw',
+'https://www.youtube.com/embed/5gf0Icoizs8',
+'https://www.youtube.com/embed/S-bsAyqS4KY',
+'https://www.youtube.com/embed/1Cdo8-VwHpY',
+'https://www.youtube.com/embed/dxb-3G4qYyo',
+'https://www.youtube.com/embed/STtoeP24j4g',
+'https://www.youtube.com/embed/Ehn5iVm0Ox0',
+'https://www.youtube.com/embed/d-gbIabi8ok',
+'https://www.youtube.com/embed/ziI3mLHN3YA',
+'https://www.youtube.com/embed/YzyzPK16Slc',
+'https://www.youtube.com/embed/JdCC1Xld15Q',
+'https://www.youtube.com/embed/L2_iRJjAJZ0',
+'https://www.youtube.com/embed/3brG7XOeVog',
+'https://www.youtube.com/embed/WxYedjhxj1A',
+'https://www.youtube.com/embed/fA6Jvc7mxxY',
+'https://www.youtube.com/embed/Jxiy-f9NkJo',
+'https://www.youtube.com/embed/ekxCVhuoOOw',
+'https://www.youtube.com/embed/SOeBXI2d26I',
+'https://www.youtube.com/embed/CZ4GzZjTPj4',
+    // ... rest of your links here
   ];
   const projectGrid = document.getElementById('projectGrid');
   videoLinks.forEach(link => {
     const div = document.createElement('div');
     div.className = 'project-thumb';
-    div.innerHTML = `<iframe src="${link}" frameborder="0" allowfullscreen></iframe>`;
+    div.innerHTML = `<img src="https://img.youtube.com/vi/${link.split('/embed/')[1]}/hqdefault.jpg" alt="Project">`;
     div.onclick = () => {
-      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup').style.display = 'flex';
       document.querySelector('#popup iframe').src = link + '?autoplay=1';
     };
     projectGrid.appendChild(div);
@@ -366,8 +367,3 @@
 
 </body>
 </html>
-
-
-
-
-
