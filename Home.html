@@ -11,6 +11,7 @@
       padding: 0;
       background: #2f1c52;
       font-family: Arial, sans-serif;
+      height: 100%;
     }
 
     /* Ensure all sections fit the device */
@@ -36,7 +37,12 @@
     }
 
     /* Main Content */
-    #main { display: none; }
+    #main { 
+      display: none; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
     #logo {
       position: fixed;
@@ -74,7 +80,8 @@
     .section {
       display: none;
       width: 100%;
-      height: 100vh;
+      height: 100%;
+      flex: 1;
       overflow: auto;
     }
     .active { display: block; }
@@ -137,8 +144,8 @@
       padding: 10px;
     }
     .video-popup iframe {
-      width: 100%;
-      height: 100%;
+      width: 85%;
+      height: 85%;
       max-width: 1280px;
       max-height: 720px;
     }
@@ -161,24 +168,33 @@
     /* Contact */
     #contact {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
+      gap: 15px;
       padding: 20px;
-      height: 100%;
+      height: calc(100vh - 50px); /* minus footer height */
+      text-align: center;
     }
-    #contact img {
-      height: 50px;
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-size: 1.2em;
+    }
+    .contact-item img {
+      height: 40px;
       cursor: pointer;
     }
 
-    /* Footer */
+    /* Footer always at bottom */
     footer {
       text-align: center;
       font-family: 'Courier New', monospace;
       color: #aaa;
       padding: 10px;
+      background: #2f1c52;
     }
 
     /* Responsive */
@@ -186,6 +202,7 @@
       .service-text { font-size: 1.2em; }
       #logo { height: 50px; }
       #navbar img { height: 25px; }
+      .contact-item { font-size: 1em; }
     }
   </style>
 </head>
@@ -225,11 +242,11 @@
   </section>
 
   <section id="contact" class="section">
-    <img src="FB.png" onclick="window.open('https://facebook.com/DFX.anime')">
-    <img src="YT.png" onclick="window.open('https://youtube.com/@DFX-studio')">
-    <img src="WA.png" onclick="window.open('https://wa.me/+8801738194746')">
-    <img src="Call.png" onclick="window.open('tel:+8809639194746')">
-    <img src="Mail.png" onclick="window.open('mailto:info@dfxbd.com')">
+    <div class="contact-item"><span>Follow us</span><img src="FB.png" onclick="window.open('https://facebook.com/DFX.anime')"></div>
+    <div class="contact-item"><span>Subscribe us</span><img src="YT.png" onclick="window.open('https://youtube.com/@DFX-studio')"></div>
+    <div class="contact-item"><span>Call us</span><img src="Call.png" onclick="window.open('tel:+8809639194746')"></div>
+    <div class="contact-item"><span>Message us</span><img src="WA.png" onclick="window.open('https://wa.me/+8801738194746')"></div>
+    <div class="contact-item"><span>Email us</span><img src="Mail.png" onclick="window.open('mailto:info@dfxbd.com')"></div>
   </section>
 
   <!-- Footer -->
@@ -245,7 +262,7 @@
   // Intro Fade Out
   setTimeout(() => {
     document.getElementById('intro').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
+    document.getElementById('main').style.display = 'flex';
   }, 4000);
 
   // Navbar Controls
@@ -314,7 +331,7 @@
 
   // Projects - Thumbnail Click Opens Popup
   const videoLinks = [
-    'https://www.youtube.com/embed/FVNMLvH35Ys',
+'https://www.youtube.com/embed/FVNMLvH35Ys',
 'https://www.youtube.com/embed/xFwnun3zMH4',
 'https://www.youtube.com/embed/wREenI4RRgc',
 'https://www.youtube.com/embed/QlsWKDEJWtk',
@@ -345,8 +362,8 @@
 'https://www.youtube.com/embed/Jxiy-f9NkJo',
 'https://www.youtube.com/embed/ekxCVhuoOOw',
 'https://www.youtube.com/embed/SOeBXI2d26I',
-'https://www.youtube.com/embed/CZ4GzZjTPj4',
-    // ... rest of your links here
+'https://www.youtube.com/embed/CZ4GzZjTPj4'
+    // add the rest...
   ];
   const projectGrid = document.getElementById('projectGrid');
   videoLinks.forEach(link => {
@@ -354,17 +371,23 @@
     div.className = 'project-thumb';
     div.innerHTML = `<img src="https://img.youtube.com/vi/${link.split('/embed/')[1]}/hqdefault.jpg" alt="Project">`;
     div.onclick = () => {
-      document.getElementById('popup').style.display = 'flex';
-      document.querySelector('#popup iframe').src = link + '?autoplay=1';
+      const popup = document.getElementById('popup');
+      const iframe = popup.querySelector('iframe');
+      popup.style.display = 'flex';
+      iframe.src = link + '?autoplay=1';
     };
     projectGrid.appendChild(div);
   });
-  document.getElementById('popup').addEventListener('click', () => {
-    document.getElementById('popup').style.display = 'none';
-    document.querySelector('#popup iframe').src = '';
+
+  // Close popup when clicking outside video
+  document.getElementById('popup').addEventListener('click', (e) => {
+    if (e.target.id === 'popup') {
+      const popup = document.getElementById('popup');
+      popup.style.display = 'none';
+      popup.querySelector('iframe').src = '';
+    }
   });
 </script>
 
 </body>
 </html>
-
