@@ -14,11 +14,13 @@
       height: 100%;
       overflow: hidden; /* Prevent scrolling */
     }
+    
     /* Ensure all sections fit the device */
     body, .section {
       width: 100%;
       height: 100%;
     }
+    
     /* Intro */
     #intro {
       position: fixed;
@@ -29,19 +31,21 @@
       align-items: center;
       z-index: 10;
     }
+    
     #intro video {
       max-width: 90%;
       max-height: 90%;
       object-fit: contain;
     }
+    
     /* Main Content */
     #main {
       display: none;
-      height: 100vh; /* Full viewport height */
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      overflow: hidden; /* Prevent scrolling */
     }
+    
     #logo {
       position: fixed;
       top: 20px;
@@ -50,6 +54,7 @@
       height: 70px;
       max-width: 40vw;
     }
+    
     /* Navbar */
     #navbar {
       position: fixed;
@@ -60,60 +65,71 @@
       z-index: 5;
       flex-wrap: wrap;
     }
+    
     #navbar img {
       height: 30px;
       cursor: pointer;
       transition: transform 0.3s ease, filter 0.3s ease;
     }
+    
     #navbar img:hover {
       transform: scale(1.3);
       filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
     }
+    
     #navbar img.active-btn {
       transform: scale(1.3);
       filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));
     }
+    
     .section {
       display: none;
       width: 100%;
-      height: 100vh; /* Full viewport height */
+      height: 100%;
       flex: 1;
-      overflow: hidden; /* Prevent scrolling */
       position: relative;
       z-index: 2; /* Above footer */
     }
+    
     .active {
       display: block;
     }
+    
     /* Home Video */
+    #home {
+      overflow: hidden; /* Prevent scrolling */
+    }
+    
     #home video {
       width: 100%;
       height: 100%;
       object-fit: cover; /* Cover the entire screen */
       background-color: #2f1c52;
     }
+    
     /* Service */
     #service {
-      position: relative;
+      overflow: hidden; /* Prevent scrolling */
     }
+    
     .service-slide {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0; /* Top, right, bottom, left all 0 */
       opacity: 0;
       transition: opacity 1s;
     }
+    
     .service-slide.active {
       opacity: 1;
     }
+    
     .service-slide video {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: cover; /* Cover the entire screen */
       background: #2f1c52;
     }
+    
     .service-text {
       position: absolute;
       bottom: 10%;
@@ -126,27 +142,34 @@
       opacity: 0;
       transition: opacity 1s;
     }
+    
     .service-slide.active .service-text {
       opacity: 1;
     }
+    
     /* Projects */
+    #projects {
+      overflow-y: auto; /* Allow scrolling for projects only */
+    }
+    
     #projects .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 15px;
       padding: 20px;
-      height: calc(100vh - 40px); /* Account for padding */
-      overflow-y: auto; /* Allow scrolling for projects only */
     }
+    
     .project-thumb {
       position: relative;
       cursor: pointer;
     }
+    
     .project-thumb img {
       width: 100%;
       display: block;
       object-fit: cover;
     }
+    
     .video-popup {
       position: fixed;
       inset: 0;
@@ -157,42 +180,49 @@
       align-items: center;
       padding: 10px;
     }
+    
     .video-popup iframe {
       width: 85%;
       height: 85%;
       max-width: 1280px;
       max-height: 720px;
     }
+    
     /* Clients */
+    #clients {
+      overflow-y: auto; /* Allow scrolling for clients only */
+    }
+    
     #clients .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 15px;
       padding: 20px;
-      height: calc(100vh - 40px); /* Account for padding */
-      overflow-y: auto; /* Allow scrolling for clients only */
       justify-items: center;
       align-items: center;
     }
+    
     #clients img {
       max-width: 100px;
       max-height: 100px;
       object-fit: contain;
     }
+    
     /* Contact Section */
     #contact {
+      overflow: hidden; /* Prevent scrolling */
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       padding: 20px;
-      height: 100vh; /* Full viewport height */
+      height: calc(100vh - 50px);
       max-width: 400px;
       margin: 0 auto;
       position: relative;
       background: #2f1c52;
-      overflow: hidden; /* Prevent scrolling */
     }
+    
     .contact-item {
       display: flex;
       align-items: center;
@@ -205,9 +235,11 @@
       position: relative;
       margin-bottom: 20px;
     }
+    
     .contact-item:last-child {
       margin-bottom: 0;
     }
+    
     .contact-item img {
       height: 40px;
       cursor: pointer;
@@ -215,21 +247,25 @@
       margin-right: 15px;
       transition: transform 0.3s ease, filter 0.3s ease;
     }
+    
     .contact-item img:hover {
       transform: scale(1.3);
       filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
     }
+    
     .contact-item .divider {
       width: 1px;
       background: white;
       height: 30px;
       margin-right: 15px;
     }
+    
     .contact-item span {
       flex: 1;
       text-align: left;
       pointer-events: none;
     }
+    
     /* Footer */
     footer {
       position: fixed;
@@ -242,6 +278,7 @@
       background: #2f1c52;
       z-index: 1; /* Below sections */
     }
+    
     /* Responsive */
     @media (max-width: 768px) {
       .service-text {
@@ -268,9 +305,11 @@
   <div id="intro">
     <video src="DFX LOGO Intro.webm" autoplay muted playsinline></video>
   </div>
+  
   <!-- Main App -->
   <div id="main">
     <img src="Logo.png" id="logo" alt="Logo" />
+    
     <!-- Navbar -->
     <div id="navbar">
       <img src="Home_0.png" data-section="home" data-default="Home_0.png" data-hover="Home_1.png" alt="Home" />
@@ -279,28 +318,36 @@
       <img src="Client_0.png" data-section="clients" data-default="Client_0.png" data-hover="Client_1.png" alt="Clients" />
       <img src="Contact_0.png" data-section="contact" data-default="Contact_0.png" data-hover="Contact_1.png" alt="Contact" />
     </div>
+    
     <!-- Sections -->
     <section id="home" class="section active">
       <video src="DFX Showreel for website.mp4" autoplay loop muted playsinline></video>
     </section>
+    
     <section id="service" class="section"></section>
+    
     <section id="projects" class="section">
       <div class="grid" id="projectGrid"></div>
     </section>
+    
     <section id="clients" class="section">
       <div class="grid" id="clientGrid"></div>
     </section>
+    
     <section id="contact" class="section">
       <!-- Contact items will be dynamically added here -->
       <div id="contactItems"></div>
     </section>
+    
     <!-- Footer -->
     <footer>© DFX Studio. All rights reserved.</footer>
   </div>
+  
   <!-- Video Popup -->
   <div class="video-popup" id="popup">
     <iframe src="" frameborder="0" allowfullscreen></iframe>
   </div>
+  
   <script>
     // Contact data
     const contactData = [
