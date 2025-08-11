@@ -335,9 +335,8 @@
     function attachContactEventListeners() {
       const popup = document.getElementById("iconPopup");
       document.querySelectorAll("#contact .contact-item img").forEach((icon) => {
-        icon.addEventListener("click", (e) => {
-          e.stopPropagation(); // prevent immediate close
-          
+        // Show popup on hover
+        icon.addEventListener("mouseenter", (e) => {
           // Only show popup if contact section is active
           if (!document.getElementById("contact").classList.contains("active")) {
             return;
@@ -381,6 +380,11 @@
           }
           popup.textContent = text;
           popup.style.display = "block";
+        });
+
+        // Hide popup when mouse leaves the icon
+        icon.addEventListener("mouseleave", () => {
+          hideContactPopup();
         });
       });
     }
@@ -587,11 +591,6 @@
         popup.style.display = "none";
         popup.querySelector("iframe").src = "";
       }
-    });
-    
-    // Close popup on clicking anywhere else
-    window.addEventListener("click", () => {
-      hideContactPopup();
     });
   </script>
 </body>
