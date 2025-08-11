@@ -13,13 +13,11 @@
       font-family: Arial, sans-serif;
       height: 100%;
     }
-
     /* Ensure all sections fit the device */
     body, .section {
       width: 100%;
       height: 100%;
     }
-
     /* Intro */
     #intro {
       position: fixed;
@@ -35,7 +33,6 @@
       max-height: 90%;
       object-fit: contain;
     }
-
     /* Main Content */
     #main {
       display: none;
@@ -43,7 +40,6 @@
       display: flex;
       flex-direction: column;
     }
-
     #logo {
       position: fixed;
       top: 20px;
@@ -52,7 +48,6 @@
       height: 70px;
       max-width: 40vw;
     }
-
     /* Navbar */
     #navbar {
       position: fixed;
@@ -76,7 +71,6 @@
       transform: scale(1.3);
       filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));
     }
-
     .section {
       display: none;
       width: 100%;
@@ -87,7 +81,6 @@
     .active {
       display: block;
     }
-
     /* Home Video */
     #home video {
       width: 100%;
@@ -95,7 +88,6 @@
       object-fit: contain;
       background-color: #2f1c52;
     }
-
     /* Service */
     #service {
       position: relative;
@@ -124,7 +116,6 @@
     .service-slide.active .service-text {
       opacity: 1;
     }
-
     /* Projects */
     #projects .grid {
       display: grid;
@@ -157,7 +148,6 @@
       max-width: 1280px;
       max-height: 720px;
     }
-
     /* Clients */
     #clients .grid {
       display: grid;
@@ -172,7 +162,6 @@
       max-height: 100px;
       object-fit: contain;
     }
-
     /* Contact Section */
     #contact {
       display: flex;
@@ -189,7 +178,7 @@
     .contact-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
       width: 100%;
       max-width: 350px;
       color: white;
@@ -214,7 +203,6 @@
       text-align: right;
       pointer-events: none;
     }
-
     /* Popup for icons */
     #iconPopup {
       display: none;
@@ -224,12 +212,12 @@
       padding: 10px 14px;
       border-radius: 8px;
       z-index: 1000;
+      width: 35vw;
       max-width: 220px;
       font-size: 0.9em;
       box-shadow: 0 0 10px rgba(0,0,0,0.7);
       user-select: none;
     }
-
     /* Footer */
     footer {
       text-align: center;
@@ -238,7 +226,6 @@
       padding: 10px;
       background: #2f1c52;
     }
-
     /* Responsive */
     @media (max-width: 768px) {
       .service-text {
@@ -257,20 +244,20 @@
       #contact {
         max-width: 90vw;
       }
+      #iconPopup {
+        width: 50vw;
+      }
     }
   </style>
 </head>
 <body>
-
   <!-- Intro Screen -->
   <div id="intro">
     <video src="DFX LOGO Intro.webm" autoplay muted playsinline></video>
   </div>
-
   <!-- Main App -->
   <div id="main">
     <img src="Logo.png" id="logo" alt="Logo" />
-
     <!-- Navbar -->
     <div id="navbar">
       <img src="Home_0.png" data-section="home" data-default="Home_0.png" data-hover="Home_1.png" alt="Home" />
@@ -279,22 +266,17 @@
       <img src="Client_0.png" data-section="clients" data-default="Client_0.png" data-hover="Client_1.png" alt="Clients" />
       <img src="Contact_0.png" data-section="contact" data-default="Contact_0.png" data-hover="Contact_1.png" alt="Contact" />
     </div>
-
     <!-- Sections -->
     <section id="home" class="section active">
       <video src="DFX Showreel for website.mp4" autoplay loop muted playsinline></video>
     </section>
-
     <section id="service" class="section"></section>
-
     <section id="projects" class="section">
       <div class="grid" id="projectGrid"></div>
     </section>
-
     <section id="clients" class="section">
       <div class="grid" id="clientGrid"></div>
     </section>
-
     <section id="contact" class="section">
       <div class="contact-item">
         <img src="FB.png" onclick="window.open('https://facebook.com/DFX.anime')" alt="Facebook" />
@@ -321,27 +303,28 @@
         <div class="divider"></div>
         <span>Email us</span>
       </div>
-
       <!-- Popup container -->
       <div id="iconPopup"></div>
     </section>
-
     <!-- Footer -->
     <footer>© DFX Studio. All rights reserved.</footer>
   </div>
-
   <!-- Video Popup -->
   <div class="video-popup" id="popup">
     <iframe src="" frameborder="0" allowfullscreen></iframe>
   </div>
-
   <script>
     // Intro Fade Out
     setTimeout(() => {
       document.getElementById("intro").style.display = "none";
       document.getElementById("main").style.display = "flex";
     }, 4000);
-
+    
+    // Function to hide the contact popup
+    function hideContactPopup() {
+      document.getElementById("iconPopup").style.display = "none";
+    }
+    
     // Navbar Controls
     document.querySelectorAll("#navbar img").forEach((btn) => {
       btn.addEventListener("mouseenter", () => (btn.src = btn.dataset.hover));
@@ -349,6 +332,9 @@
         if (!btn.classList.contains("active-btn")) btn.src = btn.dataset.default;
       });
       btn.addEventListener("click", () => {
+        // Hide contact popup when switching sections
+        hideContactPopup();
+        
         document.querySelectorAll(".section").forEach((sec) =>
           sec.classList.remove("active")
         );
@@ -361,7 +347,7 @@
         btn.src = btn.dataset.hover;
       });
     });
-
+    
     // Service Section
     const serviceVideos = [
       "Rotoscopy for web.mp4",
@@ -377,10 +363,9 @@
     serviceVideos.forEach((vid, i) => {
       const slide = document.createElement("div");
       slide.className = "service-slide" + (i === 0 ? " active" : "");
-      slide.innerHTML = `
-        <video src="Servic/${vid}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:contain; background:#2f1c52;"></video>
-        <div class="service-text">${serviceTexts[i]}</div>
-      `;
+      slide.innerHTML = 
+        `<video src="Servic/${vid}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:contain; background:#2f1c52;"></video>
+        <div class="service-text">${serviceTexts[i]}</div>`;
       serviceContainer.appendChild(slide);
     });
     let currentSlide = 0;
@@ -390,7 +375,7 @@
       currentSlide = (currentSlide + 1) % slides.length;
       slides[currentSlide].classList.add("active");
     }, 4000);
-
+    
     // Clients
     const clientLogos = [
       "Clients/Dettol.png",
@@ -453,7 +438,7 @@
       img.src = logo;
       clientGrid.appendChild(img);
     });
-
+    
     // Projects - Thumbnail Click Opens Popup
     const videoLinks = [
 'https://www.youtube.com/embed/FVNMLvH35Ys',
@@ -505,7 +490,7 @@
       };
       projectGrid.appendChild(div);
     });
-
+    
     // Close popup when clicking outside video
     document.getElementById("popup").addEventListener("click", (e) => {
       if (e.target.id === "popup") {
@@ -514,19 +499,34 @@
         popup.querySelector("iframe").src = "";
       }
     });
-
+    
     // Contact Icons Popup Logic
     const popup = document.getElementById("iconPopup");
     document.querySelectorAll("#contact .contact-item img").forEach((icon) => {
       icon.addEventListener("click", (e) => {
         e.stopPropagation(); // prevent immediate close
+        
+        // Only show popup if contact section is active
+        if (!document.getElementById("contact").classList.contains("active")) {
+          return;
+        }
+        
         const rect = e.target.getBoundingClientRect();
-
+        
+        // Calculate popup width (35% of viewport width)
+        const popupWidth = Math.min(window.innerWidth * 0.35, 220);
+        
         // Position popup below icon with some offset
         popup.style.top = rect.bottom + window.scrollY + 8 + "px";
-        popup.style.left = rect.left + window.scrollX + "px";
-
-        // Set popup text based on alt attribute (you can customize)
+        
+        // Adjust left position to prevent going off-screen
+        let left = rect.left + window.scrollX;
+        if (left + popupWidth > window.innerWidth) {
+          left = window.innerWidth - popupWidth - 10; // 10px padding from edge
+        }
+        popup.style.left = left + "px";
+        
+        // Set popup text based on alt attribute
         let text = "";
         switch (e.target.alt.toLowerCase()) {
           case "facebook":
@@ -547,15 +547,14 @@
           default:
             text = "Contact info";
         }
-
         popup.textContent = text;
         popup.style.display = "block";
       });
     });
-
+    
     // Close popup on clicking anywhere else
     window.addEventListener("click", () => {
-      popup.style.display = "none";
+      hideContactPopup();
     });
   </script>
 </body>
