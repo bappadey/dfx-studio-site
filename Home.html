@@ -77,7 +77,7 @@
       height: 100%;
       flex: 1;
       overflow: auto;
-      position: relative; /* Added for proper positioning */
+      position: relative;
     }
     .active {
       display: block;
@@ -325,6 +325,12 @@
       attachContactEventListeners();
     }
 
+    // Function to remove contact items
+    function removeContactItems() {
+      const contactContainer = document.getElementById("contactItems");
+      contactContainer.innerHTML = ""; // Remove all contact items
+    }
+
     // Function to attach event listeners to contact items
     function attachContactEventListeners() {
       const popup = document.getElementById("iconPopup");
@@ -384,6 +390,24 @@
       document.getElementById("iconPopup").style.display = "none";
     }
 
+    // Function to show only the active section
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll(".section").forEach(section => {
+        section.classList.remove("active");
+      });
+      
+      // Show the selected section
+      document.getElementById(sectionId).classList.add("active");
+      
+      // Handle contact items based on active section
+      if (sectionId === "contact") {
+        createContactItems(); // Create contact items only when contact section is active
+      } else {
+        removeContactItems(); // Remove contact items when leaving contact section
+      }
+    }
+
     // Intro Fade Out
     setTimeout(() => {
       document.getElementById("intro").style.display = "none";
@@ -400,10 +424,7 @@
         // Hide contact popup when switching sections
         hideContactPopup();
         
-        document.querySelectorAll(".section").forEach((sec) =>
-          sec.classList.remove("active")
-        );
-        document.getElementById(btn.dataset.section).classList.add("active");
+        // Update navbar buttons
         document.querySelectorAll("#navbar img").forEach((b) => {
           b.classList.remove("active-btn");
           b.src = b.dataset.default;
@@ -411,10 +432,8 @@
         btn.classList.add("active-btn");
         btn.src = btn.dataset.hover;
         
-        // Create contact items only when contact section is activated
-        if (btn.dataset.section === "contact") {
-          createContactItems();
-        }
+        // Show the selected section
+        showSection(btn.dataset.section);
       });
     });
     
