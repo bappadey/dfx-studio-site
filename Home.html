@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="dfx.ico">
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="dfx.ico" />
   <title>DFX | VFX</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     html, body {
       margin: 0;
       padding: 0;
       background: #2f1c52;
       font-family: Arial, sans-serif;
+      height: 100%;
     }
 
     /* Ensure all sections fit the device */
@@ -36,7 +37,12 @@
     }
 
     /* Main Content */
-    #main { display: none; }
+    #main {
+      display: none;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
     #logo {
       position: fixed;
@@ -74,10 +80,13 @@
     .section {
       display: none;
       width: 100%;
-      height: 100vh;
+      height: 100%;
+      flex: 1;
       overflow: auto;
     }
-    .active { display: block; }
+    .active {
+      display: block;
+    }
 
     /* Home Video */
     #home video {
@@ -88,14 +97,18 @@
     }
 
     /* Service */
-    #service { position: relative; }
+    #service {
+      position: relative;
+    }
     .service-slide {
       position: absolute;
       inset: 0;
       opacity: 0;
       transition: opacity 1s;
     }
-    .service-slide.active { opacity: 1; }
+    .service-slide.active {
+      opacity: 1;
+    }
     .service-text {
       position: absolute;
       bottom: 10%;
@@ -108,7 +121,9 @@
       opacity: 0;
       transition: opacity 1s;
     }
-    .service-slide.active .service-text { opacity: 1; }
+    .service-slide.active .service-text {
+      opacity: 1;
+    }
 
     /* Projects */
     #projects .grid {
@@ -129,7 +144,7 @@
     .video-popup {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       z-index: 20;
       display: none;
       justify-content: center;
@@ -137,8 +152,8 @@
       padding: 10px;
     }
     .video-popup iframe {
-      width: 100%;
-      height: 100%;
+      width: 85%;
+      height: 85%;
       max-width: 1280px;
       max-height: 720px;
     }
@@ -158,19 +173,61 @@
       object-fit: contain;
     }
 
-    /* Contact */
+    /* Contact Section */
     #contact {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
+      gap: 15px;
       padding: 20px;
-      height: 100%;
+      height: calc(100vh - 50px);
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
     }
-    #contact img {
-      height: 50px;
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 350px;
+      color: white;
+      font-size: 1.2em;
+      cursor: default;
+      user-select: none;
+      position: relative;
+    }
+    .contact-item img {
+      height: 40px;
       cursor: pointer;
+      flex-shrink: 0;
+    }
+    .contact-item .divider {
+      width: 1px;
+      background: white;
+      height: 24px;
+      margin: 0 10px;
+    }
+    .contact-item span {
+      flex: 1;
+      text-align: right;
+      pointer-events: none;
+    }
+
+    /* Popup for icons */
+    #iconPopup {
+      display: none;
+      position: absolute;
+      background: #222;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 8px;
+      z-index: 1000;
+      max-width: 220px;
+      font-size: 0.9em;
+      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+      user-select: none;
     }
 
     /* Footer */
@@ -179,142 +236,227 @@
       font-family: 'Courier New', monospace;
       color: #aaa;
       padding: 10px;
+      background: #2f1c52;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
-      .service-text { font-size: 1.2em; }
-      #logo { height: 50px; }
-      #navbar img { height: 25px; }
+      .service-text {
+        font-size: 1.2em;
+      }
+      #logo {
+        height: 50px;
+      }
+      #navbar img {
+        height: 25px;
+      }
+      .contact-item {
+        font-size: 1em;
+        max-width: 90vw;
+      }
+      #contact {
+        max-width: 90vw;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- Intro Screen -->
-<div id="intro">
-  <video src="DFX LOGO Intro.webm" autoplay muted playsinline></video>
-</div>
-
-<!-- Main App -->
-<div id="main">
-  <img src="Logo.png" id="logo" alt="Logo">
-
-  <!-- Navbar -->
-  <div id="navbar">
-    <img src="Home_0.png" data-section="home" data-default="Home_0.png" data-hover="Home_1.png">
-    <img src="Service_0.png" data-section="service" data-default="Service_0.png" data-hover="Service_1.png">
-    <img src="Projects_0.png" data-section="projects" data-default="Projects_0.png" data-hover="Projects_1.png">
-    <img src="Client_0.png" data-section="clients" data-default="Client_0.png" data-hover="Client_1.png">
-    <img src="Contact_0.png" data-section="contact" data-default="Contact_0.png" data-hover="Contact_1.png">
+  <!-- Intro Screen -->
+  <div id="intro">
+    <video src="DFX LOGO Intro.webm" autoplay muted playsinline></video>
   </div>
 
-  <!-- Sections -->
-  <section id="home" class="section active">
-    <video src="DFX Showreel for website.mp4" autoplay loop muted playsinline></video>
-  </section>
+  <!-- Main App -->
+  <div id="main">
+    <img src="Logo.png" id="logo" alt="Logo" />
 
-  <section id="service" class="section"></section>
+    <!-- Navbar -->
+    <div id="navbar">
+      <img src="Home_0.png" data-section="home" data-default="Home_0.png" data-hover="Home_1.png" alt="Home" />
+      <img src="Service_0.png" data-section="service" data-default="Service_0.png" data-hover="Service_1.png" alt="Service" />
+      <img src="Projects_0.png" data-section="projects" data-default="Projects_0.png" data-hover="Projects_1.png" alt="Projects" />
+      <img src="Client_0.png" data-section="clients" data-default="Client_0.png" data-hover="Client_1.png" alt="Clients" />
+      <img src="Contact_0.png" data-section="contact" data-default="Contact_0.png" data-hover="Contact_1.png" alt="Contact" />
+    </div>
 
-  <section id="projects" class="section">
-    <div class="grid" id="projectGrid"></div>
-  </section>
+    <!-- Sections -->
+    <section id="home" class="section active">
+      <video src="DFX Showreel for website.mp4" autoplay loop muted playsinline></video>
+    </section>
 
-  <section id="clients" class="section">
-    <div class="grid" id="clientGrid"></div>
-  </section>
+    <section id="service" class="section"></section>
 
-  <section id="contact" class="section">
-    <img src="FB.png" onclick="window.open('https://facebook.com/DFX.anime')">
-    <img src="YT.png" onclick="window.open('https://youtube.com/@DFX-studio')">
-    <img src="WA.png" onclick="window.open('https://wa.me/+8801738194746')">
-    <img src="Call.png" onclick="window.open('tel:+8809639194746')">
-    <img src="Mail.png" onclick="window.open('mailto:info@dfxbd.com')">
-  </section>
+    <section id="projects" class="section">
+      <div class="grid" id="projectGrid"></div>
+    </section>
 
-  <!-- Footer -->
-  <footer>© DFX Studio. All rights reserved.</footer>
-</div>
+    <section id="clients" class="section">
+      <div class="grid" id="clientGrid"></div>
+    </section>
 
-<!-- Video Popup -->
-<div class="video-popup" id="popup">
-  <iframe src="" frameborder="0" allowfullscreen></iframe>
-</div>
+    <section id="contact" class="section">
+      <div class="contact-item">
+        <img src="FB.png" onclick="window.open('https://facebook.com/DFX.anime')" alt="Facebook" />
+        <div class="divider"></div>
+        <span>Follow us</span>
+      </div>
+      <div class="contact-item">
+        <img src="YT.png" onclick="window.open('https://youtube.com/@DFX-studio')" alt="YouTube" />
+        <div class="divider"></div>
+        <span>Subscribe us</span>
+      </div>
+      <div class="contact-item">
+        <img src="Call.png" onclick="window.open('tel:+8809639194746')" alt="Call" />
+        <div class="divider"></div>
+        <span>Call us</span>
+      </div>
+      <div class="contact-item">
+        <img src="WA.png" onclick="window.open('https://wa.me/+8801738194746')" alt="WhatsApp" />
+        <div class="divider"></div>
+        <span>Message us</span>
+      </div>
+      <div class="contact-item">
+        <img src="Mail.png" onclick="window.open('mailto:info@dfxbd.com')" alt="Email" />
+        <div class="divider"></div>
+        <span>Email us</span>
+      </div>
 
-<script>
-  // Intro Fade Out
-  setTimeout(() => {
-    document.getElementById('intro').style.display = 'none';
-    document.getElementById('main').style.display = 'block';
-  }, 4000);
+      <!-- Popup container -->
+      <div id="iconPopup"></div>
+    </section>
 
-  // Navbar Controls
-  document.querySelectorAll('#navbar img').forEach(btn => {
-    btn.addEventListener('mouseenter', () => btn.src = btn.dataset.hover);
-    btn.addEventListener('mouseleave', () => {
-      if (!btn.classList.contains('active-btn')) btn.src = btn.dataset.default;
-    });
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(btn.dataset.section).classList.add('active');
-      document.querySelectorAll('#navbar img').forEach(b => {
-        b.classList.remove('active-btn');
-        b.src = b.dataset.default;
+    <!-- Footer -->
+    <footer>© DFX Studio. All rights reserved.</footer>
+  </div>
+
+  <!-- Video Popup -->
+  <div class="video-popup" id="popup">
+    <iframe src="" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    // Intro Fade Out
+    setTimeout(() => {
+      document.getElementById("intro").style.display = "none";
+      document.getElementById("main").style.display = "flex";
+    }, 4000);
+
+    // Navbar Controls
+    document.querySelectorAll("#navbar img").forEach((btn) => {
+      btn.addEventListener("mouseenter", () => (btn.src = btn.dataset.hover));
+      btn.addEventListener("mouseleave", () => {
+        if (!btn.classList.contains("active-btn")) btn.src = btn.dataset.default;
       });
-      btn.classList.add('active-btn');
-      btn.src = btn.dataset.hover;
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".section").forEach((sec) =>
+          sec.classList.remove("active")
+        );
+        document.getElementById(btn.dataset.section).classList.add("active");
+        document.querySelectorAll("#navbar img").forEach((b) => {
+          b.classList.remove("active-btn");
+          b.src = b.dataset.default;
+        });
+        btn.classList.add("active-btn");
+        btn.src = btn.dataset.hover;
+      });
     });
-  });
 
-  // Service Section
-  const serviceVideos = ['Rotoscopy for web.mp4', 'Composite For Web.mp4', '3D & Liquid For Web.mp4'];
-  const serviceTexts = [
-    'Rotoscopy: Frame by frame, DFX isolate the impossible. From clean mattes to seamless composites — our precision rotoscopy brings your VFX to life.',
-    'Composite: DFX craft stunning visual effects that blend seamlessly with your footage — from explosions to environments, turning imagination into cinematic reality.',
-    '3D & Simulation'
-  ];
-  const serviceContainer = document.getElementById('service');
-  serviceVideos.forEach((vid, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'service-slide' + (i === 0 ? ' active' : '');
-    slide.innerHTML = `
-      <video src="Servic/${vid}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:contain; background:#2f1c52;"></video>
-      <div class="service-text">${serviceTexts[i]}</div>
-    `;
-    serviceContainer.appendChild(slide);
-  });
-  let currentSlide = 0;
-  setInterval(() => {
-    const slides = document.querySelectorAll('.service-slide');
-    slides[currentSlide].classList.remove('active');
-    currentSlide = (currentSlide + 1) % slides.length;
-    slides[currentSlide].classList.add('active');
-  }, 4000);
+    // Service Section
+    const serviceVideos = [
+      "Rotoscopy for web.mp4",
+      "Composite For Web.mp4",
+      "3D & Liquid For Web.mp4",
+    ];
+    const serviceTexts = [
+      "Rotoscopy: Frame by frame, DFX isolate the impossible. From clean mattes to seamless composites — our precision rotoscopy brings your VFX to life.",
+      "Composite: DFX craft stunning visual effects that blend seamlessly with your footage — from explosions to environments, turning imagination into cinematic reality.",
+      "3D & Simulation",
+    ];
+    const serviceContainer = document.getElementById("service");
+    serviceVideos.forEach((vid, i) => {
+      const slide = document.createElement("div");
+      slide.className = "service-slide" + (i === 0 ? " active" : "");
+      slide.innerHTML = `
+        <video src="Servic/${vid}" autoplay muted loop playsinline style="width:100%; height:100%; object-fit:contain; background:#2f1c52;"></video>
+        <div class="service-text">${serviceTexts[i]}</div>
+      `;
+      serviceContainer.appendChild(slide);
+    });
+    let currentSlide = 0;
+    setInterval(() => {
+      const slides = document.querySelectorAll(".service-slide");
+      slides[currentSlide].classList.remove("active");
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add("active");
+    }, 4000);
 
-  // Clients
-  const clientLogos = [
-    'Clients/Dettol.png', 'Clients/LUX_(soap)_logo.png', 'Clients/NESTLElogo-Alternative-with-wordmark-signature-oak.png',
-    'Clients/Vim.png', 'Clients/drug.svg', 'Clients/Aarong Dairy.jpg', 'Clients/Ama.png', 'Clients/Asian Paints.png',
-    'Clients/bKash.png', 'Clients/Brac.png', 'Clients/BritishCouncil.png', 'Clients/CartUP.png', 'Clients/CEAT.png',
-    'Clients/Chaka.jpg', 'Clients/Chefchoice.png', 'Clients/Clear Men.jpeg', 'Clients/Clemon.jpeg', 'Clients/closeup.png',
-    'Clients/Daraz.png', 'Clients/Electromart.png', 'Clients/Farmfresh.jpeg', 'Clients/Finlay.webp', 'Clients/Foodi.svg',
-    'Clients/Foton.png', 'Clients/Freedom.png', 'Clients/Fresh anonna.jpeg', 'Clients/fresh_lp_gas.png', 'Clients/Frutika.jpeg',
-    'Clients/Goldmark.jpeg', 'Clients/goodknight.png', 'Clients/Gozayaan.jpg', 'Clients/GP.png', 'Clients/GPH.jpg',
-    'Clients/Harpic.png', 'Clients/Honor.png', 'Clients/IDLC.png', 'Clients/IPDC.png', 'Clients/KSRM.png',
-    'Clients/lee cooper.png', 'Clients/Link3.png', 'Clients/Lotto.png', 'Clients/Parachute Skinpure.jpg', 'Clients/Pathao.png',
-    'Clients/Power.jpeg', 'Clients/SSL.png', 'Clients/Starline.jpeg', 'Clients/Sunquick.png', 'Clients/Sylon tea.jpeg',
-    'Clients/TikTok.png', 'Clients/TSports.png', 'Clients/Veet.png', 'Clients/Walton.png', 'Clients/Yamaha.png'
-  ];
-  const clientGrid = document.getElementById('clientGrid');
-  clientLogos.forEach(logo => {
-    const img = document.createElement('img');
-    img.src = logo;
-    clientGrid.appendChild(img);
-  });
+    // Clients
+    const clientLogos = [
+      "Clients/Dettol.png",
+      "Clients/LUX_(soap)_logo.png",
+      "Clients/NESTLElogo-Alternative-with-wordmark-signature-oak.png",
+      "Clients/Vim.png",
+      "Clients/drug.png",
+      "Clients/Aarong Dairy.jpg",
+      "Clients/Ama.png",
+      "Clients/Asian Paints.png",
+      "Clients/bKash.png",
+      "Clients/Brac.png",
+      "Clients/BritishCouncil.png",
+      "Clients/CartUP.png",
+      "Clients/CEAT.png",
+      "Clients/Chaka.jpg",
+      "Clients/Chefchoice.png",
+      "Clients/Clear Men.jpeg",
+      "Clients/Clemon.jpeg",
+      "Clients/closeup.png",
+      "Clients/Daraz.png",
+      "Clients/Electromart.png",
+      "Clients/Farmfresh.jpeg",
+      "Clients/Finlay.webp",
+      "Clients/Foodi.svg",
+      "Clients/Foton.png",
+      "Clients/Freedom.png",
+      "Clients/Fresh anonna.jpeg",
+      "Clients/fresh_lp_gas.png",
+      "Clients/Frutika.jpeg",
+      "Clients/Goldmark.jpeg",
+      "Clients/goodknight.png",
+      "Clients/Gozayaan.jpg",
+      "Clients/GP.png",
+      "Clients/GPH.jpg",
+      "Clients/Harpic.png",
+      "Clients/Honor.png",
+      "Clients/IDLC.png",
+      "Clients/IPDC.png",
+      "Clients/KSRM.png",
+      "Clients/lee cooper.png",
+      "Clients/Link3.png",
+      "Clients/Lotto.png",
+      "Clients/Parachute Skinpure.jpg",
+      "Clients/Pathao.png",
+      "Clients/Power.jpeg",
+      "Clients/SSL.png",
+      "Clients/Starline.jpeg",
+      "Clients/Sunquick.png",
+      "Clients/Sylon tea.jpeg",
+      "Clients/TikTok.png",
+      "Clients/TSports.png",
+      "Clients/Veet.png",
+      "Clients/Walton.png",
+      "Clients/Yamaha.png",
+    ];
+    const clientGrid = document.getElementById("clientGrid");
+    clientLogos.forEach((logo) => {
+      const img = document.createElement("img");
+      img.src = logo;
+      clientGrid.appendChild(img);
+    });
 
-  // Projects - Thumbnail Click Opens Popup
-  const videoLinks = [
-    'https://www.youtube.com/embed/FVNMLvH35Ys',
+    // Projects - Thumbnail Click Opens Popup
+    const videoLinks = [
+'https://www.youtube.com/embed/FVNMLvH35Ys',
 'https://www.youtube.com/embed/xFwnun3zMH4',
 'https://www.youtube.com/embed/wREenI4RRgc',
 'https://www.youtube.com/embed/QlsWKDEJWtk',
@@ -346,24 +488,75 @@
 'https://www.youtube.com/embed/ekxCVhuoOOw',
 'https://www.youtube.com/embed/SOeBXI2d26I',
 'https://www.youtube.com/embed/CZ4GzZjTPj4',
-    // ... rest of your links here
-  ];
-  const projectGrid = document.getElementById('projectGrid');
-  videoLinks.forEach(link => {
-    const div = document.createElement('div');
-    div.className = 'project-thumb';
-    div.innerHTML = `<img src="https://img.youtube.com/vi/${link.split('/embed/')[1]}/hqdefault.jpg" alt="Project">`;
-    div.onclick = () => {
-      document.getElementById('popup').style.display = 'flex';
-      document.querySelector('#popup iframe').src = link + '?autoplay=1';
-    };
-    projectGrid.appendChild(div);
-  });
-  document.getElementById('popup').addEventListener('click', () => {
-    document.getElementById('popup').style.display = 'none';
-    document.querySelector('#popup iframe').src = '';
-  });
-</script>
+      // add the rest...
+    ];
+    const projectGrid = document.getElementById("projectGrid");
+    videoLinks.forEach((link) => {
+      const div = document.createElement("div");
+      div.className = "project-thumb";
+      div.innerHTML = `<img src="https://img.youtube.com/vi/${link
+        .split("/embed/")[1]
+        }/hqdefault.jpg" alt="Project" />`;
+      div.onclick = () => {
+        const popup = document.getElementById("popup");
+        const iframe = popup.querySelector("iframe");
+        popup.style.display = "flex";
+        iframe.src = link + "?autoplay=1";
+      };
+      projectGrid.appendChild(div);
+    });
 
+    // Close popup when clicking outside video
+    document.getElementById("popup").addEventListener("click", (e) => {
+      if (e.target.id === "popup") {
+        const popup = document.getElementById("popup");
+        popup.style.display = "none";
+        popup.querySelector("iframe").src = "";
+      }
+    });
+
+    // Contact Icons Popup Logic
+    const popup = document.getElementById("iconPopup");
+    document.querySelectorAll("#contact .contact-item img").forEach((icon) => {
+      icon.addEventListener("click", (e) => {
+        e.stopPropagation(); // prevent immediate close
+        const rect = e.target.getBoundingClientRect();
+
+        // Position popup below icon with some offset
+        popup.style.top = rect.bottom + window.scrollY + 8 + "px";
+        popup.style.left = rect.left + window.scrollX + "px";
+
+        // Set popup text based on alt attribute (you can customize)
+        let text = "";
+        switch (e.target.alt.toLowerCase()) {
+          case "facebook":
+            text = "Visit our Facebook page: facebook.com/DFX.anime";
+            break;
+          case "youtube":
+            text = "Subscribe to our YouTube channel: youtube.com/@DFX-studio";
+            break;
+          case "call":
+            text = "Call us at: +880 9639 194 746";
+            break;
+          case "whatsapp":
+            text = "Message us on WhatsApp: +880 1738 194 746";
+            break;
+          case "email":
+            text = "Email us at: info@dfxbd.com";
+            break;
+          default:
+            text = "Contact info";
+        }
+
+        popup.textContent = text;
+        popup.style.display = "block";
+      });
+    });
+
+    // Close popup on clicking anywhere else
+    window.addEventListener("click", () => {
+      popup.style.display = "none";
+    });
+  </script>
 </body>
 </html>
