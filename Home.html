@@ -77,6 +77,7 @@
       height: 100%;
       flex: 1;
       overflow: auto;
+      position: relative; /* Added for proper positioning */
     }
     .active {
       display: block;
@@ -168,17 +169,16 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 15px;
       padding: 20px;
       height: calc(100vh - 50px);
       max-width: 400px;
       margin: 0 auto;
       position: relative;
+      background: #2f1c52;
     }
     .contact-item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       width: 100%;
       max-width: 350px;
       color: white;
@@ -186,21 +186,26 @@
       cursor: default;
       user-select: none;
       position: relative;
+      margin-bottom: 20px;
+    }
+    .contact-item:last-child {
+      margin-bottom: 0;
     }
     .contact-item img {
       height: 40px;
       cursor: pointer;
       flex-shrink: 0;
+      margin-right: 15px;
     }
     .contact-item .divider {
       width: 1px;
       background: white;
-      height: 24px;
-      margin: 0 10px;
+      height: 30px;
+      margin-right: 15px;
     }
     .contact-item span {
       flex: 1;
-      text-align: right;
+      text-align: left;
       pointer-events: none;
     }
     /* Popup for icons */
@@ -278,8 +283,10 @@
       <div class="grid" id="clientGrid"></div>
     </section>
     <section id="contact" class="section">
-      <div class="contact-item">
-
+      <!-- Contact items will be dynamically added here -->
+      <div id="contactItems"></div>
+      <!-- Popup container -->
+      <div id="iconPopup"></div>
     </section>
     <!-- Footer -->
     <footer>© DFX Studio. All rights reserved.</footer>
@@ -289,16 +296,99 @@
     <iframe src="" frameborder="0" allowfullscreen></iframe>
   </div>
   <script>
+    // Contact data
+    const contactData = [
+      { icon: "FB.png", text: "Follow us", url: "https://facebook.com/DFX.anime", alt: "Facebook" },
+      { icon: "YT.png", text: "Subscribe us", url: "https://youtube.com/@DFX-studio", alt: "YouTube" },
+      { icon: "Call.png", text: "Call us", url: "tel:+8809639194746", alt: "Call" },
+      { icon: "WA.png", text: "Message us", url: "https://wa.me/+8801738194746", alt: "WhatsApp" },
+      { icon: "Mail.png", text: "Email us", url: "mailto:info@dfxbd.com", alt: "Email" }
+    ];
+
+    // Function to create contact items
+    function createContactItems() {
+      const contactContainer = document.getElementById("contactItems");
+      contactContainer.innerHTML = ""; // Clear existing items
+      
+      contactData.forEach(item => {
+        const contactItem = document.createElement("div");
+        contactItem.className = "contact-item";
+        contactItem.innerHTML = `
+          <img src="${item.icon}" onclick="window.open('${item.url}')" alt="${item.alt}" />
+          <div class="divider"></div>
+          <span>${item.text}</span>
+        `;
+        contactContainer.appendChild(contactItem);
+      });
+      
+      // Re-attach event listeners to the new contact items
+      attachContactEventListeners();
+    }
+
+    // Function to attach event listeners to contact items
+    function attachContactEventListeners() {
+      const popup = document.getElementById("iconPopup");
+      document.querySelectorAll("#contact .contact-item img").forEach((icon) => {
+        icon.addEventListener("click", (e) => {
+          e.stopPropagation(); // prevent immediate close
+          
+          // Only show popup if contact section is active
+          if (!document.getElementById("contact").classList.contains("active")) {
+            return;
+          }
+          
+          const rect = e.target.getBoundingClientRect();
+          
+          // Calculate popup width (35% of viewport width)
+          const popupWidth = Math.min(window.innerWidth * 0.35, 220);
+          
+          // Position popup below icon with some offset
+          popup.style.top = rect.bottom + window.scrollY + 8 + "px";
+          
+          // Adjust left position to prevent going off-screen
+          let left = rect.left + window.scrollX;
+          if (left + popupWidth > window.innerWidth) {
+            left = window.innerWidth - popupWidth - 10; // 10px padding from edge
+          }
+          popup.style.left = left + "px";
+          
+          // Set popup text based on alt attribute
+          let text = "";
+          switch (e.target.alt.toLowerCase()) {
+            case "facebook":
+              text = "Visit our Facebook page: facebook.com/DFX.anime";
+              break;
+            case "youtube":
+              text = "Subscribe to our YouTube channel: youtube.com/@DFX-studio";
+              break;
+            case "call":
+              text = "Call us at: +880 9639 194 746";
+              break;
+            case "whatsapp":
+              text = "Message us on WhatsApp: +880 1738 194 746";
+              break;
+            case "email":
+              text = "Email us at: info@dfxbd.com";
+              break;
+            default:
+              text = "Contact info";
+          }
+          popup.textContent = text;
+          popup.style.display = "block";
+        });
+      });
+    }
+
+    // Function to hide the contact popup
+    function hideContactPopup() {
+      document.getElementById("iconPopup").style.display = "none";
+    }
+
     // Intro Fade Out
     setTimeout(() => {
       document.getElementById("intro").style.display = "none";
       document.getElementById("main").style.display = "flex";
     }, 4000);
-    
-    // Function to hide the contact popup
-    function hideContactPopup() {
-      document.getElementById("iconPopup").style.display = "none";
-    }
     
     // Navbar Controls
     document.querySelectorAll("#navbar img").forEach((btn) => {
@@ -320,6 +410,11 @@
         });
         btn.classList.add("active-btn");
         btn.src = btn.dataset.hover;
+        
+        // Create contact items only when contact section is activated
+        if (btn.dataset.section === "contact") {
+          createContactItems();
+        }
       });
     });
     
@@ -475,58 +570,6 @@
       }
     });
     
-    // Contact Icons Popup Logic
-    const popup = document.getElementById("iconPopup");
-    document.querySelectorAll("#contact .contact-item img").forEach((icon) => {
-      icon.addEventListener("click", (e) => {
-        e.stopPropagation(); // prevent immediate close
-        
-        // Only show popup if contact section is active
-        if (!document.getElementById("contact").classList.contains("active")) {
-          return;
-        }
-        
-        const rect = e.target.getBoundingClientRect();
-        
-        // Calculate popup width (35% of viewport width)
-        const popupWidth = Math.min(window.innerWidth * 0.35, 220);
-        
-        // Position popup below icon with some offset
-        popup.style.top = rect.bottom + window.scrollY + 8 + "px";
-        
-        // Adjust left position to prevent going off-screen
-        let left = rect.left + window.scrollX;
-        if (left + popupWidth > window.innerWidth) {
-          left = window.innerWidth - popupWidth - 10; // 10px padding from edge
-        }
-        popup.style.left = left + "px";
-        
-        // Set popup text based on alt attribute
-        let text = "";
-        switch (e.target.alt.toLowerCase()) {
-          case "facebook":
-            text = "Visit our Facebook page: facebook.com/DFX.anime";
-            break;
-          case "youtube":
-            text = "Subscribe to our YouTube channel: youtube.com/@DFX-studio";
-            break;
-          case "call":
-            text = "Call us at: +880 9639 194 746";
-            break;
-          case "whatsapp":
-            text = "Message us on WhatsApp: +880 1738 194 746";
-            break;
-          case "email":
-            text = "Email us at: info@dfxbd.com";
-            break;
-          default:
-            text = "Contact info";
-        }
-        popup.textContent = text;
-        popup.style.display = "block";
-      });
-    });
-    
     // Close popup on clicking anywhere else
     window.addEventListener("click", () => {
       hideContactPopup();
@@ -534,4 +577,3 @@
   </script>
 </body>
 </html>
-
