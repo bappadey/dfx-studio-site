@@ -206,30 +206,35 @@
     <script>
         // 1. YouTube Data - FIXED IMAGE SOURCE
         const projects = [
-            { id: 'FVNMLvH35Ys', title: 'Action Reel' }, { id: 'xFwnun3zMH4', title: 'VFX Scene' },
-            { id: 'XXunnh1Bokk', title: 'Cinema' }, { id: 'wREenI4RRgc', title: 'TVC' },
-            { id: 'QlsWKDEJWtk', title: 'Motion' }, { id: 'Gh-8nJfbSVs', title: 'Animation' },
-            { id: 'vuNy4gvvoZc', title: 'VFX' }, { id: '_WI1QZTFXX4', title: 'Visuals' },
-            { id: '2r1lr7dLano', title: '3D VFX' }, { id: '9ktiKThBwZA', title: 'CGI' },
-            { id: 'N5D2_bK5RNM', title: 'Ads' }, { id: 'nO72m__mcew', title: 'Reel' },
-            { id: 'OvFSsmLqyCc', title: 'VFX' }, { id: 'bL5uI2NAKDM', title: 'Cinema' },
-            { id: 'kAshuCi6UJw', title: 'Action' }, { id: '5gf0Icoizs8', title: 'Commercial' },
-            { id: 'S-bsAyqS4KY', title: 'Effect' }, { id: '1Cdo8-VwHpY', title: 'CGI' },
-            { id: 'dxb-3G4qYyo', title: 'Visual' }, { id: 'STtoeP24j4g', title: 'Motion' },
-            { id: 'Ehn5iVm0Ox0', title: 'Ads' }, { id: 'd-gbIabi8ok', title: 'Scene' },
-            { id: 'ziI3mLHN3YA', title: 'Reel' }, { id: 'YzyzPK16Slc', title: 'Motion' },
-            { id: 'JdCC1Xld15Q', title: 'Action' }, { id: 'L2_iRJjAJZ0', title: 'Visual' },
-            { id: '3brG7XOeVog', title: 'Cinema' }, { id: 'WxYedjhxj1A', title: 'VFX' },
-            { id: 'fA6Jvc7mxxY', title: 'Ads' }, { id: 'Jxiy-f9NkJo', title: 'Scene' },
-            { id: 'ekxCVhuoOOw', title: 'Commercial' }, { id: 'SOeBXI2d26I', title: 'Animation' },
-            { id: 'CZ4GzZjTPj4', title: '3D VFX' }
+            { id: 'FVNMLvH35Ys', title: '' }, { id: 'xFwnun3zMH4', title: '' },
+            { id: 'XXunnh1Bokk', title: '' }, { id: 'wREenI4RRgc', title: '' },
+            { id: 'QlsWKDEJWtk', title: '' }, { id: 'Gh-8nJfbSVs', title: '' },
+            { id: 'vuNy4gvvoZc', title: '' }, { id: '_WI1QZTFXX4', title: '' },
+            { id: '2r1lr7dLano', title: '' }, { id: '9ktiKThBwZA', title: '' },
+            { id: 'N5D2_bK5RNM', title: '' }, { id: 'nO72m__mcew', title: '' },
+            { id: 'OvFSsmLqyCc', title: '' }, { id: 'bL5uI2NAKDM', title: '' },
+            { id: 'kAshuCi6UJw', title: '' }, { id: '5gf0Icoizs8', title: '' },
+            { id: 'S-bsAyqS4KY', title: '' }, { id: '1Cdo8-VwHpY', title: '' },
+            { id: 'dxb-3G4qYyo', title: '' }, { id: 'STtoeP24j4g', title: '' },
+            { id: 'Ehn5iVm0Ox0', title: '' }, { id: 'd-gbIabi8ok', title: '' },
+            { id: 'ziI3mLHN3YA', title: '' }, { id: 'YzyzPK16Slc', title: '' },
+            { id: 'JdCC1Xld15Q', title: '' }, { id: 'L2_iRJjAJZ0', title: '' },
+            { id: '3brG7XOeVog', title: '' }, { id: 'WxYedjhxj1A', title: '' },
+            { id: 'fA6Jvc7mxxY', title: '' }, { id: 'Jxiy-f9NkJo', title: '' },
+            { id: 'ekxCVhuoOOw', title: '' }, { id: 'SOeBXI2d26I', title: '' },
+            { id: 'CZ4GzZjTPj4', title: '' }
         ];
 
         // 2. Service Slider Data
         const services = [
-            { type: 'video', file: 'vfx.mp4', title: 'VFX & CGI', desc: 'Crafting cinematic visual effects for movies and high-end series.' },
-            { type: 'image', file: 'motion.jpg', title: 'MOTION GRAPHICS', desc: 'Bringing designs to life with dynamic motion and brand energy.' },
-            { type: 'image', file: '3danim.gif', title: '3D ANIMATION', desc: 'High-quality 3D character assets and stylized animations.' }
+            { type: 'image', file: '3DAnimation.gif', title: '3D ANIMATION', desc: 'High-quality 3D Product Modeling & stylized animations.' },
+            { type: 'image', file: 'Liquid.gif', title: 'Fluid Simulation', desc: 'Realistic liquid simulations crafted for ads, films, and visuals.' },
+            { type: 'image', file: 'Composite.gif', title: 'Composite', desc: 'Seamless compositing services for commercials, films, and digital content.' },
+            { type: 'image', file: 'VFX.gif', title: 'VFX', desc: 'Professional VFX solutions for commercials, films, and digital content.' },
+            { type: 'image', file: 'Rotoscopy.gif', title: 'Rotoscopy', desc: 'High-precision rotoscopy for film, TV, and commercials.' },
+            { type: 'image', file: '2D Animation.gif', title: '2D Animation', desc: 'Creative 2D animation studio crafting visuals that tell stories.' },
+            { type: 'image', file: 'Motion Graphics.gif', title: 'MOTION GRAPHICS', desc: 'Bringing designs to life with dynamic motion and brand energy.' },
+
         ];
 
         // 3. Client Logos
