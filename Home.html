@@ -137,6 +137,32 @@
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
+
+/* Review Section Styling */
+.star-rating {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    direction: row;
+}
+.star-rating i {
+    font-size: 2.5rem;
+    color: #333; /* Default dark gray */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.star-rating i.active, .star-rating i:hover, .star-rating i:hover ~ i {
+    color: var(--dfx-magenta);
+    text-shadow: 0 0 15px var(--dfx-magenta);
+}
+#avg-score {
+    font-size: 5rem;
+    font-family: 'Bebas Neue';
+    color: #fff;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
     </style>
 </head>
 <body>
@@ -225,6 +251,28 @@
             <!-- Client images loaded via JS -->
         </div>
     </section>
+
+<!-- 6.5 Review Section -->
+<section id="reviews" class="py-20 bg-[rgb(5,5,5)] px-6 text-center border-t border-white/5">
+    <h2 class="text-4xl md:text-5xl font-bebas mb-4 italic uppercase">Client Satisfaction</h2>
+    <p class="text-gray-400 font-rai mb-10 tracking-widest">Rate our magic and help us grow</p>
+
+    <div class="max-w-md mx-auto bg-black p-10 rounded-3xl border border-[rgb(47,28,82)] shadow-2xl">
+        <div id="avg-score">4.8</div>
+        <div class="text-gray-500 font-bebas tracking-widest mb-6">AVERAGE RATING (<span id="total-votes">24</span> VOTES)</div>
+        
+        <!-- Interactive Stars -->
+        <div class="star-rating mb-6" id="star-input">
+            <i class="fas fa-star" data-value="5"></i>
+            <i class="fas fa-star" data-value="4"></i>
+            <i class="fas fa-star" data-value="3"></i>
+            <i class="fas fa-star" data-value="2"></i>
+            <i class="fas fa-star" data-value="1"></i>
+        </div>
+        
+        <p id="rate-msg" class="text-sm font-rai text-[rgb(205,31,133)] opacity-0 transition-opacity">Thank you for rating us!</p>
+    </div>
+</section>
 
     <!-- 7. Footer -->
     <footer id="contact" class="py-20 bg-[rgb(47,28,82)] px-6 text-center">
@@ -361,6 +409,66 @@
                 setTimeout(() => intro.style.display = "none", 1500);
             }, 5000);
         });
+
+// --- STAR RATING LOGIC ---
+const stars = document.querySelectorAll('#star-input i');
+const avgDisplay = document.getElementById('avg-score');
+const totalVotesDisplay = document.getElementById('total-votes');
+const rateMsg = document.getElementById('rate-msg');
+
+// Initial Mock Data (You can change these starting numbers)
+let totalScore = parseFloat(localStorage.getItem('dfx_total_score')) || 194; 
+let totalVotes = parseInt(localStorage.getItem('dfx_total_votes')) || 39;
+
+function updateDisplay() {
+    let avg = (totalScore / totalVotes).toFixed(1);
+    avgDisplay.innerText = avg;
+    totalVotesDisplay.innerText = totalVotes;
+}
+
+stars.forEach(star => {
+    star.addEventListener('click', function() {
+        if(localStorage.getItem('dfx_rated')) {
+            rateMsg.innerText = "You have already rated us!";
+            rateMsg.style.opacity = "1";
+            return;
+        }
+
+        const value = parseInt(this.getAttribute('data-value'));
+        totalScore += value;
+        totalVotes += 1;
+
+        // Save to local browser storage
+        localStorage.setItem('dfx_total_score', totalScore);
+        localStorage.setItem('dfx_total_votes', totalVotes);
+        localStorage.setItem('dfx_rated', 'true');
+
+        updateDisplay();
+        highlightStars(value);
+        
+        rateMsg.innerText = "Thank you for the " + value + " star rating!";
+        rateMsg.style.opacity = "1";
+    });
+});
+
+function highlightStars(val) {
+    stars.forEach(s => {
+        if(s.getAttribute('data-value') <= val) {
+            s.classList.add('active');
+        } else {
+            s.classList.remove('active');
+        }
+    });
+}
+
+// Check if already rated on load
+window.addEventListener('DOMContentLoaded', () => {
+    updateDisplay();
+    if(localStorage.getItem('dfx_rated')) {
+        // Optional: show their previous rating
+    }
+});
+
     </script>
 </body>
 </html>
