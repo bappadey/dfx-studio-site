@@ -437,8 +437,8 @@ const avgDisplay = document.getElementById('avg-score');
 const totalVotesDisplay = document.getElementById('total-votes');
 const rateMsg = document.getElementById('rate-msg');
 
-let totalScore = parseFloat(localStorage.getItem('dfx_total_score')) || 617.52; 
-let totalVotes = parseInt(localStorage.getItem('dfx_total_votes')) || 124;
+let totalScore = parseFloat(localStorage.getItem('dfx_total_score')) || 637.52; 
+let totalVotes = parseInt(localStorage.getItem('dfx_total_votes')) || 128;
 
 function updateRatingUI() {
     let avg = (totalScore / totalVotes).toFixed(2);
@@ -492,4 +492,5 @@ window.addEventListener('DOMContentLoaded', updateRatingUI);
     </script>
 </body>
 </html>
+
 
