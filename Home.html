@@ -259,7 +259,7 @@
         <!-- Big Precise Score -->
         <div id="avg-score">4.98</div>
         <div class="text-gray-500 font-bebas tracking-[3px] mb-10 text-sm uppercase">
-            Average Rating (<span id="total-votes">218</span> Votes)
+            Average Rating (<span id="total-votes">131</span> Votes)
         </div>
         
         <!-- Interactive Star-Rating Grid -->
@@ -437,8 +437,8 @@ const avgDisplay = document.getElementById('avg-score');
 const totalVotesDisplay = document.getElementById('total-votes');
 const rateMsg = document.getElementById('rate-msg');
 
-let totalScore = parseFloat(localStorage.getItem('dfx_total_score')) || 637.52; 
-let totalVotes = parseInt(localStorage.getItem('dfx_total_votes')) || 218;
+let totalScore = parseFloat(localStorage.getItem('dfx_total_score')) || 653.52; 
+let totalVotes = parseInt(localStorage.getItem('dfx_total_votes')) || 131;
 
 function updateRatingUI() {
     let avg = (totalScore / totalVotes).toFixed(2);
@@ -492,6 +492,7 @@ window.addEventListener('DOMContentLoaded', updateRatingUI);
     </script>
 </body>
 </html>
+
 
 
 
