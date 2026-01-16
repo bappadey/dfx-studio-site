@@ -278,56 +278,104 @@
         updateUI();
     </script>
 
-    <!-- FIREBASE MODULE -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // IMPORTANT: REPLACE THIS CONFIG WITH YOURS
-        const firebaseConfig = {
-  apiKey: "AIzaSyAIX4Al2mFvSeDCgE01FWGXRuuowJwpjXg",
-  authDomain: "dfx-reviews.firebaseapp.com",
-  projectId: "dfx-reviews",
-  storageBucket: "dfx-reviews.firebasestorage.app",
-  messagingSenderId: "71883383009",
-  appId: "1:71883383009:web:7fc96391ad98f5cff357a0",
-  measurementId: "G-FEY260SKQJ"
-};
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
+  // ১. আপনার ফায়ারবেস কনফিগ (এখানে আপনার নিজের তথ্যগুলো অবশ্যই বসান)
+  const firebaseConfig = {
+    apiKey: "AIzaSyAIX4Al2mFvSeDCgE01FWGXRuuowJwpjXg",
+    authDomain: "dfx-reviews.firebaseapp.com",
+    projectId: "dfx-reviews",
+    storageBucket: "dfx-reviews.firebasestorage.app",
+    messagingSenderId: "71883383009",
+    appId: "1:71883383009:web:7fc96391ad98f5cff357a0",
+    measurementId: "G-FEY260SKQJ"
+  };
 
-        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider).catch(e => console.error(e));
+  // ইনিশিয়ালাইজেশন
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('auth-area').classList.add('hidden');
-                document.getElementById('review-form').classList.remove('hidden');
-                document.getElementById('user-name').innerText = user.displayName;
-                document.getElementById('user-pic').src = user.photoURL;
-            }
-        });
-
-        document.getElementById('submit-review').onclick = async () => {
-            const val = document.getElementById('review-text').value;
-            if(!val) return;
-            await addDoc(collection(db, "dfx_reviews"), { name: auth.currentUser.displayName, pic: auth.currentUser.photoURL, text: val, time: Date.now() });
-            document.getElementById('review-text').value = ""; document.getElementById('review-form').classList.add('hidden');
-        };
-
-        const q = query(collection(db, "dfx_reviews"), orderBy("time", "desc"));
-        onSnapshot(q, (snapshot) => {
-            const w = document.getElementById('review-slider-wrapper');
-            w.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const d = doc.data();
-                w.innerHTML += `<div class="swiper-slide"><div class="text-center bg-zinc-950 p-10 rounded-3xl border border-white/5"><img src="${d.pic}" class="w-20 h-20 rounded-full mx-auto mb-6 border-2 border-[rgb(205,31,133)]"><p class="italic text-gray-300">"${d.text}"</p><h4 class="font-bebas text-white mt-4 text-2xl tracking-widest">${d.name}</h4></div></div>`;
+  // ২. লগইন বাটন লজিক (Debug Mode)
+  const loginBtn = document.getElementById('login-btn');
+  
+  if(loginBtn) {
+      loginBtn.addEventListener('click', function() {
+          alert("Login Button Clicked! Starting Google Popup..."); // এটি স্ক্রিনে আসছে কি না দেখুন
+          
+          signInWithPopup(auth, provider)
+            .then((result) => {
+                alert("Success! Welcome " + result.user.displayName);
+            })
+            .catch((error) => {
+                console.error(error);
+                // এই মেসেজটি সবচেয়ে গুরুত্বপূর্ণ, এটি আমাকে জানাবেন
+                alert("Firebase Error!\nCode: " + error.code + "\nMessage: " + error.message);
             });
-            new Swiper(".reviewSwiper", { loop: true, autoplay: { delay: 5000 }, pagination: { el: ".swiper-pagination" } });
-        });
-    </script>
+      });
+  } else {
+      console.error("Login button not found in HTML!");
+  }
+
+  // ৩. ইউজার স্টেট চেক
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+        document.getElementById('auth-area').classList.add('hidden');
+        document.getElementById('review-form').classList.remove('hidden');
+        document.getElementById('user-name').innerText = user.displayName;
+        document.getElementById('user-pic').src = user.photoURL;
+    }
+  });
+
+  // ৪. রিভিউ সাবমিট
+  const submitBtn = document.getElementById('submit-review');
+  if(submitBtn) {
+      submitBtn.onclick = async () => {
+        const text = document.getElementById('review-text').value;
+        if(!text) return alert("Please write a review!");
+        
+        try {
+            await addDoc(collection(db, "dfx_reviews"), {
+                name: auth.currentUser.displayName,
+                pic: auth.currentUser.photoURL,
+                text: text,
+                time: Date.now()
+            });
+            alert("Review Posted!");
+            document.getElementById('review-text').value = "";
+            document.getElementById('review-form').classList.add('hidden');
+        } catch (e) {
+            alert("Firestore Error: " + e.message);
+        }
+      };
+  }
+
+  // ৫. রিভিউ লোড করা
+  const q = query(collection(db, "dfx_reviews"), orderBy("time", "desc"));
+  onSnapshot(q, (snapshot) => {
+    const wrapper = document.getElementById('review-slider-wrapper');
+    if(!wrapper) return;
+    wrapper.innerHTML = "";
+    snapshot.forEach((doc) => {
+        const data = doc.data();
+        wrapper.innerHTML += `
+            <div class="swiper-slide">
+                <div class="p-10 bg-zinc-950 rounded-3xl border border-white/5 text-center">
+                    <img src="${data.pic}" class="w-20 h-20 rounded-full mx-auto mb-6 border-2 border-[rgb(205,31,133)] shadow-lg">
+                    <p class="text-xl text-gray-300 italic mb-6">"${data.text}"</p>
+                    <h4 class="font-bebas text-white text-2xl tracking-widest">${data.name}</h4>
+                </div>
+            </div>`;
+    });
+    new Swiper(".reviewSwiper", { loop: true, autoplay: { delay: 5000 }, pagination: { el: ".swiper-pagination" } });
+  });
+</script>
 </body>
 </html>
+
 
