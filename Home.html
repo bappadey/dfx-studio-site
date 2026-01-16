@@ -499,128 +499,12 @@ starBoxes.forEach(box => {
 
 window.addEventListener('DOMContentLoaded', updateRatingUI);
 
-<!-- ৮. ক্লায়েন্ট রিভিউ স্লাইডার সেকশন -->
-<section id="user-reviews" class="py-24 bg-[rgb(5,5,5)] px-6 text-center border-t border-white/5">
-    <h2 class="text-4xl md:text-6xl font-bebas mb-12 italic uppercase text-white tracking-widest">Client Stories</h2>
 
-    <!-- স্লাইডার (যেখানে সবার রিভিউ দেখাবে) -->
-    <div class="swiper reviewSwiper mb-16 max-w-5xl mx-auto overflow-hidden">
-        <div class="swiper-wrapper" id="review-slider-wrapper">
-            <!-- ডাটাবেস থেকে আসা রিভিউ এখানে দেখা যাবে -->
-            <div class="swiper-slide p-10 bg-black rounded-3xl border border-white/5">
-                <p class="text-gray-500 italic">No reviews yet. Be the first!</p>
-            </div>
-        </div>
-        <div class="swiper-pagination mt-10"></div>
-    </div>
-
-    <!-- লগইন বাটন -->
-    <div id="auth-area">
-        <button id="login-btn" class="nav-btn bg-[rgb(205,31,133)] rounded-full px-12 py-4 text-white hover:bg-white hover:text-black transition duration-300">
-            <i class="fab fa-google mr-2"></i> Login with Google to Review
-        </button>
-    </div>
-
-    <!-- রিভিউ দেওয়ার ফরম (লগইন করলে এটি দেখা যাবে) -->
-    <div id="review-form" class="hidden max-w-xl mx-auto bg-black p-10 rounded-[40px] border border-[rgb(47,28,82)] shadow-2xl">
-        <div id="user-info" class="mb-6 flex items-center justify-center gap-4">
-            <img id="user-pic" src="" class="w-16 h-16 rounded-full border-2 border-[rgb(205,31,133)] shadow-lg shadow-magenta/30">
-            <span id="user-name" class="font-bebas text-2xl text-white"></span>
-        </div>
-        
-        <textarea id="review-text" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-2xl text-white mb-6 focus:border-[rgb(205,31,133)] outline-none min-h-[120px]" placeholder="Share your experience with DFX Studio..."></textarea>
-        
-        <button id="submit-review" class="nav-btn bg-[rgb(205,31,133)] w-full py-4 rounded-2xl font-bebas text-2xl tracking-widest hover:bg-white hover:text-black transition">
-            Post Review
-        </button>
-    </div>
-</section>
-
-<!-- Firebase এবং রিভিউ লজিক স্ক্রিপ্ট -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  // ১. আপনার পাওয়া Firebase Config এখানে বসান
-  const firebaseConfig = {
-  apiKey: "AIzaSyAIX4Al2mFvSeDCgE01FWGXRuuowJwpjXg",
-  authDomain: "dfx-reviews.firebaseapp.com",
-  projectId: "dfx-reviews",
-  storageBucket: "dfx-reviews.firebasestorage.app",
-  messagingSenderId: "71883383009",
-  appId: "1:71883383009:web:7fc96391ad98f5cff357a0",
-  measurementId: "G-FEY260SKQJ"
-};
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-
-  const loginBtn = document.getElementById('login-btn');
-  const reviewForm = document.getElementById('review-form');
-  const authArea = document.getElementById('auth-area');
-  const reviewText = document.getElementById('review-text');
-
-  // ২. গুগল লগইন ফাংশন
-  loginBtn.onclick = () => signInWithPopup(auth, provider);
-
-  // ৩. ইউজার লগইন অবস্থা চেক করা
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-        authArea.classList.add('hidden');
-        reviewForm.classList.remove('hidden');
-        document.getElementById('user-name').innerText = user.displayName;
-        document.getElementById('user-pic').src = user.photoURL;
-    }
-  });
-
-  // ৪. রিভিউ সেভ করা
-  document.getElementById('submit-review').onclick = async () => {
-    const text = reviewText.value;
-    if(!text) return alert("Write something first!");
-
-    await addDoc(collection(db, "dfx_reviews"), {
-        name: auth.currentUser.displayName,
-        pic: auth.currentUser.photoURL,
-        text: text,
-        time: Date.now()
-    });
-
-    reviewText.value = "";
-    alert("Review posted successfully!");
-    reviewForm.classList.add('hidden');
-  };
-
-  // ৫. স্লাইডারে রিভিউ দেখানো (Live)
-  const q = query(collection(db, "dfx_reviews"), orderBy("time", "desc"));
-  onSnapshot(q, (snapshot) => {
-    const wrapper = document.getElementById('review-slider-wrapper');
-    wrapper.innerHTML = "";
-    snapshot.forEach((doc) => {
-        const data = doc.data();
-        wrapper.innerHTML += `
-            <div class="swiper-slide">
-                <div class="p-10 bg-zinc-950 rounded-3xl border border-white/5 text-center">
-                    <img src="${data.pic}" class="w-20 h-20 rounded-full mx-auto mb-6 border-2 border-[rgb(205,31,133)] shadow-lg">
-                    <p class="text-xl text-gray-300 italic mb-6">"${data.text}"</p>
-                    <h4 class="font-bebas text-white text-2xl tracking-widest">${data.name}</h4>
-                </div>
-            </div>`;
-    });
-
-    // স্লাইডার ইনিশিয়ালাইজেশন
-    new Swiper(".reviewSwiper", {
-        loop: true,
-        autoplay: { delay: 5000 },
-        pagination: { el: ".swiper-pagination", clickable: true },
-    });
-  });
 		
     </script>
 </body>
 </html>
+
 
 
 
