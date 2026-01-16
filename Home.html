@@ -431,14 +431,15 @@
             }, 5000);
         });
 
-// --- DFX STAR RATING SYSTEM ---
+// --- DFX STAR RATING SYSTEM (Method 3: V2 Force Reset) ---
 const starBoxes = document.querySelectorAll('.star-box');
 const avgDisplay = document.getElementById('avg-score');
 const totalVotesDisplay = document.getElementById('total-votes');
 const rateMsg = document.getElementById('rate-msg');
 
-let totalScore = parseFloat(localStorage.getItem('dfx_total_score')) || 653.52; 
-let totalVotes = parseInt(localStorage.getItem('dfx_total_votes')) || 131;
+// 1 & 2. INITIALIZATION (Update your starting numbers here)
+let totalScore = parseFloat(localStorage.getItem('dfx_score_v2')) || 652.5; // Put your new total score
+let totalVotes = parseInt(localStorage.getItem('dfx_votes_v2')) || 131;   // Put your new vote count
 
 function updateRatingUI() {
     let avg = (totalScore / totalVotes).toFixed(2);
@@ -459,39 +460,48 @@ function fillStars(val) {
 
 starBoxes.forEach(box => {
     box.addEventListener('mouseover', function() {
-        if(!localStorage.getItem('dfx_rated')) {
+        // 3. CHECK V2 KEY
+        if(!localStorage.getItem('dfx_rated_v2')) {
             fillStars(this.getAttribute('data-value'));
         }
     });
+
     box.addEventListener('mouseout', function() {
-        if(!localStorage.getItem('dfx_rated')) {
+        // 4. CHECK V2 KEY
+        if(!localStorage.getItem('dfx_rated_v2')) {
             fillStars(0);
         }
     });
+
     box.addEventListener('click', function() {
-        if(localStorage.getItem('dfx_rated')) {
-            rateMsg.innerText = "Already rated!";
+        // 5. CHECK V2 KEY
+        if(localStorage.getItem('dfx_rated_v2')) {
+            rateMsg.innerText = "You have already rated DFX!";
             rateMsg.style.opacity = "1";
             return;
         }
+
         const value = parseInt(this.getAttribute('data-value'));
         totalScore += value;
         totalVotes += 1;
-        localStorage.setItem('dfx_total_score', totalScore);
-        localStorage.setItem('dfx_total_votes', totalVotes);
-        localStorage.setItem('dfx_rated', 'true');
+
+        // 6, 7 & 8. SAVE V2 KEYS
+        localStorage.setItem('dfx_score_v2', totalScore);
+        localStorage.setItem('dfx_votes_v2', totalVotes);
+        localStorage.setItem('dfx_rated_v2', 'true');
+
         updateRatingUI();
         fillStars(value); 
-        rateMsg.innerText = "Thank you for the " + value + " star rating!";
+        rateMsg.innerText = "Success! Thank you for the " + value + " star rating.";
         rateMsg.style.opacity = "1";
     });
 });
 
 window.addEventListener('DOMContentLoaded', updateRatingUI);
-
     </script>
 </body>
 </html>
+
 
 
 
