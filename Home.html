@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- EmailJS SDK (Notification এর জন্য) -->
+    <!-- EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
     <style>
@@ -21,133 +21,157 @@
             --dfx-purple: rgb(47, 28, 82);   /* #2F1C52 */
             --dfx-magenta: rgb(205, 31, 133); /* #CD1F85 */
         }
+
         h1, h2, h3, .font-bebas { font-family: 'Bebas Neue', cursive; letter-spacing: 2px; }
         .font-rai { font-family: 'RaiLowercase', 'Inter', sans-serif; }
+
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* Intro */
+        /* 1. Intro Animation */
         #intro { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .intro-img { width: 450px; max-width: 90%; height: auto; filter: drop-shadow(0 0 25px var(--dfx-magenta)); }
 
-        /* Navbar & Active State */
-        header { backdrop-filter: blur(20px); background: rgba(0, 0, 0, 0.75); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .nav-link { position: relative; color: #fff; font-family: 'Bebas Neue'; font-size: 1.4rem; padding: 5px 10px; transition: 0.3s; }
-        .nav-link.active::after { content: ''; position: absolute; bottom: -5px; left: 10%; width: 80%; height: 3px; background: var(--dfx-magenta); box-shadow: 0 0 10px var(--dfx-magenta); }
+        /* 2. Header & Nav Link Underline Logic */
+        header { backdrop-filter: blur(20px); background: rgba(0, 0, 0, 0.85); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-link { 
+            position: relative; color: #fff; font-family: 'Bebas Neue'; font-size: 1.4rem; padding: 5px 10px; transition: 0.3s;
+        }
+        /* Active Underline Effect */
+        .nav-link.active::after {
+            content: ''; position: absolute; bottom: -5px; left: 10%; width: 80%; height: 3px; background: var(--dfx-magenta); box-shadow: 0 0 10px var(--dfx-magenta);
+        }
+        .nav-link:hover { color: var(--dfx-magenta); }
 
-        /* Hero Cinema */
+        /* 3. Hero Cinema Container (Strict 16:9) */
         .hero-section { width: 100%; padding-top: 80px; background: #000; display: flex; flex-direction: column; align-items: center; }
         .cinema-frame { width: 100%; max-width: 1440px; aspect-ratio: 16 / 9; position: relative; overflow: hidden; border-bottom: 2px solid var(--dfx-magenta); box-shadow: 0 10px 50px rgba(205, 31, 133, 0.15); }
-        .hero-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
+        .hero-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
         .hero-content-corner { position: absolute; bottom: 10%; left: 5%; text-align: left; z-index: 10; }
 
-        /* Portfolio */
+        /* 4. Portfolio Cards */
         .portfolio-card { position: relative; overflow: hidden; border-radius: 12px; transition: 0.5s; border: 1px solid rgba(255,255,255,0.05); }
         .portfolio-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(205, 31, 133, 0.3); border-color: var(--dfx-magenta); }
-        
-        /* Swiper & Rating */
-        .mySwiper { width: 100%; aspect-ratio: 16 / 10; border-radius: 15px; border: 1px solid var(--dfx-purple); }
-        .review-card { background: linear-gradient(145deg, #0a0a0a, #000); border: 1px solid rgba(255,255,255,0.1); padding: 30px 20px; border-radius: 25px; text-align: center; height: auto !important; width: 85% !important; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
-        .review-card img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--dfx-magenta); margin-bottom: 15px; }
-        
-        .star-box i { color: #222; }
+
+        /* 5. Rating & Review UI */
         .star-box.active i { color: var(--dfx-magenta); text-shadow: 0 0 20px var(--dfx-magenta); }
         #avg-score { font-size: 5.5rem; font-family: 'Bebas Neue'; color: #fff; line-height: 1; text-shadow: 0 0 30px rgba(205, 31, 133, 0.4); }
-        #typewriter-box { min-height: 65px; font-family: 'Bebas Neue'; color: var(--dfx-magenta); font-size: clamp(2rem, 8vw, 3.5rem); text-shadow: 0 0 20px rgba(205, 31, 133, 0.6); }
+        .review-card { background: linear-gradient(145deg, #0a0a0a, #000); border: 1px solid rgba(255,255,255,0.1); padding: 30px 20px; border-radius: 25px; text-align: center; height: auto !important; width: 85% !important; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .review-card img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--dfx-magenta); margin-bottom: 15px; box-shadow: 0 0 15px var(--dfx-magenta); }
 
+        /* General Styles */
+        .mySwiper { width: 100%; aspect-ratio: 16 / 10; border-radius: 15px; border: 1px solid var(--dfx-purple); }
+        #typewriter-box { min-height: 65px; font-family: 'Bebas Neue'; color: var(--dfx-magenta); font-size: clamp(2rem, 8vw, 3.5rem); text-shadow: 0 0 20px rgba(205, 31, 133, 0.6); }
         #mobile-menu { display: none; position: fixed; top: 0; right: 0; width: 85%; height: 100vh; background: linear-gradient(135deg, var(--dfx-purple), #000); z-index: 100; flex-direction: column; justify-content: center; align-items: center; }
         #videoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 10000; justify-content: center; align-items: center; }
-
+        
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
     </style>
 </head>
 <body>
 
+    <!-- Intro -->
     <div id="intro"><img src="Asset/DFX LOGO Intro.gif" alt="DFX Intro" class="intro-img"></div>
 
+    <!-- Navbar -->
     <header class="fixed top-0 w-full p-4 flex justify-between items-center z-50 px-6 md:px-20">
         <div class="flex items-center">
             <img src="Asset/LOGO.png" alt="DFX" class="w-10 h-10 md:w-14 md:h-14 mr-3">
-            <span class="text-4xl md:text-5xl font-bebas font-bold uppercase" style="color: var(--dfx-magenta); text-shadow: 0 0 15px var(--dfx-magenta);">DFX</span>
+            <span class="text-4xl md:text-5xl font-bebas font-bold uppercase tracking-tighter" style="color: var(--dfx-magenta); text-shadow: 0 0 15px var(--dfx-magenta);">DFX</span>
         </div>
-        <nav class="hidden md:flex items-center space-x-10">
+        <nav class="hidden md:flex items-center space-x-8">
+            <a href="#hero" class="nav-link">HOME</a>
             <a href="#work" class="nav-link">PROJECTS</a>
             <a href="#services" class="nav-link">SERVICES</a>
             <a href="#clients" class="nav-link">CLIENTS</a>
             <a href="#user-reviews" class="nav-link">REVIEWS</a>
-            <a href="#contact" class="nav-link bg-[rgb(205,31,133)] rounded-full px-8 hover:bg-white hover:text-black !text-white">CONTACT</a>
+            <a href="#contact" class="nav-link">CONTACT</a>
         </nav>
         <button class="md:hidden text-3xl text-white" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     </header>
 
+    <!-- Mobile Sidebar -->
     <div id="mobile-menu">
         <button class="absolute top-6 right-6 text-4xl" onclick="toggleMenu()">&times;</button>
+        <a href="#hero" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">HOME</a>
         <a href="#work" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">PROJECTS</a>
         <a href="#services" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">SERVICES</a>
         <a href="#clients" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">CLIENTS</a>
         <a href="#user-reviews" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">REVIEWS</a>
-        <a href="#contact" class="text-4xl font-bebas bg-[rgb(205,31,133)] px-10 py-3 rounded-full" onclick="toggleMenu()">CONTACT</a>
+        <a href="#contact" class="text-4xl font-bebas" onclick="toggleMenu()">CONTACT</a>
     </div>
 
-    <section class="hero-section">
+    <!-- 3. Hero Section ( cinema frame ) -->
+    <section class="hero-section" id="hero">
         <div class="cinema-frame">
-            <video autoplay muted loop playsinline class="hero-video"><source src="Asset/DFX Showreel.mp4" type="video/mp4"></video>
+            <video autoplay muted loop playsinline class="hero-video">
+                <source src="Asset/DFX Showreel.mp4" type="video/mp4">
+            </video>
             <div class="hero-content-corner">
-                <h1 class="text-5xl md:text-8xl font-bebas font-black text-white" style="text-shadow: 0 0 20px rgba(0,0,0,0.8);">DFX STUDIO</h1>
-                <p class="text-[10px] md:text-xl font-rai font-bold uppercase tracking-[3px] md:tracking-[8px] text-[rgb(205,31,133)] mb-6">Dynamic • Determined • Delightful • Dedicated</p>
-                <div class="flex space-x-4">
-                    <a href="#work" class="bg-white text-black px-6 py-2 rounded-full font-bebas text-xl hover:bg-[rgb(205,31,133)] transition">WATCH SHOWREEL</a>
-                    <a href="#user-reviews" class="border-2 border-white px-6 py-2 rounded-full font-bebas text-xl hover:bg-white hover:text-black transition">CLIENT STORIES</a>
-                </div>
+                <h1 class="text-5xl md:text-8xl font-bebas font-black text-white uppercase drop-shadow-2xl">DFX STUDIO</h1>
+                <p class="text-[10px] md:text-xl font-rai font-bold uppercase tracking-[3px] md:tracking-[8px] text-[rgb(205,31,133)]">
+                    Dynamic • Determined • Delightful • Dedicated
+                </p>
             </div>
         </div>
     </section>
 
+    <!-- 4. Projects Portfolio -->
     <section id="work" class="py-20 px-4 md:px-20 bg-black">
         <h2 class="text-4xl md:text-5xl font-bebas mb-12 text-center border-b-2 border-[rgb(47,28,82)] inline-block w-full uppercase">Portfolio</h2>
         <div id="portfolio-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8"></div>
     </section>
 
+    <!-- 5. Service Section -->
     <section id="services" class="py-20 bg-[rgb(5,5,5)] px-6 md:px-20">
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div><h2 class="text-lg text-white opacity-40 uppercase tracking-[5px] mb-2 font-bebas">Expertise</h2><div id="typewriter-box"></div><p id="service-desc" class="text-gray-400 mt-6 text-lg md:text-xl font-rai border-l-2 border-[rgb(205,31,133)] pl-6"></p></div>
-            <div class="shadow-2xl shadow-[rgb(47,28,82)]/30 w-full"><div class="swiper mySwiper"><div class="swiper-wrapper" id="service-slides"></div></div></div>
+            <div>
+                <h2 class="text-lg text-white opacity-40 uppercase tracking-[5px] mb-2 font-bebas">Expertise</h2>
+                <div id="typewriter-box"></div>
+                <p id="service-desc" class="text-gray-400 mt-6 text-lg md:text-xl font-rai leading-relaxed border-l-2 border-[rgb(205,31,133)] pl-6"></p>
+            </div>
+            <div class="shadow-2xl shadow-[rgb(47,28,82)]/30 w-full">
+                <div class="swiper mySwiper">
+                    <div class="swiper-wrapper" id="service-slides"></div>
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- 6. Clients Section -->
     <section id="clients" class="py-20 px-6 text-center bg-black">
-        <h2 class="text-3xl md:text-4xl font-bebas mb-12 opacity-30 uppercase tracking-widest text-white">Global Partners</h2>
+        <h2 class="text-3xl md:text-4xl font-bebas mb-12 opacity-30 uppercase italic tracking-widest text-white">Our Partners</h2>
         <div id="clients-container" class="flex flex-wrap justify-center items-center gap-6 md:gap-16"></div>
     </section>
 
-    <!-- Client Stories (Firebase Live) -->
+    <!-- 8. Firebase Client Stories (Order: Stories First) -->
     <section id="user-reviews" class="py-24 bg-[rgb(5,5,5)] px-4 text-center border-t border-white/5">
         <h2 class="text-4xl md:text-5xl font-bebas mb-12 italic uppercase text-white tracking-widest">Client Stories</h2>
         <div class="swiper reviewSwiper mb-16 max-w-5xl mx-auto overflow-hidden">
             <div class="swiper-wrapper" id="review-slider-wrapper">
-                <div class="swiper-slide p-10"><p class="text-gray-500 italic">No stories yet...</p></div>
+                <div class="swiper-slide p-10"><p class="text-gray-500 italic">Be the first to share your story!</p></div>
             </div>
             <div class="swiper-pagination mt-10"></div>
         </div>
         <div id="auth-area">
-            <button id="login-btn" class="nav-btn bg-[rgb(205,31,133)] rounded-full px-12 py-4 text-white hover:bg-white hover:text-black transition">Login with Google to Review</button>
+            <button id="login-btn" class="nav-link bg-[rgb(205,31,133)] rounded-full px-12 py-4 text-white hover:bg-white hover:text-black transition uppercase">Login with Google to Review</button>
         </div>
         <div id="review-form" class="hidden max-w-xl mx-auto bg-black p-10 rounded-[40px] border border-[rgb(47,28,82)] shadow-2xl">
             <div id="user-info" class="mb-6 flex items-center justify-center gap-4">
                 <img id="user-pic" src="" class="w-14 h-14 rounded-full border-2 border-[rgb(205,31,133)]">
                 <span id="user-name" class="font-bebas text-2xl text-white"></span>
             </div>
-            <textarea id="review-text" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-2xl text-white mb-6 outline-none min-h-[120px]" placeholder="Share your experience..."></textarea>
-            <button id="submit-review" class="nav-btn bg-[rgb(205,31,133)] w-full py-4 rounded-2xl font-bebas text-2xl">Post Review</button>
+            <textarea id="review-text" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-2xl text-white mb-6 outline-none min-h-[120px]" placeholder="Write your experience..."></textarea>
+            <button id="submit-review" class="nav-link bg-[rgb(205,31,133)] w-full py-4 rounded-2xl font-bebas text-2xl">Post Review</button>
         </div>
     </section>
 
-    <!-- Average Ratings (Real-time Global Sync) -->
+    <!-- 6.5 Overall Stats (Order: Stats Second) -->
     <section id="reviews" class="py-24 bg-black px-6 text-center border-t border-white/5">
         <h2 class="text-4xl md:text-5xl font-bebas mb-4 italic uppercase tracking-wider text-white">Overall Satisfaction</h2>
         <div class="max-w-md mx-auto bg-[rgb(5,5,5)] p-12 rounded-[40px] border border-[rgb(47,28,82)] shadow-[0_20px_50px_rgba(47,28,82,0.4)]">
             <div id="avg-score">4.98</div>
-            <div class="text-gray-500 font-bebas tracking-[3px] mb-10 text-sm uppercase">Total (<span id="total-votes">0</span> Votes)</div>
+            <div class="text-gray-500 font-bebas tracking-[3px] mb-10 text-sm uppercase">Global Rating (<span id="total-votes">0</span> Votes)</div>
             <div class="flex justify-center gap-4 md:gap-6 mb-10" id="star-input">
                 <div class="star-box cursor-pointer group" data-value="1"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">1</span></div>
                 <div class="star-box cursor-pointer group" data-value="2"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">2</span></div>
@@ -159,6 +183,7 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer id="contact" class="py-20 bg-[rgb(47,28,82)] px-6 text-center">
         <h2 class="text-4xl md:text-6xl font-bebas mb-12 italic text-white uppercase tracking-widest">Let's Create Magic</h2>
         <div class="flex justify-center flex-wrap gap-10 text-4xl mb-12">
@@ -172,11 +197,9 @@
         <p class="text-white opacity-40 font-rai tracking-[3px] text-xs uppercase">© 2026 DFX Studio | Bangladesh</p>
     </footer>
 
-    <div id="videoModal" onclick="closeVideo()"><span class="absolute top-6 right-6 text-5xl cursor-pointer text-white opacity-40 hover:opacity-100">&times;</span><div class="w-11/12 lg:w-4/5 aspect-video" onclick="event.stopPropagation()"><iframe id="videoPlayer" class="w-full h-full rounded-lg" src="" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>
-
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // Project/Service Data
         const projects = [ { id: '4nYutWIka7M' }, { id: 'pmMDbRDJMV0' }, { id: 'y9QLyOzQz2I' }, { id: 'nI-8Gpg6eZg' }, { id: 'VTzuggox5mM' }, { id: '2LMTT_HZttA' }, { id: 'FVNMLvH35Ys' }, { id: 'xFwnun3zMH4' }, { id: 'XXunnh1Bokk' }, { id: 'wREenI4RRgc' }, { id: 'QlsWKDEJWtk' }, { id: 'Gh-8nJfbSVs' }, { id: 'vuNy4gvvoZc' }, { id: '_WI1QZTFXX4' }, { id: '2r1lr7dLano' }, { id: '9ktiKThBwZA' }, { id: 'N5D2_bK5RNM' }, { id: 'nO72m__mcew' }, { id: 'OvFSsmLqyCc' }, { id: 'bL5uI2NAKDM' }, { id: 'kAshuCi6UJw' }, { id: '5gf0Icoizs8' }, { id: 'S-bsAyqS4KY' }, { id: '1Cdo8-VwHpY' }, { id: 'dxb-3G4qYyo' }, { id: 'STtoeP24j4g' }, { id: 'Ehn5iVm0Ox0' }, { id: 'd-gbIabi8ok' }, { id: 'ziI3mLHN3YA' }, { id: 'YzyzPK16Slc' }, { id: 'JdCC1Xld15Q' }, { id: 'L2_iRJjAJZ0' }, { id: '3brG7XOeVog' }, { id: 'WxYedjhxj1A' }, { id: 'fA6Jvc7mxxY' }, { id: 'Jxiy-f9NkJo' }, { id: 'ekxCVhuoOOw' }, { id: 'SOeBXI2d26I' }, { id: 'CZ4GzZjTPj4' }, { id: 'rWRd133yIbY' } ];
         const services = [ { file: '3DAnimation.mp4', title: '3D ANIMATION', desc: 'High-quality 3D Product Modeling & stylized animations.' }, { file: 'Liquid.mp4', title: 'Fluid Simulation', desc: 'Realistic liquid simulations crafted for ads and films.' }, { file: 'Composite.mp4', title: 'Composite', desc: 'Seamless compositing services for commercials and films.' }, { file: 'VFX.mp4', title: 'VFX', desc: 'Professional VFX solutions for commercials and cinema.' }, { file: 'Rotoscopy.mp4', title: 'Rotoscopy', desc: 'High-precision rotoscopy for TV and cinema.' }, { file: '2D Animation.mp4', title: '2D Animation', desc: 'Creative 2D animation studio crafting visuals that tell stories.' }, { file: 'Motion Graphics.mp4', title: 'MOTION GRAPHICS', desc: 'Bringing designs to life with dynamic motion and brand energy.' } ];
         const clientLogos = ['LUX_(soap)_logo.png', 'NESTLElogo.png', 'Vim.png', 'drug.png', 'Aarong Dairy.jpg', 'Ama.png', 'Asian Paints.png', 'bKash.png', 'Brac.png', 'BritishCouncil.png', 'CartUP.png', 'CEAT.png', 'Chaka.jpg', 'Chefchoice.png', 'Clear Men.jpeg', 'Clemon.jpeg', 'closeup.png', 'Daraz.png', 'Electromart.png', 'Farmfresh.jpeg', 'Finlay.webp', 'Foodi.png', 'foton.png', 'Freedom.png', 'Fresh anonna.jpeg', 'fresh_lp_gas.png', 'Frutika.jpeg', 'Goldmark.jpeg', 'goodknight.png', 'Gozayaan.jpg', 'GP.png', 'GPH.jpg', 'Harpic.png', 'Honor.png', 'IDLC.png', 'IPDC.png', 'KSRM.png', 'lee cooper.png', 'Link3.png', 'Lotto.png', 'Parachute Skinpure.jpg', 'Pathao.png', 'Power.jpeg', 'SSL.png', 'Starline.jpeg', 'Sunquick.png', 'Sylon tea.jpeg', 'TikTok.png', 'TSports.png', 'Veet.png', 'Walton.png', 'Yamaha.png'];
@@ -204,13 +227,19 @@
         function openVideo(id) { document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`; document.getElementById('videoModal').style.display = 'flex'; }
         function closeVideo() { document.getElementById('videoPlayer').src = ""; document.getElementById('videoModal').style.display = 'none'; }
 
-        // Active Nav Observer
+        // --- Active Link Observer (Highlight when in Section) ---
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section, footer');
             const navLinks = document.querySelectorAll('.nav-link');
             let current = '';
-            sections.forEach(s => { if (pageYOffset >= s.offsetTop - 150) current = s.getAttribute('id'); });
-            navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
+            sections.forEach(s => {
+                const sTop = s.offsetTop;
+                if (pageYOffset >= sTop - 180) current = s.getAttribute('id');
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) link.classList.add('active');
+            });
         });
 
         window.addEventListener('load', () => {
@@ -219,13 +248,12 @@
         });
     </script>
 
-    <!-- FIREBASE & REALTIME SYNC & NOTIFICATION -->
+    <!-- FIREBASE & GLOBAL RATINGS -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // ১. আপনার Firebase Config এখানে বসান
         const firebaseConfig = {
             apiKey: "AIzaSyAIX4Al2mFvSeDCgE01FWGXRuuowJwpjXg",
             authDomain: "dfx-reviews.firebaseapp.com",
@@ -235,53 +263,43 @@
             appId: "1:71883383009:web:7fc96391ad98f5cff357a0",
             measurementId: "G-FEY260SKQJ"
   };
-
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
-
-        // EmailJS Init (আপনার User ID দিয়ে রিপ্লেস করুন)
         emailjs.init("O_S8i6tkPawHLhPUs");
 
-        // --- GLOBAL STAR RATING SYNC ---
         const starBoxes = document.querySelectorAll('.star-box');
         const avgDisplay = document.getElementById('avg-score');
         const totalVotesDisplay = document.getElementById('total-votes');
         const statsRef = doc(db, "global_stats", "ratings");
 
-        // Listen for Global Changes
         onSnapshot(statsRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 let avg = data.totalScore / data.totalVotes;
-                // Safety Floor: Never below 4.85
-                let displayAvg = avg < 4.85 ? 4.88 : avg;
+                // Floor Logic: Always 4.85+
+                let displayAvg = avg < 4.85 ? 4.91 : avg;
                 avgDisplay.innerText = displayAvg.toFixed(2);
                 totalVotesDisplay.innerText = data.totalVotes;
-            } else {
-                // Initialize if empty
-                setDoc(statsRef, { totalScore: 639.4, totalVotes: 131 });
-            }
+            } else { setDoc(statsRef, { totalScore: 639, totalVotes: 131 }); }
         });
 
         starBoxes.forEach(box => {
-            box.addEventListener('mouseover', function() { if(!localStorage.getItem('dfx_rated_v3')) fillStars(this.getAttribute('data-value')); });
-            box.addEventListener('mouseout', function() { if(!localStorage.getItem('dfx_rated_v3')) fillStars(0); });
+            box.addEventListener('mouseover', function() { if(!localStorage.getItem('dfx_v4')) fill(this.getAttribute('data-value')); });
+            box.addEventListener('mouseout', function() { if(!localStorage.getItem('dfx_v4')) fill(0); });
             box.addEventListener('click', async function() {
-                if(localStorage.getItem('dfx_rated_v3')) return alert("Already rated!");
+                if(localStorage.getItem('dfx_v4')) return alert("Already rated!");
                 const val = parseInt(this.getAttribute('data-value'));
                 await updateDoc(statsRef, { totalScore: increment(val), totalVotes: increment(1) });
-                localStorage.setItem('dfx_rated_v3', 'true');
-                fillStars(val);
+                localStorage.setItem('dfx_v4', 'true');
+                fill(val);
             });
         });
 
-        function fillStars(v) { starBoxes.forEach(b => { if(parseInt(b.getAttribute('data-value')) <= v) b.classList.add('active'); else b.classList.remove('active'); }); }
+        function fill(v) { starBoxes.forEach(b => { if(parseInt(b.getAttribute('data-value')) <= v) b.classList.add('active'); else b.classList.remove('active'); }); }
 
-        // --- CLIENT STORIES & NOTIFICATION ---
-        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider).catch(e => alert(e.message));
-
+        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('auth-area').classList.add('hidden');
@@ -295,30 +313,22 @@
             const val = document.getElementById('review-text').value;
             if(!val) return;
             const userName = auth.currentUser.displayName;
-
-            // Save to Firebase
             await addDoc(collection(db, "dfx_reviews"), { name: userName, pic: auth.currentUser.photoURL, text: val, time: Date.now() });
-            
-            // Send Email Notification via EmailJS
-            emailjs.send("service_zkwwe8d", "template_xoc5h28", {
-                from_name: userName,
-                message: val,
-                reply_to: auth.currentUser.email
-            }).then(() => console.log("Notification Sent!"));
-
+            emailjs.send("service_zkwwe8d", "template_xoc5h28", { from_name: userName, message: val });
             document.getElementById('review-text').value = ""; document.getElementById('review-form').classList.add('hidden');
             alert("Success! Your story is live.");
         };
 
         const q = query(collection(db, "dfx_reviews"), orderBy("time", "desc"));
+        let revSwiper;
         onSnapshot(q, (snapshot) => {
-            const w = document.getElementById('review-slider-wrapper');
-            w.innerHTML = "";
+            const w = document.getElementById('review-slider-wrapper'); w.innerHTML = "";
             snapshot.forEach((doc) => {
                 const d = doc.data();
                 w.innerHTML += `<div class="swiper-slide p-4"><div class="review-card"><img src="${d.pic}"><div class="text-[rgb(205,31,133)] mb-4 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>"${d.text}"</p><h4 class="font-bebas text-white mt-4 text-2xl tracking-widest uppercase">${d.name}</h4></div></div>`;
             });
-            new Swiper(".reviewSwiper", { loop: true, autoHeight: true, autoplay: { delay: 5000 }, pagination: { el: ".swiper-pagination", clickable: true } });
+            if(revSwiper) revSwiper.destroy();
+            revSwiper = new Swiper(".reviewSwiper", { loop: true, autoHeight: true, autoplay: { delay: 5000 }, pagination: { el: ".swiper-pagination", clickable: true } });
         });
     </script>
 </body>
