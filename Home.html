@@ -27,68 +27,74 @@
 
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* 1. Intro Animation */
+        /* 1. Intro Animation - 135% Bigger */
         #intro { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .intro-img { width: 450px; max-width: 90%; height: auto; filter: drop-shadow(0 0 25px var(--dfx-magenta)); }
 
-        /* 2. Header & Logo with Gap */
+        /* 2. Header & Nav Link (Pill Style as per your drawing) */
         header { backdrop-filter: blur(20px); background: rgba(0, 0, 0, 0.85); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        
-        .logo-text {
-            color: var(--dfx-magenta);
-            text-shadow: 0 0 15px var(--dfx-magenta);
-            letter-spacing: 15px; /* High visibility gap as requested */
-            font-weight: 900;
-            text-transform: uppercase;
-        }
+        .logo-text { color: var(--dfx-magenta); text-shadow: 0 0 15px var(--dfx-magenta); letter-spacing: 15px; font-weight: 900; text-transform: uppercase; }
 
-        /* --- PILL STYLE NAVIGATION (MATCHING IMAGE) --- */
         .nav-link { 
-            color: var(--dfx-magenta) !important; /* Inactive Magenta */
-            font-family: 'Bebas Neue';
-            font-size: 1.3rem;
-            padding: 6px 20px;
-            transition: all 0.3s ease;
-            border-radius: 50px; 
-            border: 2px solid transparent;
-            letter-spacing: 1px;
+            color: var(--dfx-magenta) !important; font-family: 'Bebas Neue'; font-size: 1.3rem; padding: 6px 20px; transition: 0.3s;
+            border-radius: 50px; border: 2px solid transparent; letter-spacing: 1px;
         }
-
-        /* Active Pill State */
         .nav-link.active {
-            background-color: var(--dfx-purple) !important; 
-            color: white !important; 
-            border: 2px solid var(--dfx-magenta) !important; 
-            box-shadow: 0 0 15px rgba(205, 31, 133, 0.4);
+            background-color: var(--dfx-purple) !important; color: white !important;
+            border: 2px solid var(--dfx-magenta) !important; box-shadow: 0 0 15px rgba(205, 31, 133, 0.4);
         }
 
-        /* 3. Hero Cinema Layout */
+        /* 3. Hero Cinema Layout (Strict 16:9, No Interaction) */
         .hero-section { width: 100%; padding-top: 80px; background: #000; display: flex; flex-direction: column; align-items: center; }
         .cinema-frame { width: 100%; max-width: 1440px; aspect-ratio: 16 / 9; position: relative; overflow: hidden; border-bottom: 2px solid var(--dfx-magenta); }
-        .hero-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
-        .hero-content-corner { position: absolute; bottom: 10%; left: 5%; text-align: left; z-index: 10; }
+        .hero-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; pointer-events: none; }
+        .hero-content-corner { position: absolute; bottom: 8%; left: 5%; text-align: left; z-index: 10; pointer-events: auto; }
 
-        /* 4. Portfolio Grid */
-        .portfolio-card { position: relative; overflow: hidden; border-radius: 12px; transition: 0.5s; border: 1px solid rgba(255,255,255,0.05); }
-        .portfolio-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(205, 31, 133, 0.3); border-color: var(--dfx-magenta); }
+        /* 4. Portfolio Grid (Old Style - Round Play Button) */
+        .portfolio-card { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
+        .portfolio-card img { transition: 0.5s ease; filter: grayscale(0.2); }
+        
+        .portfolio-text {
+            position: absolute; bottom: 10px; left: 15px; z-index: 5;
+            font-family: 'Bebas Neue'; font-size: 1.2rem; color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8); letter-spacing: 1px;
+            transition: 0.3s ease;
+        }
 
-        /* 5. Review Cards */
-        .review-card { background: linear-gradient(145deg, #0a0a0a, #000); border: 1px solid rgba(255,255,255,0.1); padding: 30px 20px; border-radius: 25px; text-align: center; height: auto !important; width: 85% !important; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
-        .review-card img { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--dfx-magenta); margin-bottom: 15px; box-shadow: 0 0 15px var(--dfx-magenta); }
+        .play-overlay-round {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: 0.4s ease; z-index: 10;
+        }
 
-        /* General UI */
+        .play-btn-circle {
+            width: 70px; height: 70px; border-radius: 50%;
+            border: 3px solid var(--dfx-magenta);
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.3); box-shadow: 0 0 20px var(--dfx-magenta);
+        }
+        .play-btn-circle i { color: #fff; font-size: 1.8rem; margin-left: 5px; }
+
+        /* Hover State Portfolio */
+        .portfolio-card:hover .play-overlay-round { opacity: 1; }
+        .portfolio-card:hover .portfolio-text { opacity: 0; transform: translateY(10px); }
+        .portfolio-card:hover img { transform: scale(1.1); filter: grayscale(0) blur(2px); }
+
+        /* 5. Service Tab Buttons */
+        .service-btn { background: rgba(255,255,255,0.03); color: #777; font-family: 'Bebas Neue'; font-size: 1.4rem; padding: 12px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; text-align: left; width: 100%; cursor: pointer; }
+        .service-btn.active { background: var(--dfx-purple); color: #fff; border-color: var(--dfx-magenta); box-shadow: 0 0 15px rgba(205, 31, 133, 0.3); }
+        .service-media-box { width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--dfx-purple); box-shadow: 0 0 30px rgba(47, 28, 82, 0.5); }
+
+        /* 6. Rating & Review UI */
+        .review-card { background: linear-gradient(145deg, #0a0a0a, #000); border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 25px; text-align: center; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .review-card img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--dfx-magenta); margin-bottom: 20px; box-shadow: 0 0 15px var(--dfx-magenta); }
         .star-box.active i { color: var(--dfx-magenta); text-shadow: 0 0 20px var(--dfx-magenta); }
         #avg-score { font-size: 5.5rem; font-family: 'Bebas Neue'; color: #fff; line-height: 1; text-shadow: 0 0 30px rgba(205, 31, 133, 0.4); }
-        #typewriter-box { min-height: 65px; font-family: 'Bebas Neue'; color: var(--dfx-magenta); font-size: clamp(2rem, 8vw, 3.5rem); text-shadow: 0 0 20px rgba(205, 31, 133, 0.6); }
+        #typewriter-box { min-height: 60px; font-family: 'Bebas Neue'; color: var(--dfx-magenta); font-size: clamp(2rem, 8vw, 3.2rem); text-shadow: 0 0 20px rgba(205, 31, 133, 0.6); }
 
-        /* Mobile Sidebar */
+        /* Global UI */
         #mobile-menu { display: none; position: fixed; top: 0; right: 0; width: 85%; height: 100vh; background: var(--dfx-purple); z-index: 100; flex-direction: column; justify-content: center; align-items: center; }
         #videoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 10000; justify-content: center; align-items: center; }
-        
-        /* Swiper Fixes */
-        .mySwiper { width: 100%; aspect-ratio: 16 / 10; border-radius: 15px; border: 1px solid var(--dfx-purple); }
-        .reviewSwiper { padding-bottom: 50px !important; }
-
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
     </style>
@@ -98,13 +104,13 @@
     <!-- 1. Intro Animation -->
     <div id="intro"><img src="Asset/DFX LOGO Intro.gif" alt="DFX Intro" class="intro-img"></div>
 
-    <!-- 2. Header Navigation -->
+    <!-- 2. Header -->
     <header class="fixed top-0 w-full p-4 flex justify-between items-center z-50 px-6 md:px-20">
         <div class="flex items-center">
             <img src="Asset/LOGO.png" alt="DFX" class="w-10 h-10 md:w-14 md:h-14 mr-3">
             <span class="text-3xl md:text-4xl font-bebas logo-text">DFX</span>
         </div>
-        <nav class="hidden md:flex items-center space-x-2 lg:space-x-4">
+        <nav class="hidden md:flex items-center space-x-2">
             <a href="#hero" class="nav-link">HOME</a>
             <a href="#work" class="nav-link">PORTFOLIO</a>
             <a href="#services" class="nav-link">SERVICE</a>
@@ -115,7 +121,6 @@
         <button class="md:hidden text-3xl text-white" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     </header>
 
-    <!-- Mobile Sidebar -->
     <div id="mobile-menu">
         <button class="absolute top-6 right-6 text-4xl" onclick="toggleMenu()">&times;</button>
         <a href="#hero" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">HOME</a>
@@ -129,11 +134,11 @@
     <!-- 3. Hero Section ( cinema frame ) -->
     <section class="hero-section" id="hero">
         <div class="cinema-frame">
-            <video autoplay muted loop playsinline class="hero-video">
+            <video autoplay muted loop playsinline disablePictureInPicture class="hero-video" oncontextmenu="return false;">
                 <source src="Asset/DFX Showreel.mp4" type="video/mp4">
             </video>
             <div class="hero-content-corner">
-                <h1 class="text-5xl md:text-8xl font-bebas font-black text-white uppercase drop-shadow-2xl">DFX</h1>
+                <h1 class="text-5xl md:text-8xl font-bebas font-black text-white uppercase" style="text-shadow: 0 4px 20px rgba(0,0,0,0.9);">DFX</h1>
                 <p class="text-[10px] md:text-xl font-rai font-bold uppercase tracking-[3px] md:tracking-[8px] text-[rgb(205,31,133)]">
                     Dynamic • Determined • Delightful • Dedicated
                 </p>
@@ -141,29 +146,26 @@
         </div>
     </section>
 
-    <!-- 4. Projects Portfolio -->
+    <!-- 4. Projects Portfolio (Round Play Button Style) -->
     <section id="work" class="py-20 px-4 md:px-20 bg-black">
-        <h2 class="text-4xl md:text-5xl font-bebas mb-12 text-center border-b-2 border-[rgb(47,28,82)] inline-block w-full uppercase">Portfolio</h2>
+        <h2 class="text-4xl md:text-5xl font-bebas mb-12 text-center border-b-2 border-[rgb(47,28,82)] inline-block w-full uppercase tracking-widest">Portfolio</h2>
         <div id="portfolio-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-8"></div>
     </section>
 
-    <!-- 5. Service Section -->
+    <!-- 5. Interactive Service Tabs -->
     <section id="services" class="py-20 bg-[rgb(5,5,5)] px-6 md:px-20">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-                <h2 class="text-lg text-white opacity-40 uppercase tracking-[5px] mb-2 font-bebas">Expertise</h2>
-                <div id="typewriter-box"></div>
-                <p id="service-desc" class="text-gray-400 mt-6 text-lg md:text-xl font-rai leading-relaxed border-l-2 border-[rgb(205,31,133)] pl-6"></p>
-            </div>
-            <div class="shadow-2xl shadow-[rgb(47,28,82)]/30 w-full">
-                <div class="swiper mySwiper">
-                    <div class="swiper-wrapper" id="service-slides"></div>
-                </div>
+        <h2 class="text-4xl md:text-5xl font-bebas mb-16 text-center italic uppercase tracking-widest text-white">Our Expertise</h2>
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+            <div id="service-buttons" class="lg:col-span-4 flex flex-col gap-3"></div>
+            <div class="lg:col-span-8">
+                <div id="typewriter-box" class="mb-2"></div>
+                <p id="service-desc" class="text-gray-400 text-lg mb-8 font-rai leading-relaxed border-l-2 border-[rgb(205,31,133)] pl-6"></p>
+                <div id="service-media" class="service-media-box"></div>
             </div>
         </div>
     </section>
 
-    <!-- 6. Clients Section -->
+    <!-- 6. Clients -->
     <section id="clients" class="py-20 px-6 text-center bg-black">
         <h2 class="text-3xl md:text-4xl font-bebas mb-12 opacity-30 uppercase italic tracking-widest text-white">Our Partners</h2>
         <div id="clients-container" class="flex flex-wrap justify-center items-center gap-6 md:gap-16"></div>
@@ -174,25 +176,25 @@
         <h2 class="text-4xl md:text-5xl font-bebas mb-12 italic uppercase text-white tracking-widest">Client Stories</h2>
         <div class="swiper reviewSwiper mb-16 max-w-5xl mx-auto overflow-hidden">
             <div class="swiper-wrapper" id="review-slider-wrapper">
-                <div class="swiper-slide p-10"><p class="text-gray-500 italic">Be the first to share your story!</p></div>
+                <div class="swiper-slide p-10"><p class="text-gray-500 italic">No stories yet...</p></div>
             </div>
-            <div class="swiper-pagination mt-10"></div>
+            <div class="swiper-pagination"></div>
         </div>
         <div id="auth-area">
             <button id="login-btn" class="nav-link bg-[rgb(205,31,133)] !text-white rounded-full px-12 py-4 hover:bg-white hover:!text-black transition uppercase">Login with Google to Review</button>
         </div>
-        <div id="review-form" class="hidden max-w-xl mx-auto bg-black p-10 rounded-[40px] border border-[rgb(47,28,82)] shadow-2xl">
+        <div id="review-form" class="hidden max-w-xl mx-auto bg-black p-10 rounded-[40px] border border-[rgb(47,28,82)] shadow-2xl text-left">
             <div id="user-info" class="mb-6 flex items-center justify-center gap-4">
                 <img id="user-pic" src="" class="w-14 h-14 rounded-full border-2 border-[rgb(205,31,133)]">
-                <span id="user-name" class="font-bebas text-2xl text-white"></span>
+                <div><span id="user-name" class="font-bebas text-2xl text-white block"></span><span id="form-mode" class="text-xs text-[rgb(205,31,133)] uppercase font-bold tracking-widest">New Story</span></div>
             </div>
-            <textarea id="review-text" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-2xl text-white mb-6 outline-none min-h-[120px]" placeholder="Share your experience with DFX Studio..."></textarea>
-            <button id="submit-review" class="nav-link bg-[rgb(205,31,133)] !text-white w-full py-4 rounded-2xl font-bebas text-2xl">Post Review</button>
+            <textarea id="review-text" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-2xl text-white mb-6 outline-none min-h-[120px]" placeholder="Tell us about your DFX experience..."></textarea>
+            <button id="submit-review" class="nav-link bg-[rgb(205,31,133)] !text-white w-full py-4 rounded-2xl font-bebas text-2xl">SUBMIT STORY</button>
         </div>
     </section>
 
-    <!-- 6.5 Overall Stats -->
-    <section id="reviews" class="py-24 bg-black px-6 text-center border-t border-white/5 pb-40"> <!-- Added large bottom padding -->
+    <!-- 6.5 Satisfaction Stats -->
+    <section id="reviews" class="py-24 bg-black px-6 text-center border-t border-white/5 pb-40">
         <h2 class="text-4xl md:text-5xl font-bebas mb-4 italic uppercase tracking-wider text-white">Overall Satisfaction</h2>
         <div class="max-w-md mx-auto bg-[rgb(5,5,5)] p-12 rounded-[40px] border border-[rgb(47,28,82)] shadow-[0_20px_50px_rgba(47,28,82,0.4)]">
             <div id="avg-score">4.98</div>
@@ -208,7 +210,7 @@
         </div>
     </section>
 
-    <!-- Footer (Contact) -->
+    <!-- Footer -->
     <footer id="contact" class="py-24 bg-[rgb(47,28,82)] px-6 text-center">
         <h2 class="text-4xl md:text-6xl font-bebas mb-12 italic text-white uppercase tracking-widest">Let's Create Magic</h2>
         <div class="flex justify-center flex-wrap gap-10 text-4xl mb-12">
@@ -216,70 +218,105 @@
             <a href="https://youtube.com/@DFX-studio" target="_blank" class="hover:text-red-500 transition transform hover:scale-125"><i class="fab fa-youtube"></i></a>
             <a href="https://www.instagram.com/dfxanime/" target="_blank" class="hover:text-[rgb(205,31,133)] transition transform hover:scale-125"><i class="fab fa-instagram"></i></a>
             <a href="https://wa.me/+8801738194746" target="_blank" class="hover:text-green-400 transition transform hover:scale-125"><i class="fab fa-whatsapp"></i></a>
-            <a href="tel:+8809639194746" class="hover:text-yellow-500 transition transform hover:-translate-y-2"><i class="fas fa-phone-alt"></i></a>
+            <a href="tel:+8809639194746" class="hover:text-yellow-500 transition transform hover:scale-125"><i class="fas fa-phone-alt"></i></a>
             <a href="https://mail.google.com/mail/?view=cm&fs=1&to=info@dfxbd.com&su=Inquiry" target="_blank" class="hover:text-yellow-400 transition transform hover:scale-125"><i class="fas fa-envelope"></i></a>
             <a href="https://maps.app.goo.gl/PvRqmnj43F1qQuBe6" target="_blank" class="hover:text-blue-300 transition transform hover:scale-125"><i class="fas fa-map-marker-alt"></i></a>
         </div>
-        <p class="text-white opacity-40 font-rai tracking-[3px] text-xs uppercase">© 2026 DFX | Bangladesh</p>
+        <p class="text-white opacity-40 font-rai tracking-[3px] text-xs uppercase">© 2026 DFX | Visualizing Imagination</p>
     </footer>
 
-    <!-- Video Modal -->
     <div id="videoModal" onclick="closeVideo()"><span class="absolute top-6 right-6 text-5xl cursor-pointer text-white opacity-40 hover:opacity-100">&times;</span><div class="w-11/12 lg:w-4/5 aspect-video" onclick="event.stopPropagation()"><iframe id="videoPlayer" class="w-full h-full rounded-lg shadow-2xl" src="" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        const projects = [ { id: '4nYutWIka7M' }, { id: 'pmMDbRDJMV0' }, { id: 'y9QLyOzQz2I' }, { id: 'nI-8Gpg6eZg' }, { id: 'VTzuggox5mM' }, { id: '2LMTT_HZttA' }, { id: 'FVNMLvH35Ys' }, { id: 'xFwnun3zMH4' }, { id: 'XXunnh1Bokk' }, { id: 'wREenI4RRgc' }, { id: 'QlsWKDEJWtk' }, { id: 'Gh-8nJfbSVs' }, { id: 'vuNy4gvvoZc' }, { id: '_WI1QZTFXX4' }, { id: '2r1lr7dLano' }, { id: '9ktiKThBwZA' }, { id: 'N5D2_bK5RNM' }, { id: 'nO72m__mcew' }, { id: 'OvFSsmLqyCc' }, { id: 'bL5uI2NAKDM' }, { id: 'kAshuCi6UJw' }, { id: '5gf0Icoizs8' }, { id: 'S-bsAyqS4KY' }, { id: '1Cdo8-VwHpY' }, { id: 'dxb-3G4qYyo' }, { id: 'STtoeP24j4g' }, { id: 'Ehn5iVm0Ox0' }, { id: 'd-gbIabi8ok' }, { id: 'ziI3mLHN3YA' }, { id: 'YzyzPK16Slc' }, { id: 'JdCC1Xld15Q' }, { id: 'L2_iRJjAJZ0' }, { id: '3brG7XOeVog' }, { id: 'WxYedjhxj1A' }, { id: 'fA6Jvc7mxxY' }, { id: 'Jxiy-f9NkJo' }, { id: 'ekxCVhuoOOw' }, { id: 'SOeBXI2d26I' }, { id: 'CZ4GzZjTPj4' }, { id: 'rWRd133yIbY' } ];
-        const services = [ { file: '3DAnimation.mp4', title: '3D ANIMATION', desc: 'High-quality 3D Product Modeling & stylized animations.' }, { file: 'Liquid.mp4', title: 'Fluid Simulation', desc: 'Realistic liquid simulations crafted for ads and films.' }, { file: 'Composite.mp4', title: 'Composite', desc: 'Seamless compositing services for commercials and films.' }, { file: 'VFX.mp4', title: 'VFX', desc: 'Professional VFX solutions for commercials and cinema.' }, { file: 'Rotoscopy.mp4', title: 'Rotoscopy', desc: 'High-precision rotoscopy for TV and cinema.' }, { file: '2D Animation.mp4', title: '2D Animation', desc: 'Creative 2D animation studio crafting visuals that tell stories.' }, { file: 'Motion Graphics.mp4', title: 'MOTION GRAPHICS', desc: 'Bringing designs to life with dynamic motion and brand energy.' } ];
+        // Projects Data with Titles
+        const projects = [ 
+            { id: '4nYutWIka7M', title: '' }, { id: 'pmMDbRDJMV0', title: '' },
+            { id: 'y9QLyOzQz2I', title: '' }, { id: 'nI-8Gpg6eZg', title: '' },
+            { id: 'VTzuggox5mM', title: '' }, { id: '2LMTT_HZttA', title: '' },
+            { id: 'FVNMLvH35Ys', title: '' }, { id: 'xFwnun3zMH4', title: '' },
+            { id: 'XXunnh1Bokk', title: '' }, { id: 'wREenI4RRgc', title: '' },
+            { id: 'QlsWKDEJWtk', title: '' }, { id: 'Gh-8nJfbSVs', title: '' },
+            { id: 'vuNy4gvvoZc', title: '' }, { id: '_WI1QZTFXX4', title: '' },
+            { id: '2r1lr7dLano', title: '' }, { id: '9ktiKThBwZA', title: '' },
+            { id: 'N5D2_bK5RNM', title: '' }, { id: 'nO72m__mcew' , title: '' },
+            { id: 'OvFSsmLqyCc' , title: '' }, { id: 'bL5uI2NAKDM' , title: '' },
+            { id: 'kAshuCi6UJw' , title: '' }, { id: '5gf0Icoizs8' , title: '' },
+            { id: 'S-bsAyqS4KY' , title: '' }, { id: '1Cdo8-VwHpY' , title: '' },
+            { id: 'dxb-3G4qYyo' , title: '' }, { id: 'STtoeP24j4g' , title: '' },
+            { id: 'Ehn5iVm0Ox0' , title: '' }, { id: 'd-gbIabi8ok' , title: '' },
+            { id: 'ziI3mLHN3YA' , title: '' }, { id: 'YzyzPK16Slc' , title: '' },
+            { id: 'JdCC1Xld15Q' , title: '' }, { id: 'L2_iRJjAJZ0' , title: '' },
+            { id: '3brG7XOeVog' , title: '' }, { id: 'WxYedjhxj1A' , title: '' },
+            { id: 'fA6Jvc7mxxY' , title: '' }, { id: 'Jxiy-f9NkJo' , title: '' },
+            { id: 'ekxCVhuoOOw' , title: '' }, { id: 'SOeBXI2d26I' , title: '' },
+            { id: 'CZ4GzZjTPj4' , title: '' }, { id: 'rWRd133yIbY' , title: '' }
+        ];
+        
+        const services = [ 
+            { file: 'Motion Graphics.mp4', title: 'DYNAMIC MOTION GRAPHICS', desc: 'Powerful motion design that elevates brand energy and social media presence.' },
+            { file: '2D Animation.mp4', title: '2D STORYTELLING', desc: 'Creative 2D animations that simplify complex stories into engaging visuals.' },
+            { file: '3DAnimation.mp4', title: '3D PRODUCT DESIGN', desc: 'High-quality 3D Product Modeling & stylized animations tailored for global brands.' }, 
+            { file: 'Liquid.mp4', title: 'FLUID SIMULATION', desc: 'Realistic liquid and particle simulations crafted for ads and films.' }, 
+            { file: 'Composite.mp4', title: 'CINEMATIC COMPOSITE', desc: 'Seamlessly blending digital elements with real footage for cinema and series.' }, 
+            { file: 'VFX.mp4', title: 'VFX SOLUTIONS', desc: 'Professional visual effects that bring your wildest imaginations to life.' }, 
+            { file: 'Rotoscopy.mp4', title: 'PRECISION ROTOSCOPY', desc: 'High-fidelity roto services for industry-standard cleanups and masking.' } 
+        ];
+
         const clientLogos = ['LUX_(soap)_logo.png', 'NESTLElogo.png', 'Vim.png', 'drug.png', 'Aarong Dairy.jpg', 'Ama.png', 'Asian Paints.png', 'bKash.png', 'Brac.png', 'BritishCouncil.png', 'CartUP.png', 'CEAT.png', 'Chaka.jpg', 'Chefchoice.png', 'Clear Men.jpeg', 'Clemon.jpeg', 'closeup.png', 'Daraz.png', 'Electromart.png', 'Farmfresh.jpeg', 'Finlay.webp', 'Foodi.png', 'foton.png', 'Freedom.png', 'Fresh anonna.jpeg', 'fresh_lp_gas.png', 'Frutika.jpeg', 'Goldmark.jpeg', 'goodknight.png', 'Gozayaan.jpg', 'GP.png', 'GPH.jpg', 'Harpic.png', 'Honor.png', 'IDLC.png', 'IPDC.png', 'KSRM.png', 'lee cooper.png', 'Link3.png', 'Lotto.png', 'Parachute Skinpure.jpg', 'Pathao.png', 'Power.jpeg', 'SSL.png', 'Starline.jpeg', 'Sunquick.png', 'Sylon tea.jpeg', 'TikTok.png', 'TSports.png', 'Veet.png', 'Walton.png', 'Yamaha.png'];
 
         function initSite() {
             const pGrid = document.getElementById('portfolio-grid');
-            projects.forEach(p => { pGrid.innerHTML += `<div class="portfolio-card cursor-pointer group" onclick="openVideo('${p.id}')"><img src="https://img.youtube.com/vi/${p.id}/hqdefault.jpg" class="w-full aspect-video object-cover transition duration-700 group-hover:scale-110"><div class="absolute inset-0 bg-black/70 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500"><i class="fas fa-play-circle text-6xl text-[rgb(205,31,133)]"></i></div></div>`; });
+            projects.forEach(p => { 
+                pGrid.innerHTML += `
+                    <div class="portfolio-card group" onclick="openVideo('${p.id}')">
+                        <img src="https://img.youtube.com/vi/${p.id}/hqdefault.jpg" class="w-full aspect-video object-cover">
+                        <div class="portfolio-text">${p.title}</div>
+                        <div class="play-overlay-round"><div class="play-btn-circle"><i class="fas fa-play"></i></div></div>
+                    </div>`; 
+            });
             const cContainer = document.getElementById('clients-container');
             clientLogos.forEach(logo => { cContainer.innerHTML += `<img src="Asset/clients/${logo}" class="h-10 md:h-16 w-auto object-contain transition duration-500 hover:scale-110">`; });
-            const sWrapper = document.getElementById('service-slides');
-            services.forEach(s => { sWrapper.innerHTML += `<div class="swiper-slide"><video autoplay muted loop playsinline><source src="Asset/service/${s.file}" type="video/mp4"></video></div>`; });
-            new Swiper(".mySwiper", { 
-                loop: true, autoplay: { delay: 4000, disableOnInteraction: false },
-                on: { init: function () { startTypewriter(0); }, slideChange: function () { startTypewriter(this.realIndex); } }
-            });
+            const btnContainer = document.getElementById('service-buttons');
+            services.forEach((s, index) => { btnContainer.innerHTML += `<button class="service-btn" onclick="switchService(${index})">${s.title}</button>`; });
+            switchService(0);
+        }
+
+        function switchService(index) {
+            const btns = document.querySelectorAll('.service-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            btns[index].classList.add('active');
+            const mediaBox = document.getElementById('service-media');
+            mediaBox.innerHTML = `<video autoplay muted loop playsinline class="w-full h-full object-cover"><source src="Asset/service/${services[index].file}" type="video/mp4"></video>`;
+            startTypewriter(index);
         }
 
         let twInterval;
         function startTypewriter(index) {
             const box = document.getElementById('typewriter-box');
             const desc = document.getElementById('service-desc');
-            const targetTitle = services[index].title;
-            const targetDesc = services[index].desc;
-            desc.innerText = targetDesc; box.innerText = ""; clearInterval(twInterval);
-            let i = 0; twInterval = setInterval(() => { if (i < targetTitle.length) { box.innerText += targetTitle.charAt(i); i++; } else { clearInterval(twInterval); } }, 50);
+            const title = services[index].title;
+            desc.innerText = services[index].desc;
+            box.innerText = ""; clearInterval(twInterval);
+            let i = 0; twInterval = setInterval(() => { if (i < title.length) { box.innerText += title.charAt(i); i++; } else { clearInterval(twInterval); } }, 40);
         }
 
         function toggleMenu() { const m = document.getElementById('mobile-menu'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
         function openVideo(id) { document.getElementById('videoPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`; document.getElementById('videoModal').style.display = 'flex'; }
         function closeVideo() { document.getElementById('videoPlayer').src = ""; document.getElementById('videoModal').style.display = 'none'; }
 
-        // --- NEW IMPROVED SCROLL OBSERVER ---
+        // Navbar Sync Logic
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section, footer');
             const navLinks = document.querySelectorAll('.nav-link');
-            
-            // Fix for reaching the bottom of the page
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
                 navLinks.forEach(link => link.classList.remove('active'));
                 document.querySelector('.nav-link[href="#contact"]').classList.add('active');
                 return;
             }
-
             let current = '';
-            sections.forEach(s => {
-                const sTop = s.offsetTop;
-                if (pageYOffset >= sTop - 180) current = s.getAttribute('id');
-            });
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) link.classList.add('active');
-            });
+            sections.forEach(s => { if (pageYOffset >= s.offsetTop - 220) current = s.getAttribute('id'); });
+            navLinks.forEach(link => { link.classList.remove('active'); if (link.getAttribute('href').includes(current)) link.classList.add('active'); });
         });
 
         window.addEventListener('load', () => {
@@ -288,11 +325,11 @@
         });
     </script>
 
-    <!-- FIREBASE MODULE (Keep your original keys here) -->
+    <!-- FIREBASE MODULE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAIX4Al2mFvSeDCgE01FWGXRuuowJwpjXg",
@@ -324,6 +361,45 @@
             } else { setDoc(statsRef, { totalScore: 639, totalVotes: 131 }); }
         });
 
+        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider).catch(e => alert(e.message));
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                document.getElementById('auth-area').classList.add('hidden');
+                document.getElementById('review-form').classList.remove('hidden');
+                document.getElementById('user-name').innerText = user.displayName;
+                document.getElementById('user-pic').src = user.photoURL;
+                const docSnap = await getDoc(doc(db, "dfx_reviews", user.uid));
+                if (docSnap.exists()) {
+                    document.getElementById('review-text').value = docSnap.data().text;
+                    document.getElementById('form-mode').innerText = "Update Your Story";
+                }
+            }
+        });
+
+        document.getElementById('submit-review').onclick = async () => {
+            const val = document.getElementById('review-text').value;
+            if(!val) return;
+            const user = auth.currentUser;
+            await setDoc(doc(db, "dfx_reviews", user.uid), { uid: user.uid, name: user.displayName, pic: user.photoURL, text: val, time: Date.now() }, { merge: true });
+            emailjs.send("service_zkwwe8d", "template_xoc5h28", { from_name: user.displayName, message: val });
+            alert("Success!");
+            signOut(auth).then(() => {
+                document.getElementById('review-form').classList.add('hidden');
+                document.getElementById('auth-area').classList.remove('hidden');
+            });
+        };
+
+        const q = query(collection(db, "dfx_reviews"), orderBy("time", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const w = document.getElementById('review-slider-wrapper'); w.innerHTML = "";
+            snapshot.forEach((doc) => {
+                const d = doc.data();
+                w.innerHTML += `<div class="swiper-slide p-4"><div class="review-card"><img src="${d.pic}"><div class="text-[rgb(205,31,133)] mb-4 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>"${d.text}"</p><h4 class="font-bebas text-white mt-4 text-2xl tracking-widest uppercase">${d.name}</h4></div></div>`;
+            });
+            new Swiper(".reviewSwiper", { loop: true, autoHeight: true, autoplay: { delay: 5000 }, pagination: { el: ".swiper-pagination", clickable: true } });
+        });
+
         document.querySelectorAll('.star-box').forEach(box => {
             box.addEventListener('click', async function() {
                 if(localStorage.getItem('dfx_v5')) return alert("Already rated!");
@@ -332,32 +408,6 @@
                 localStorage.setItem('dfx_v5', 'true');
             });
         });
-
-        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
-        onAuthStateChanged(auth, (user) => { if (user) { document.getElementById('auth-area').classList.add('hidden'); document.getElementById('review-form').classList.remove('hidden'); document.getElementById('user-name').innerText = user.displayName; document.getElementById('user-pic').src = user.photoURL; } });
-
-        document.getElementById('submit-review').onclick = async () => {
-            const val = document.getElementById('review-text').value;
-            if(!val) return;
-            const userName = auth.currentUser.displayName;
-            await addDoc(collection(db, "dfx_reviews"), { name: userName, pic: auth.currentUser.photoURL, text: val, time: Date.now() });
-            emailjs.send("service_zkwwe8d", "template_xoc5h28", { from_name: userName, message: val });
-            document.getElementById('review-text').value = ""; document.getElementById('review-form').classList.add('hidden');
-            alert("Story Posted!");
-        };
-
-        const q = query(collection(db, "dfx_reviews"), orderBy("time", "desc"));
-        let revSwiper;
-        onSnapshot(q, (snapshot) => {
-            const w = document.getElementById('review-slider-wrapper'); w.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const d = doc.data();
-                w.innerHTML += `<div class="swiper-slide p-4"><div class="review-card"><img src="${d.pic}"><div class="text-[rgb(205,31,133)] mb-4 text-sm"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div><p>"${d.text}"</p><h4 class="font-bebas text-white mt-4 text-2xl tracking-widest uppercase">${d.name}</h4></div></div>`;
-            });
-            if(revSwiper) revSwiper.destroy();
-            revSwiper = new Swiper(".reviewSwiper", { loop: true, autoHeight: true, autoplay: { delay: 5000 }, pagination: { el: ".swiper-pagination", clickable: true } });
-        });
     </script>
 </body>
 </html>
-
