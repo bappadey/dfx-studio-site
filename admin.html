@@ -3,45 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DFX | Admin Backend</title>
+    <title>DFX | Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root { --dfx-magenta: #CD1F85; --dfx-purple: #2F1C52; }
         body { background: #050505; color: white; font-family: sans-serif; }
         .dfx-card { background: #111; border: 1px solid #222; padding: 25px; border-radius: 20px; margin-bottom: 25px; }
-        input { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; color: white; width: 100%; margin-bottom: 10px; outline: none; }
-        .btn-magenta { background: #CD1F85; color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold; transition: 0.3s; }
-        .btn-magenta:hover { opacity: 0.8; }
-        .delete-btn { color: #ff4444; cursor: pointer; padding: 10px; }
+        input, .file-input { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; color: white; width: 100%; margin-bottom: 10px; outline: none; }
+        input:focus { border-color: var(--dfx-magenta); }
+        .btn-magenta { background: var(--dfx-magenta); color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold; transition: 0.3s; width: 100%; }
+        .btn-magenta:hover { opacity: 0.8; transform: translateY(-2px); }
+        .delete-btn { color: #ff4444; cursor: pointer; transition: 0.3s; padding: 10px; }
+        #upload-status { font-size: 13px; color: var(--dfx-magenta); margin-bottom: 10px; display: none; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     </style>
 </head>
 <body class="p-6 md:p-20">
 
     <div id="login-screen" class="text-center py-32">
-        <h1 class="text-5xl font-bold mb-10 text-[rgb(205,31,133)] uppercase">DFX Admin</h1>
-        <button id="login-btn" class="btn-magenta px-12">LOGIN WITH GOOGLE</button>
+        <h1 class="text-5xl font-bold mb-10 text-[rgb(205,31,133)] uppercase tracking-tighter">DFX BACKEND</h1>
+        <button id="login-btn" class="btn-magenta max-w-xs">LOGIN WITH GOOGLE</button>
     </div>
 
     <div id="admin-content" class="hidden max-w-5xl mx-auto">
         <div class="flex justify-between items-center mb-10 border-b border-zinc-800 pb-6">
-            <h1 class="text-3xl font-bold">DFX CMS Control</h1>
+            <h1 class="text-3xl font-bold italic uppercase">DFX CMS Control</h1>
             <button onclick="auth.signOut()" class="text-zinc-500 hover:text-white">Logout</button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <!-- PORTFOLIO MANAGER -->
             <div class="dfx-card">
-                <h2 class="text-2xl font-bold mb-6 text-[rgb(205,31,133)]">ADD PORTFOLIO VIDEO</h2>
-                <input type="text" id="v-url" placeholder="Paste full YouTube Link">
+                <h2 class="text-2xl font-bold mb-6 text-[rgb(205,31,133)] uppercase">Add Portfolio</h2>
+                <input type="text" id="v-url" placeholder="Paste Full YouTube Link">
                 <input type="text" id="v-title" placeholder="Project Title">
-                <button id="add-v" class="btn-magenta w-full">ADD TO SITE</button>
-                <div id="v-list" class="mt-8 space-y-3 max-h-96 overflow-y-auto"></div>
+                <button id="add-v" class="btn-magenta">ADD TO WEBSITE</button>
+                <div id="v-list" class="mt-8 space-y-3 max-h-96 overflow-y-auto pr-2"></div>
             </div>
 
+            <!-- CLIENT LOGO MANAGER -->
             <div class="dfx-card">
-                <h2 class="text-2xl font-bold mb-6 text-blue-500">MANAGE CLIENT LOGOS</h2>
-                <input type="text" id="c-name" placeholder="Filename (e.g. Walton.png)">
-                <button id="add-c" class="btn-magenta w-full" style="background: #3b82f6;">ADD LOGO</button>
-                <div id="c-list" class="mt-8 grid grid-cols-2 gap-3 max-h-96 overflow-y-auto"></div>
+                <h2 class="text-2xl font-bold mb-6 text-blue-500 uppercase">Upload Client Logo</h2>
+                <input type="file" id="c-file" class="file-input" accept="image/*">
+                <p id="upload-status"><i class="fas fa-spinner fa-spin mr-2"></i>Uploading to ImgBB Server...</p>
+                <button id="add-c" class="btn-magenta" style="background: #3b82f6;">UPLOAD & SAVE</button>
+                <div id="c-list" class="mt-8 grid grid-cols-3 gap-4 max-h-96 overflow-y-auto"></div>
             </div>
         </div>
     </div>
@@ -65,7 +72,8 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        const adminEmail = "bappadey61@gmail.com"; // <--- আপনার ইমেইল দিন
+        const adminEmail = "bappadey61@gmail.com"; // <--- CHANGE TO YOUR GMAIL
+        const IMGBB_KEY = "6c180ea35e97176e79cde2c007894032";
 
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
 
@@ -73,25 +81,22 @@
             if (user && user.email === adminEmail) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
-                loadAdminData();
-            } else if (user) {
-                alert("Unauthorized!");
-                auth.signOut();
-            }
+                loadData();
+            } else if (user) { alert("Access Denied!"); auth.signOut(); }
         });
 
         function extractID(url) {
-            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-            const match = url.match(regex);
+            const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(reg);
             return (match && match[1]) ? match[1] : url;
         }
 
-        function loadAdminData() {
+        function loadData() {
             onSnapshot(query(collection(db, "portfolio"), orderBy("createdAt", "desc")), (snap) => {
                 const list = document.getElementById('v-list'); list.innerHTML = "";
                 snap.forEach(d => {
-                    list.innerHTML += `<div class="p-3 bg-zinc-900 rounded-lg flex justify-between border border-zinc-800">
-                        <div><p class="font-bold text-xs">${d.data().title}</p></div>
+                    list.innerHTML += `<div class="p-3 bg-zinc-900 rounded-lg flex justify-between border border-zinc-800 mb-2 truncate">
+                        <span class="text-xs">${d.data().title}</span>
                         <i class="fas fa-trash delete-btn" onclick="deleteItem('portfolio','${d.id}')"></i>
                     </div>`;
                 });
@@ -99,10 +104,8 @@
             onSnapshot(collection(db, "clients_list"), (snap) => {
                 const list = document.getElementById('c-list'); list.innerHTML = "";
                 snap.forEach(d => {
-                    list.innerHTML += `<div class="p-2 bg-zinc-800 rounded flex justify-between">
-                        <span class="text-xs truncate">${d.data().filename}</span>
-                        <i class="fas fa-times delete-btn" onclick="deleteItem('clients_list','${d.id}')"></i>
-                    </div>`;
+                    list.innerHTML += `<div class="relative"><img src="${d.data().url}" class="h-16 w-full object-contain bg-white rounded-lg p-1">
+                    <i class="fas fa-times-circle absolute -top-2 -right-2 text-red-500 cursor-pointer" onclick="deleteItem('clients_list','${d.id}')"></i></div>`;
                 });
             });
         }
@@ -117,8 +120,20 @@
         };
 
         document.getElementById('add-c').onclick = async () => {
-            const name = document.getElementById('c-name').value;
-            if(name) { await addDoc(collection(db, "clients_list"), { filename: name }); document.getElementById('c-name').value = ""; }
+            const fileInput = document.getElementById('c-file');
+            if(!fileInput.files[0]) return alert("Select a logo first!");
+            document.getElementById('upload-status').style.display = "block";
+            const formData = new FormData();
+            formData.append("image", fileInput.files[0]);
+            try {
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
+                const json = await res.json();
+                if(json.success) {
+                    await addDoc(collection(db, "clients_list"), { url: json.data.url });
+                    fileInput.value = ""; alert("Logo Saved!");
+                }
+            } catch (e) { alert("Upload Failed"); }
+            document.getElementById('upload-status').style.display = "none";
         };
 
         window.deleteItem = async (col, id) => { if(confirm("Delete?")) await deleteDoc(doc(db, col, id)); };
