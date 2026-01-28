@@ -15,8 +15,8 @@
         .btn-magenta { background: var(--dfx-magenta); color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold; transition: 0.3s; width: 100%; }
         .btn-magenta:hover { opacity: 0.8; transform: translateY(-2px); }
         .delete-btn { color: #ff4444; cursor: pointer; transition: 0.3s; padding: 10px; }
-        #upload-status { font-size: 13px; color: var(--dfx-magenta); margin-bottom: 10px; display: none; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .toggle-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #aaa; margin-bottom: 15px; }
+        #upload-status { font-size: 13px; color: var(--dfx-magenta); margin-bottom: 10px; display: none; }
     </style>
 </head>
 <body class="p-6 md:p-20">
@@ -33,20 +33,19 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <!-- PORTFOLIO MANAGER -->
             <div class="dfx-card">
                 <h2 class="text-2xl font-bold mb-6 text-[rgb(205,31,133)] uppercase">Add Portfolio</h2>
-                <input type="text" id="v-url" placeholder="Paste Full YouTube Link">
+                <input type="text" id="v-url" placeholder="Paste YouTube Link">
                 <input type="text" id="v-title" placeholder="Project Title">
+                <label class="toggle-label"><input type="checkbox" id="v-show-title" checked class="w-5 h-5 accent-[rgb(205,31,133)]"> Show Title on Website?</label>
                 <button id="add-v" class="btn-magenta">ADD TO WEBSITE</button>
                 <div id="v-list" class="mt-8 space-y-3 max-h-96 overflow-y-auto pr-2"></div>
             </div>
 
-            <!-- CLIENT LOGO MANAGER -->
             <div class="dfx-card">
                 <h2 class="text-2xl font-bold mb-6 text-blue-500 uppercase">Upload Client Logo</h2>
                 <input type="file" id="c-file" class="file-input" accept="image/*">
-                <p id="upload-status"><i class="fas fa-spinner fa-spin mr-2"></i>Uploading to ImgBB Server...</p>
+                <p id="upload-status"><i class="fas fa-spinner fa-spin mr-2"></i>Uploading...</p>
                 <button id="add-c" class="btn-magenta" style="background: #3b82f6;">UPLOAD & SAVE</button>
                 <div id="c-list" class="mt-8 grid grid-cols-3 gap-4 max-h-96 overflow-y-auto"></div>
             </div>
@@ -56,7 +55,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAIX4Al2mFvSeDCgE01FWGXRuuowJwpjXg",
@@ -71,8 +70,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
-
-        const adminEmail = "bappadey61@gmail.com"; // <--- CHANGE TO YOUR GMAIL
+        const adminEmail = "your-email@gmail.com"; // <--- CHANGE TO YOUR GMAIL
         const IMGBB_KEY = "6c180ea35e97176e79cde2c007894032";
 
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
@@ -95,8 +93,9 @@
             onSnapshot(query(collection(db, "portfolio"), orderBy("createdAt", "desc")), (snap) => {
                 const list = document.getElementById('v-list'); list.innerHTML = "";
                 snap.forEach(d => {
+                    const data = d.data();
                     list.innerHTML += `<div class="p-3 bg-zinc-900 rounded-lg flex justify-between border border-zinc-800 mb-2 truncate">
-                        <span class="text-xs">${d.data().title}</span>
+                        <span class="text-xs">${data.title}</span>
                         <i class="fas fa-trash delete-btn" onclick="deleteItem('portfolio','${d.id}')"></i>
                     </div>`;
                 });
@@ -110,33 +109,53 @@
             });
         }
 
+        // --- PREVENT DUPLICATE VIDEO ---
         document.getElementById('add-v').onclick = async () => {
             const vid = extractID(document.getElementById('v-url').value);
             const title = document.getElementById('v-title').value;
-            if(vid && title) {
-                await addDoc(collection(db, "portfolio"), { id: vid, title: title, createdAt: serverTimestamp() });
-                document.getElementById('v-url').value = ""; document.getElementById('v-title').value = "";
-            }
+            const showTitle = document.getElementById('v-show-title').checked;
+
+            if(!vid || !title) return alert("Fill all fields");
+
+            // Check if ID exists
+            const q = query(collection(db, "portfolio"), where("id", "==", vid));
+            const check = await getDocs(q);
+            if (!check.empty) return alert("This video is already in your Portfolio!");
+
+            await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, createdAt: serverTimestamp() });
+            document.getElementById('v-url').value = ""; document.getElementById('v-title').value = "";
+            alert("Success!");
         };
 
+        // --- PREVENT DUPLICATE LOGO ---
         document.getElementById('add-c').onclick = async () => {
             const fileInput = document.getElementById('c-file');
-            if(!fileInput.files[0]) return alert("Select a logo first!");
+            if(!fileInput.files[0]) return alert("Select an image!");
+
             document.getElementById('upload-status').style.display = "block";
             const formData = new FormData();
             formData.append("image", fileInput.files[0]);
+
             try {
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
                 const json = await res.json();
-                if(json.success) {
-                    await addDoc(collection(db, "clients_list"), { url: json.data.url });
-                    fileInput.value = ""; alert("Logo Saved!");
+                const newUrl = json.data.url;
+
+                // Check if URL exists
+                const q = query(collection(db, "clients_list"), where("url", "==", newUrl));
+                const check = await getDocs(q);
+                if (!check.empty) {
+                    alert("This logo is already uploaded!");
+                } else {
+                    await addDoc(collection(db, "clients_list"), { url: newUrl });
+                    alert("Logo Saved!");
                 }
+                fileInput.value = "";
             } catch (e) { alert("Upload Failed"); }
             document.getElementById('upload-status').style.display = "none";
         };
 
-        window.deleteItem = async (col, id) => { if(confirm("Delete?")) await deleteDoc(doc(db, col, id)); };
+        window.deleteItem = async (col, id) => { if(confirm("Confirm Delete?")) await deleteDoc(doc(db, col, id)); };
     </script>
 </body>
 </html>
