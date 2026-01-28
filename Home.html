@@ -16,27 +16,27 @@
         h1, h2, h3, .font-bebas { font-family: 'Bebas Neue', cursive; }
         .font-rai { font-family: 'RaiLowercase', 'Inter', sans-serif; }
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
-        
-        /* 1. Intro Animation - 135% Bigger */
+
+        /* 1. Intro */
         #intro { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .intro-img { width: 450px; max-width: 90%; height: auto; filter: drop-shadow(0 0 25px var(--dfx-magenta)); }
 
-        /* 2. Nav Pill Style */
+        /* 2. Header PILL STYLE */
         header { backdrop-filter: blur(20px); background: rgba(0, 0, 0, 0.85); border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo-text { color: var(--dfx-magenta); text-shadow: 0 0 15px var(--dfx-magenta); letter-spacing: 15px; font-weight: 900; text-transform: uppercase; }
         .nav-link { color: var(--dfx-magenta) !important; font-family: 'Bebas Neue'; font-size: 1.3rem; padding: 6px 20px; transition: 0.3s; border-radius: 50px; border: 2px solid transparent; letter-spacing: 1px; }
         .nav-link.active { background-color: var(--dfx-purple) !important; color: white !important; border: 2px solid var(--dfx-magenta) !important; box-shadow: 0 0 15px rgba(205, 31, 133, 0.4); }
 
-        /* 3. Hero Cinema frame */
+        /* 3. Hero Cinema 16:9 */
         .hero-section { width: 100%; padding-top: 80px; background: #000; display: flex; flex-direction: column; align-items: center; }
         .cinema-frame { width: 100%; max-width: 1440px; aspect-ratio: 16 / 9; position: relative; overflow: hidden; border-bottom: 2px solid var(--dfx-magenta); }
         .hero-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; pointer-events: none; }
         .hero-content-corner { position: absolute; bottom: 8%; left: 5%; text-align: left; z-index: 10; pointer-events: auto; }
 
-        /* 4. Portfolio Grid (Round Play Button) */
+        /* 4. Portfolio Old Style Round Button */
         .portfolio-card { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
         .portfolio-card img { transition: 0.5s ease; filter: grayscale(0.2); }
-        .portfolio-text { position: absolute; bottom: 10px; left: 15px; z-index: 5; font-family: 'Bebas Neue'; font-size: 1.2rem; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); transition: 0.3s ease; }
+        .portfolio-text { position: absolute; bottom: 10px; left: 15px; z-index: 5; font-family: 'Bebas Neue'; font-size: 1.2rem; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); transition: 0.3s; }
         .play-overlay-round { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.4s ease; z-index: 10; }
         .play-btn-circle { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--dfx-magenta); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); box-shadow: 0 0 20px var(--dfx-magenta); }
         .play-btn-circle i { color: #fff; font-size: 1.8rem; margin-left: 5px; }
@@ -44,7 +44,7 @@
         .portfolio-card:hover .portfolio-text { opacity: 0; transform: translateY(10px); }
         .portfolio-card:hover img { transform: scale(1.1); filter: grayscale(0) blur(2px); }
 
-        /* 5. Service Tabs */
+        /* 5. Mobile Dynamic Service Section */
         #service-buttons { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
         #service-buttons::-webkit-scrollbar { display: none; }
         .service-btn { background: rgba(255,255,255,0.03); color: #777; font-family: 'Bebas Neue'; font-size: 1.2rem; padding: 8px 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; white-space: nowrap; flex-shrink: 0; cursor: pointer; }
@@ -52,12 +52,12 @@
         @media (min-width: 1024px) { #service-buttons { flex-direction: column; overflow-x: visible; } .service-btn { font-size: 1.5rem; padding: 12px 25px; border-radius: 12px; } }
         .service-media-box { width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--dfx-purple); box-shadow: 0 0 30px rgba(47, 28, 82, 0.5); }
 
-        /* 6. Review & Rating */
+        /* Review & Rating */
         .review-card { background: linear-gradient(145deg, #0a0a0a, #000); border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 25px; text-align: center; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
         .review-card img { width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--dfx-magenta); margin-bottom: 20px; box-shadow: 0 0 15px var(--dfx-magenta); }
         .star-box.active i { color: var(--dfx-magenta); text-shadow: 0 0 20px var(--dfx-magenta); }
         #avg-score { font-size: 5.5rem; font-family: 'Bebas Neue'; color: #fff; line-height: 1; text-shadow: 0 0 30px rgba(205, 31, 133, 0.4); }
-        #typewriter-box { min-height: 60px; font-family: 'Bebas Neue'; color: var(--dfx-magenta); font-size: clamp(2rem, 8vw, 3.2rem); text-shadow: 0 0 20px rgba(205, 31, 133, 0.6); }
+        #typewriter-box { min-height: 60px; font-family: 'Bebas Neue'; color: var(--dfx-magenta); font-size: clamp(1.8rem, 8vw, 3.2rem); text-shadow: 0 0 20px rgba(205, 31, 133, 0.6); }
 
         #mobile-menu { display: none; position: fixed; top: 0; right: 0; width: 85%; height: 100vh; background: var(--dfx-purple); z-index: 100; flex-direction: column; justify-content: center; align-items: center; }
         #videoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 10000; justify-content: center; align-items: center; }
@@ -74,7 +74,7 @@
             <img src="Asset/LOGO.png" alt="DFX" class="w-10 h-10 md:w-14 md:h-14 mr-3">
             <span class="text-3xl md:text-4xl font-bebas logo-text">DFX</span>
         </div>
-        <nav class="hidden md:flex items-center space-x-2 lg:space-x-4">
+        <nav class="hidden md:flex items-center space-x-2">
             <a href="#hero" class="nav-link">HOME</a>
             <a href="#work" class="nav-link">PORTFOLIO</a>
             <a href="#services" class="nav-link">SERVICE</a>
@@ -97,7 +97,7 @@
 
     <section class="hero-section" id="hero">
         <div class="cinema-frame">
-            <video autoplay muted loop playsinline class="hero-video"><source src="Asset/DFX Showreel.mp4" type="video/mp4"></video>
+            <video autoplay muted loop playsinline disablePictureInPicture class="hero-video" oncontextmenu="return false;"><source src="Asset/DFX Showreel.mp4" type="video/mp4"></video>
             <div class="hero-content-corner">
                 <h1 class="text-5xl md:text-8xl font-bebas font-black text-white uppercase" style="text-shadow: 0 4px 20px rgba(0,0,0,0.9);">DFX</h1>
                 <p class="text-[10px] md:text-xl font-rai font-bold uppercase tracking-[3px] md:tracking-[8px] text-[rgb(205,31,133)]">Dynamic • Determined • Delightful • Dedicated</p>
@@ -117,7 +117,7 @@
             <div class="lg:col-span-8 order-2">
                 <div id="service-media" class="service-media-box mb-6"></div>
                 <div id="typewriter-box" class="mb-2"></div>
-                <p id="service-desc" class="text-gray-400 text-lg font-rai leading-relaxed border-l-2 border-[rgb(205,31,133)] pl-6"></p>
+                <p id="service-desc" class="text-gray-400 text-lg font-rai border-l-2 border-[rgb(205,31,133)] pl-6"></p>
             </div>
         </div>
     </section>
@@ -130,10 +130,10 @@
     <section id="user-reviews" class="py-24 bg-[rgb(5,5,5)] px-4 text-center border-t border-white/5">
         <h2 class="text-4xl md:text-5xl font-bebas mb-12 italic uppercase text-white tracking-widest">Client Stories</h2>
         <div class="swiper reviewSwiper mb-16 max-w-5xl mx-auto overflow-hidden">
-            <div class="swiper-wrapper" id="review-slider-wrapper"><div class="swiper-slide p-10"><p class="text-gray-500 italic">No stories yet...</p></div></div>
+            <div class="swiper-wrapper" id="review-slider-wrapper"><div class="swiper-slide p-10"><p class="text-gray-500 italic">Loading magic moments...</p></div></div>
             <div class="swiper-pagination"></div>
         </div>
-        <div id="auth-area"><button id="login-btn" class="nav-link bg-[rgb(205,31,133)] !text-white rounded-full px-12 py-4 transition uppercase">Login with Google to Review</button></div>
+        <div id="auth-area"><button id="login-btn" class="nav-link bg-[rgb(205,31,133)] !text-white rounded-full px-12 py-4 transition uppercase">Login to Review</button></div>
         <div id="review-form" class="hidden max-w-xl mx-auto bg-black p-10 rounded-[40px] border border-[rgb(47,28,82)] shadow-2xl text-left">
             <div id="user-info" class="mb-6 flex items-center gap-4"><img id="user-pic" src="" class="w-14 h-14 rounded-full border-2 border-[rgb(205,31,133)]"><div><span id="user-name" class="font-bebas text-2xl text-white block"></span><span id="form-mode" class="text-xs text-[rgb(205,31,133)] uppercase font-bold tracking-widest">New Story</span></div></div>
             <textarea id="review-text" class="w-full bg-zinc-900 border border-white/10 p-5 rounded-2xl text-white mb-6 outline-none min-h-[120px]" placeholder="Tell us about your DFX experience..."></textarea>
@@ -145,7 +145,7 @@
         <h2 class="text-4xl md:text-5xl font-bebas mb-4 italic uppercase tracking-wider text-white">Overall Satisfaction</h2>
         <div class="max-w-md mx-auto bg-[rgb(5,5,5)] p-12 rounded-[40px] border border-[rgb(47,28,82)] shadow-[0_20px_50px_rgba(47,28,82,0.4)]">
             <div id="avg-score">4.98</div>
-            <div class="text-gray-500 font-bebas tracking-[3px] mb-10 text-sm uppercase">Global Rating (<span id="total-votes">131</span> Votes)</div>
+            <div class="text-gray-500 font-bebas tracking-[3px] mb-10 text-sm uppercase">Global Rating (<span id="total-votes">0</span> Votes)</div>
             <div class="flex justify-center gap-4 md:gap-6 mb-10" id="star-input">
                 <div class="star-box cursor-pointer group" data-value="1"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">1</span></div>
                 <div class="star-box cursor-pointer group" data-value="2"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">2</span></div>
@@ -153,7 +153,6 @@
                 <div class="star-box cursor-pointer group" data-value="4"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">4</span></div>
                 <div class="star-box cursor-pointer group" data-value="5"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">5</span></div>
             </div>
-            <p id="rate-msg" class="text-sm font-rai text-[rgb(205,31,133)] opacity-0 transition-opacity duration-500">Thank you for rating!</p>
         </div>
     </section>
 
@@ -168,7 +167,7 @@
             <a href="https://mail.google.com/mail/?view=cm&fs=1&to=info@dfxbd.com&su=Inquiry" target="_blank" class="hover:text-yellow-400 transition transform hover:scale-125"><i class="fas fa-envelope"></i></a>
             <a href="https://maps.app.goo.gl/PvRqmnj43F1qQuBe6" target="_blank" class="hover:text-blue-300 transition transform hover:scale-125"><i class="fas fa-map-marker-alt"></i></a>
         </div>
-        <p class="text-white opacity-40 font-rai tracking-[3px] text-xs uppercase">© 2026 DFX Studio | Bangladesh</p>
+        <p class="text-white opacity-40 font-rai tracking-[3px] text-xs uppercase">© 2026 DFX | Visualizing Imagination</p>
     </footer>
 
     <div id="videoModal" onclick="closeVideo()"><span class="absolute top-6 right-6 text-5xl cursor-pointer text-white opacity-40 hover:opacity-100">&times;</span><div class="w-11/12 lg:w-4/5 aspect-video" onclick="event.stopPropagation()"><iframe id="videoPlayer" class="w-full h-full rounded-lg shadow-2xl" src="" frameborder="0" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div></div>
@@ -209,19 +208,19 @@
             });
             onSnapshot(collection(db, "clients_list"), (snap) => {
                 const cContainer = document.getElementById('clients-container'); cContainer.innerHTML = "";
-                snap.forEach(d => { cContainer.innerHTML += `<img src="Asset/clients/${d.data().filename}" class="h-10 md:h-16 w-auto object-contain transition duration-500 hover:scale-110">`; });
+                snap.forEach(d => { cContainer.innerHTML += `<img src="${d.data().url}" class="h-10 md:h-16 w-auto object-contain transition duration-500 hover:scale-110">`; });
             });
             renderServiceTabs();
         }
 
         const services = [ 
             { file: 'Motion Graphics.mp4', title: 'MOTION GRAPHICS', desc: 'Powerful motion design that elevates brand energy.' },
-            { file: '2D Animation.mp4', title: '2D STORYTELLING', desc: 'Creative 2D animation crafting visuals.' },
-            { file: '3DAnimation.mp4', title: '3D PRODUCT DESIGN', desc: 'High-quality 3D Modeling.' }, 
-            { file: 'Liquid.mp4', title: 'FLUID SIM', desc: 'Realistic liquid and particle simulations.' }, 
-            { file: 'Composite.mp4', title: 'CINEMATIC COMPOSITE', desc: 'Seamless digital blending.' }, 
-            { file: 'VFX.mp4', title: 'VFX SOLUTIONS', desc: 'Wildest imaginations to life.' }, 
-            { file: 'Rotoscopy.mp4', title: 'PRECISION ROTOSCOPY', desc: 'High-fidelity roto services.' }
+            { file: '2D Animation.mp4', title: '2D ANIMATION', desc: 'Creative 2D storytelling engaging visuals.' },
+            { file: '3DAnimation.mp4', title: '3D DESIGN', desc: 'High-quality 3D Product Modeling.' }, 
+            { file: 'Liquid.mp4', title: 'FLUID SIM', desc: 'Realistic liquid simulations.' }, 
+            { file: 'Composite.mp4', title: 'COMPOSITE', desc: 'Seamless digital blending.' }, 
+            { file: 'VFX.mp4', title: 'VFX', desc: 'Professional visual effects.' }, 
+            { file: 'Rotoscopy.mp4', title: 'ROTOSCOPY', desc: 'High-fidelity roto services.' }
         ];
 
         function renderServiceTabs() {
@@ -246,7 +245,6 @@
         window.openVideo = (id) => { document.getElementById('videoPlayer').src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`; document.getElementById('videoModal').style.display = 'flex'; };
         window.closeVideo = () => { document.getElementById('videoPlayer').src = ""; document.getElementById('videoModal').style.display = 'none'; };
 
-        // Scroll Logic
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section, footer');
             const navLinks = document.querySelectorAll('.nav-link');
@@ -257,7 +255,6 @@
             navLinks.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href').includes(curr)) l.classList.add('active'); });
         });
 
-        // Firebase Logic
         const statsRef = doc(db, "global_stats", "ratings");
         onSnapshot(statsRef, (snap) => { if (snap.exists()) { const d = snap.data(); let avg = d.totalScore / d.totalVotes; document.getElementById('avg-score').innerText = (avg < 4.85 ? 4.91 : avg).toFixed(2); document.getElementById('total-votes').innerText = d.totalVotes; } });
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
