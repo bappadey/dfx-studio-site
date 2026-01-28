@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DFX | Admin Panel</title>
+    <title>DFX | Admin Panel (Batch Mode)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --dfx-magenta: #CD1F85; --dfx-purple: #2F1C52; }
         body { background: #050505; color: white; font-family: sans-serif; }
         .dfx-card { background: #111; border: 1px solid #222; padding: 25px; border-radius: 20px; margin-bottom: 25px; }
-        input, .file-input { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; color: white; width: 100%; margin-bottom: 10px; outline: none; }
-        input:focus { border-color: var(--dfx-magenta); }
+        input, textarea, .file-input { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; color: white; width: 100%; margin-bottom: 10px; outline: none; }
+        input:focus, textarea:focus { border-color: var(--dfx-magenta); }
         .btn-magenta { background: var(--dfx-magenta); color: white; padding: 12px 24px; border-radius: 8px; font-weight: bold; transition: 0.3s; width: 100%; }
         .btn-magenta:hover { opacity: 0.8; transform: translateY(-2px); }
         .delete-btn { color: #ff4444; cursor: pointer; transition: 0.3s; padding: 10px; }
         .toggle-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #aaa; margin-bottom: 15px; }
-        #upload-status { font-size: 13px; color: var(--dfx-magenta); margin-bottom: 10px; display: none; }
+        #status-box { font-size: 13px; color: var(--dfx-magenta); margin-bottom: 10px; display: none; background: rgba(205,31,133,0.1); padding: 10px; border-radius: 8px; border: 1px solid var(--dfx-magenta); }
     </style>
 </head>
 <body class="p-6 md:p-20">
@@ -26,28 +26,37 @@
         <button id="login-btn" class="btn-magenta max-w-xs">LOGIN WITH GOOGLE</button>
     </div>
 
-    <div id="admin-content" class="hidden max-w-5xl mx-auto">
+    <div id="admin-content" class="hidden max-w-6xl mx-auto">
         <div class="flex justify-between items-center mb-10 border-b border-zinc-800 pb-6">
-            <h1 class="text-3xl font-bold italic uppercase">DFX CMS Control</h1>
+            <h1 class="text-3xl font-bold italic uppercase">Batch Control Center</h1>
             <button onclick="auth.signOut()" class="text-zinc-500 hover:text-white">Logout</button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div id="status-box"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <!-- MULTI PORTFOLIO MANAGER -->
             <div class="dfx-card">
-                <h2 class="text-2xl font-bold mb-6 text-[rgb(205,31,133)] uppercase">Add Portfolio</h2>
-                <input type="text" id="v-url" placeholder="Paste YouTube Link">
-                <input type="text" id="v-title" placeholder="Project Title">
-                <label class="toggle-label"><input type="checkbox" id="v-show-title" checked class="w-5 h-5 accent-[rgb(205,31,133)]"> Show Title on Website?</label>
-                <button id="add-v" class="btn-magenta">ADD TO WEBSITE</button>
-                <div id="v-list" class="mt-8 space-y-3 max-h-96 overflow-y-auto pr-2"></div>
+                <h2 class="text-2xl font-bold mb-4 text-[rgb(205,31,133)] uppercase">Add Portfolio Videos</h2>
+                <p class="text-xs text-zinc-500 mb-4 italic">Paste YouTube links below (one per line)</p>
+                <textarea id="v-urls" rows="6" placeholder="https://youtube.com/watch?v=...&#10;https://youtu.be/..."></textarea>
+                <input type="text" id="v-title-common" placeholder="Common Title (optional)">
+                
+                <label class="toggle-label"><input type="checkbox" id="v-show-title" checked class="w-5 h-5 accent-[rgb(205,31,133)]"> Show Titles on Website?</label>
+
+                <button id="add-v-batch" class="btn-magenta">BATCH ADD VIDEOS</button>
+                
+                <div id="v-list" class="mt-8 space-y-2 max-h-80 overflow-y-auto pr-2"></div>
             </div>
 
+            <!-- MULTI LOGO MANAGER -->
             <div class="dfx-card">
-                <h2 class="text-2xl font-bold mb-6 text-blue-500 uppercase">Upload Client Logo</h2>
-                <input type="file" id="c-file" class="file-input" accept="image/*">
-                <p id="upload-status"><i class="fas fa-spinner fa-spin mr-2"></i>Uploading...</p>
-                <button id="add-c" class="btn-magenta" style="background: #3b82f6;">UPLOAD & SAVE</button>
-                <div id="c-list" class="mt-8 grid grid-cols-3 gap-4 max-h-96 overflow-y-auto"></div>
+                <h2 class="text-2xl font-bold mb-4 text-blue-500 uppercase">Upload Client Logos</h2>
+                <p class="text-xs text-zinc-500 mb-4 italic">You can select multiple files at once</p>
+                <input type="file" id="c-files" class="file-input" accept="image/*" multiple>
+                <button id="add-c-batch" class="btn-magenta" style="background: #3b82f6;">BATCH UPLOAD & SAVE</button>
+                
+                <div id="c-list" class="mt-8 grid grid-cols-4 gap-3 max-h-80 overflow-y-auto pr-2"></div>
             </div>
         </div>
     </div>
@@ -70,7 +79,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
-        const adminEmail = "bappadey61@gmail.com"; // <--- CHANGE TO YOUR GMAIL
+        const adminEmail = "your-email@gmail.com"; // <--- CHANGE TO YOUR GMAIL
         const IMGBB_KEY = "6c180ea35e97176e79cde2c007894032";
 
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
@@ -85,17 +94,22 @@
 
         function extractID(url) {
             const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-            const match = url.match(reg);
-            return (match && match[1]) ? match[1] : url;
+            const match = url.trim().match(reg);
+            return (match && match[1]) ? match[1] : (url.length === 11 ? url : null);
+        }
+
+        function showStatus(msg) {
+            const box = document.getElementById('status-box');
+            box.style.display = "block";
+            box.innerHTML = msg;
         }
 
         function loadData() {
             onSnapshot(query(collection(db, "portfolio"), orderBy("createdAt", "desc")), (snap) => {
                 const list = document.getElementById('v-list'); list.innerHTML = "";
                 snap.forEach(d => {
-                    const data = d.data();
-                    list.innerHTML += `<div class="p-3 bg-zinc-900 rounded-lg flex justify-between border border-zinc-800 mb-2 truncate">
-                        <span class="text-xs">${data.title}</span>
+                    list.innerHTML += `<div class="p-2 bg-zinc-900 rounded flex justify-between border border-zinc-800 text-[10px]">
+                        <span class="truncate">${d.data().title || 'No Title'}</span>
                         <i class="fas fa-trash delete-btn" onclick="deleteItem('portfolio','${d.id}')"></i>
                     </div>`;
                 });
@@ -103,56 +117,60 @@
             onSnapshot(collection(db, "clients_list"), (snap) => {
                 const list = document.getElementById('c-list'); list.innerHTML = "";
                 snap.forEach(d => {
-                    list.innerHTML += `<div class="relative"><img src="${d.data().url}" class="h-16 w-full object-contain bg-white rounded-lg p-1">
-                    <i class="fas fa-times-circle absolute -top-2 -right-2 text-red-500 cursor-pointer" onclick="deleteItem('clients_list','${d.id}')"></i></div>`;
+                    list.innerHTML += `<div class="relative"><img src="${d.data().url}" class="h-12 w-full object-contain bg-white rounded p-1">
+                    <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 cursor-pointer text-xs" onclick="deleteItem('clients_list','${d.id}')"></i></div>`;
                 });
             });
         }
 
-        // --- PREVENT DUPLICATE VIDEO ---
-        document.getElementById('add-v').onclick = async () => {
-            const vid = extractID(document.getElementById('v-url').value);
-            const title = document.getElementById('v-title').value;
+        // --- BATCH ADD VIDEOS ---
+        document.getElementById('add-v-batch').onclick = async () => {
+            const urls = document.getElementById('v-urls').value.split('\n');
+            const commonTitle = document.getElementById('v-title-common').value;
             const showTitle = document.getElementById('v-show-title').checked;
+            let count = 0;
 
-            if(!vid || !title) return alert("Fill all fields");
-
-            // Check if ID exists
-            const q = query(collection(db, "portfolio"), where("id", "==", vid));
-            const check = await getDocs(q);
-            if (!check.empty) return alert("This video is already in your Portfolio!");
-
-            await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, createdAt: serverTimestamp() });
-            document.getElementById('v-url').value = ""; document.getElementById('v-title').value = "";
-            alert("Success!");
+            for(let url of urls) {
+                const vid = extractID(url);
+                if(vid) {
+                    const q = query(collection(db, "portfolio"), where("id", "==", vid));
+                    const check = await getDocs(q);
+                    if (check.empty) {
+                        await addDoc(collection(db, "portfolio"), { id: vid, title: commonTitle || "DFX Work", showTitle, createdAt: serverTimestamp() });
+                        count++;
+                    }
+                }
+            }
+            alert(`Batch Complete: Added ${count} new videos.`);
+            document.getElementById('v-urls').value = "";
         };
 
-        // --- PREVENT DUPLICATE LOGO ---
-        document.getElementById('add-c').onclick = async () => {
-            const fileInput = document.getElementById('c-file');
-            if(!fileInput.files[0]) return alert("Select an image!");
+        // --- BATCH UPLOAD LOGOS ---
+        document.getElementById('add-c-batch').onclick = async () => {
+            const files = document.getElementById('c-files').files;
+            if(files.length === 0) return alert("Select files first!");
 
-            document.getElementById('upload-status').style.display = "block";
-            const formData = new FormData();
-            formData.append("image", fileInput.files[0]);
+            for(let i = 0; i < files.length; i++) {
+                showStatus(`Uploading Logo ${i+1} of ${files.length}...`);
+                const formData = new FormData();
+                formData.append("image", files[i]);
 
-            try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
-                const json = await res.json();
-                const newUrl = json.data.url;
-
-                // Check if URL exists
-                const q = query(collection(db, "clients_list"), where("url", "==", newUrl));
-                const check = await getDocs(q);
-                if (!check.empty) {
-                    alert("This logo is already uploaded!");
-                } else {
-                    await addDoc(collection(db, "clients_list"), { url: newUrl });
-                    alert("Logo Saved!");
-                }
-                fileInput.value = "";
-            } catch (e) { alert("Upload Failed"); }
-            document.getElementById('upload-status').style.display = "none";
+                try {
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
+                    const json = await res.json();
+                    if(json.success) {
+                        const newUrl = json.data.url;
+                        const q = query(collection(db, "clients_list"), where("url", "==", newUrl));
+                        const check = await getDocs(q);
+                        if (check.empty) {
+                            await addDoc(collection(db, "clients_list"), { url: newUrl });
+                        }
+                    }
+                } catch (e) { console.error("Upload failed for file " + i); }
+            }
+            showStatus("All uploads complete!");
+            document.getElementById('c-files').value = "";
+            setTimeout(() => document.getElementById('status-box').style.display = "none", 3000);
         };
 
         window.deleteItem = async (col, id) => { if(confirm("Confirm Delete?")) await deleteDoc(doc(db, col, id)); };
