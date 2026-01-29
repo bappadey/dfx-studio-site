@@ -18,10 +18,11 @@
         .btn-update { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
         .order-badge { background: var(--dfx-magenta); color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
         
-        /* Video Preview Styling */
+        /* Video Preview Styles */
+        #live-v-preview-container { display: none; margin-top: 15px; text-align: center; }
+        .live-thumb { width: 100%; max-width: 280px; border-radius: 12px; border: 2px solid var(--dfx-magenta); box-shadow: 0 0 20px rgba(205, 31, 133, 0.4); margin: 0 auto; }
         #adminPreviewModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
-        .thumb-preview { width: 80px; height: 45px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .thumb-preview:hover { border-color: var(--dfx-magenta); transform: scale(1.05); }
+        .thumb-preview-list { width: 80px; height: 45px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
 
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
@@ -31,8 +32,8 @@
 
     <!-- LOGIN -->
     <div id="login-screen" class="flex flex-col items-center justify-center min-h-[80vh]">
-        <h1 class="text-6xl font-bebas text-[rgb(205,31,133)] mb-2 drop-shadow-2xl text-center">DFX COMMAND</h1>
-        <p class="text-zinc-500 tracking-[5px] uppercase text-xs mb-10 text-center">Authorized Personnel Only</p>
+        <h1 class="text-6xl font-bebas text-[rgb(205,31,133)] mb-2 drop-shadow-2xl">DFX COMMAND</h1>
+        <p class="text-zinc-500 tracking-[5px] uppercase text-xs mb-10">Authorized Personnel Only</p>
         <button id="login-btn" class="btn-vfx px-12 py-4 rounded-full text-lg">Enter Dashboard</button>
     </div>
 
@@ -46,31 +47,37 @@
         <div id="status-box" class="hidden mb-6 p-4 rounded-xl bg-magenta-900/20 border border-magenta-500 text-center text-sm"></div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- PORTFOLIO -->
+            <!-- PORTFOLIO ENGINE -->
             <div class="glass-card p-8">
                 <h3 id="form-title" class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Manage Portfolio</h3>
-                <textarea id="v-urls" rows="3" class="w-full p-4 mb-4 text-sm" placeholder="Paste YouTube Link(s) (One per line)"></textarea>
+                <textarea id="v-urls" rows="3" class="w-full p-4 mb-2 text-sm" placeholder="Paste YouTube Link(s)"></textarea>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <!-- LIVE PREVIEW IMAGE AFTER PASTE -->
+                <div id="live-v-preview-container">
+                    <p class="text-[10px] text-zinc-500 uppercase mb-2 font-bold tracking-widest">Link Preview</p>
+                    <img id="live-v-thumb" src="" class="live-thumb">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
                     <input type="text" id="v-title" class="p-3 md:col-span-2" placeholder="Project Title">
                     <input type="number" id="v-sort" class="p-3" placeholder="Order No.">
                 </div>
 
-                <div class="flex items-center gap-4 mb-6">
+                <div class="flex items-center gap-6 mb-6">
                     <label class="flex items-center gap-2 cursor-pointer bg-black/40 rounded-xl px-4 py-2 border border-white/5">
                         <input type="checkbox" id="v-show-title" checked class="w-5 h-5 accent-[rgb(205,31,133)]">
                         <span class="text-xs font-bold uppercase">Show Title?</span>
                     </label>
                 </div>
 
-                <button id="add-v-btn" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-4 text-white">Save Project</button>
+                <button id="add-v-btn" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-4">Save to Website</button>
                 <button id="cancel-edit" class="hidden w-full py-2 mb-6 text-zinc-500 uppercase font-bold text-xs hover:text-white">Cancel Edit</button>
 
-                <h4 class="text-xs uppercase font-bold text-zinc-600 mb-4 tracking-widest border-b border-zinc-800 pb-2">All Live Projects</h4>
+                <h4 class="text-xs uppercase font-bold text-zinc-600 mb-4 tracking-widest border-b border-zinc-800 pb-2">Active Projects</h4>
                 <div id="v-list" class="space-y-2 max-h-[500px] overflow-y-auto pr-2 mt-4"></div>
             </div>
 
-            <!-- CLIENTS -->
+            <!-- CLIENT PORTAL -->
             <div class="glass-card p-8">
                 <h3 class="text-2xl font-bebas mb-6 uppercase text-blue-500">Client Logos</h3>
                 <input type="file" id="c-files" class="w-full mb-4" accept="image/*" multiple>
@@ -113,19 +120,8 @@
 
         let editingId = null;
 
-        // Login/Logout
-        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
-        document.getElementById('logout-btn').onclick = () => signOut(auth);
-
-        onAuthStateChanged(auth, (user) => {
-            if (user && user.email === adminEmail) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('admin-content').classList.remove('hidden');
-                loadData();
-            } else if (user) { signOut(auth); alert("Unauthorized!"); }
-        });
-
         // --- GLOBAL EXPOSED FUNCTIONS ---
+        window.auth = auth;
         window.openAdminPreview = (id) => {
             document.getElementById('adminPreviewPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
             document.getElementById('adminPreviewModal').style.display = 'flex';
@@ -134,19 +130,56 @@
             document.getElementById('adminPreviewPlayer').src = "";
             document.getElementById('adminPreviewModal').style.display = 'none';
         };
+        window.delItem = async (col, id) => { if(confirm("Confirm deletion?")) await deleteDoc(doc(db, col, id)); };
+
         window.startEdit = (docId, videoId, title, showTitle, sortOrder) => {
             editingId = docId;
             document.getElementById('v-urls').value = `https://www.youtube.com/watch?v=${videoId}`;
             document.getElementById('v-title').value = title;
             document.getElementById('v-sort').value = sortOrder || 0;
             document.getElementById('v-show-title').checked = showTitle;
+            
+            // Trigger preview for edit mode
+            updateLivePreview(videoId);
+
             document.getElementById('form-title').innerText = "Update Project";
-            document.getElementById('add-v-btn').innerText = "Update Now";
+            document.getElementById('add-v-btn').innerText = "Confirm Update";
             document.getElementById('add-v-btn').classList.add('btn-update');
             document.getElementById('cancel-edit').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
-        window.delItem = async (col, id) => { if(confirm("Confirm Delete?")) await deleteDoc(doc(db, col, id)); };
+
+        // UI Interactions
+        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
+        document.getElementById('cancel-edit').onclick = resetForm;
+
+        // --- LIVE PREVIEW LOGIC ---
+        const urlInput = document.getElementById('v-urls');
+        urlInput.addEventListener('input', function() {
+            const lines = this.value.split('\n');
+            const id = extractID(lines[0]); // Preview the first link in batch
+            updateLivePreview(id);
+        });
+
+        function updateLivePreview(id) {
+            const container = document.getElementById('live-v-preview-container');
+            const thumb = document.getElementById('live-v-thumb');
+            if(id) {
+                thumb.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === adminEmail) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                loadData();
+            } else if (user) { signOut(auth); alert("Unauthorized Access!"); }
+        });
 
         function extractID(url) {
             const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
@@ -154,8 +187,19 @@
             return (match && match[1]) ? match[1] : (url.trim().length === 11 ? url.trim() : null);
         }
 
+        function resetForm() {
+            editingId = null;
+            document.getElementById('v-urls').value = "";
+            document.getElementById('v-title').value = "";
+            document.getElementById('v-sort').value = "";
+            updateLivePreview(null);
+            document.getElementById('form-title').innerText = "Add Portfolio Videos";
+            document.getElementById('add-v-btn').innerText = "Save to Website";
+            document.getElementById('add-v-btn').classList.remove('btn-update');
+            document.getElementById('cancel-edit').classList.add('hidden');
+        }
+
         function loadData() {
-            // Portfolio Sync
             onSnapshot(query(collection(db, "portfolio"), orderBy("sortOrder", "asc")), (snap) => {
                 const list = document.getElementById('v-list'); list.innerHTML = "";
                 snap.forEach(d => {
@@ -163,10 +207,10 @@
                     const item = document.createElement('div');
                     item.className = "p-3 bg-black/40 rounded-xl flex justify-between items-center border border-white/5 mb-2";
                     item.innerHTML = `
-                        <div class="flex items-center gap-4 truncate">
-                            <img src="https://img.youtube.com/vi/${p.id}/default.jpg" class="thumb-preview" onclick="openAdminPreview('${p.id}')" title="Click to Preview">
-                            <div class="truncate">
-                                <p class="text-xs font-bold text-white truncate">${p.title}</p>
+                        <div class="flex items-center gap-3 truncate">
+                            <img src="https://img.youtube.com/vi/${p.id}/default.jpg" class="thumb-preview-list" onclick="openAdminPreview('${p.id}')">
+                            <div class="truncate text-[11px] font-bold text-white">
+                                <p class="truncate">${p.title}</p>
                                 <span class="order-badge">#${p.sortOrder || 0}</span>
                             </div>
                         </div>
@@ -178,7 +222,6 @@
                 });
             });
 
-            // Clients Sync
             onSnapshot(collection(db, "clients_list"), (snap) => {
                 const list = document.getElementById('c-list'); list.innerHTML = "";
                 snap.forEach(d => {
@@ -195,12 +238,12 @@
         document.getElementById('add-v-btn').onclick = async () => {
             const urls = document.getElementById('v-urls').value.split('\n');
             const title = document.getElementById('v-title').value || "DFX Project";
-            const sort = parseInt(document.getElementById('v-sort').value) || 0;
+            const sortOrder = parseInt(document.getElementById('v-sort').value) || 0;
             const showTitle = document.getElementById('v-show-title').checked;
 
             if(editingId) {
                 const vid = extractID(urls[0]);
-                await updateDoc(doc(db, "portfolio", editingId), { id: vid, title, showTitle, sortOrder: sort });
+                await updateDoc(doc(db, "portfolio", editingId), { id: vid, title, showTitle, sortOrder });
                 alert("Updated!"); resetForm();
             } else {
                 for(let url of urls) {
@@ -208,36 +251,26 @@
                     if(vid) {
                         const q = query(collection(db, "portfolio"), where("id", "==", vid));
                         const check = await getDocs(q);
-                        if (check.empty) await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, sortOrder: sort, createdAt: serverTimestamp() });
+                        if (check.empty) await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, sortOrder, createdAt: serverTimestamp() });
                     }
                 }
-                document.getElementById('v-urls').value = ""; alert("Database Synced!");
+                document.getElementById('v-urls').value = ""; alert("Added!");
+                updateLivePreview(null);
             }
         };
-
-        function resetForm() {
-            editingId = null;
-            document.getElementById('v-urls').value = ""; document.getElementById('v-title').value = ""; document.getElementById('v-sort').value = "";
-            document.getElementById('form-title').innerText = "Add Portfolio Videos";
-            document.getElementById('add-v-btn').innerText = "Save Project";
-            document.getElementById('add-v-btn').classList.remove('btn-update');
-            document.getElementById('cancel-edit').classList.add('hidden');
-        }
 
         document.getElementById('add-c-batch').onclick = async () => {
             const files = document.getElementById('c-files').files;
             if(!files.length) return alert("Select images");
-            const sb = document.getElementById('status-box'); sb.style.display="block";
             for(let i=0; i<files.length; i++){
-                sb.innerText = `Uploading ${i+1}/${files.length}...`;
                 const f = new FormData(); f.append("image", files[i]);
                 try {
                     const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: f });
                     const j = await res.json();
                     if(j.success) await addDoc(collection(db, "clients_list"), { url: j.data.url });
-                } catch (e) {}
+                } catch (e) { console.error(e); }
             }
-            sb.style.display="none"; alert("Done!");
+            alert("Logos Uploaded!");
         };
     </script>
 </body>
