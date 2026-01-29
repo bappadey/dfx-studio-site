@@ -15,58 +15,58 @@
         input, textarea { background: rgba(0,0,0,0.4) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; border-radius: 12px !important; outline: none; }
         input:focus, textarea:focus { border-color: var(--dfx-magenta) !important; box-shadow: 0 0 15px rgba(205, 31, 133, 0.3); }
         .btn-vfx { background: linear-gradient(135deg, var(--dfx-magenta), #8e145c); text-transform: uppercase; font-weight: bold; transition: 0.3s; cursor: pointer; }
-        .btn-vfx:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(205, 31, 133, 0.4); }
         .btn-update { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
+        .order-badge { background: var(--dfx-magenta); color: white; font-size: 10px; padding: 2px 8px; border-radius: 50px; font-weight: bold; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
-        .order-badge { background: var(--dfx-magenta); color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <!-- LOGIN -->
     <div id="login-screen" class="flex flex-col items-center justify-center min-h-[80vh]">
         <h1 class="text-6xl font-bebas text-[rgb(205,31,133)] mb-2 drop-shadow-2xl">DFX COMMAND</h1>
         <p class="text-zinc-500 tracking-[5px] uppercase text-xs mb-10">Authorized Personnel Only</p>
         <button id="login-btn" class="btn-vfx px-12 py-4 rounded-full text-lg">Enter Dashboard</button>
     </div>
 
-    <!-- MAIN PANEL -->
     <div id="admin-content" class="hidden max-w-7xl mx-auto">
         <div class="flex justify-between items-center mb-12">
-            <h2 class="text-3xl font-bebas tracking-widest text-[rgb(205,31,133)]">BACKEND SYSTEM</h2>
+            <h2 class="text-3xl font-bebas tracking-widest text-[rgb(205,31,133)] uppercase">Backend System</h2>
             <button id="logout-btn" class="px-6 py-2 bg-red-900/20 border border-red-500 text-red-500 rounded-full font-bebas text-lg hover:bg-red-500 hover:text-white transition">Exit</button>
         </div>
 
         <div id="status-box" class="hidden mb-6 p-4 rounded-xl bg-magenta-900/20 border border-magenta-500 text-center text-sm"></div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- PORTFOLIO -->
+            <!-- PORTFOLIO SECTION -->
             <div class="glass-card p-8">
-                <h3 id="form-title" class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Add Portfolio Videos</h3>
-                <textarea id="v-urls" rows="4" class="w-full p-4 mb-4 text-sm" placeholder="Paste YouTube Links (One per line)"></textarea>
+                <h3 id="form-title" class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Manage Portfolio</h3>
+                <textarea id="v-urls" rows="3" class="w-full p-4 mb-4" placeholder="YouTube Link(s)"></textarea>
+                
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <input type="text" id="v-title" class="p-3 md:col-span-2" placeholder="Category/Project Title">
+                    <input type="text" id="v-title" class="p-3 md:col-span-2" placeholder="Project Title">
                     <input type="number" id="v-sort" class="p-3" placeholder="Order No.">
                 </div>
-                <div class="flex items-center gap-4 mb-6">
-                    <label class="flex items-center gap-2 cursor-pointer bg-black/40 rounded-xl px-4 py-2 border border-white/5">
+
+                <div class="flex items-center gap-6 mb-6 bg-black/40 p-3 rounded-xl border border-white/5">
+                    <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="v-show-title" checked class="w-5 h-5 accent-[rgb(205,31,133)]">
-                        <span class="text-xs font-bold">Show Title?</span>
+                        <span class="text-xs font-bold uppercase tracking-widest opacity-70">Show Title?</span>
                     </label>
                 </div>
-                <button id="add-v-btn" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-4">Sync to Database</button>
+
+                <button id="add-v-btn" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-4">Save to Website</button>
                 <button id="cancel-edit" class="hidden w-full py-2 mb-6 text-zinc-500 uppercase font-bold text-xs hover:text-white">Cancel Edit</button>
 
                 <h4 class="text-xs uppercase font-bold text-zinc-600 mb-4 tracking-widest border-b border-zinc-800 pb-2">Active Projects</h4>
-                <div id="v-list" class="space-y-2 max-h-[500px] overflow-y-auto pr-2 mt-4"></div>
+                <div id="v-list" class="space-y-2 max-h-[500px] overflow-y-auto pr-2"></div>
             </div>
 
-            <!-- CLIENTS -->
+            <!-- CLIENTS SECTION -->
             <div class="glass-card p-8">
                 <h3 class="text-2xl font-bebas mb-6 uppercase text-blue-500">Client Logos</h3>
                 <input type="file" id="c-files" class="w-full mb-4" accept="image/*" multiple>
-                <button id="add-c-batch" class="w-full py-4 rounded-xl font-bebas text-xl bg-blue-600 hover:bg-blue-500 shadow-lg transition mb-6 uppercase">Upload Assets</button>
+                <button id="add-c-batch" class="w-full py-4 rounded-xl font-bebas text-xl bg-blue-600 hover:bg-blue-500 shadow-lg transition mb-6 uppercase">Batch Upload</button>
                 <div id="c-list" class="grid grid-cols-3 gap-3 max-h-[500px] overflow-y-auto pr-2"></div>
             </div>
         </div>
@@ -97,65 +97,12 @@
 
         let editingId = null;
 
-        // Login/Logout
-        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
-        document.getElementById('logout-btn').onclick = () => signOut(auth);
-
-        onAuthStateChanged(auth, (user) => {
-            if (user && user.email === adminEmail) {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('admin-content').classList.remove('hidden');
-                loadDashboard();
-            } else if (user) { signOut(auth); alert("Access Denied!"); }
-        });
-
-        function extractID(url) {
-            const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-            const match = url.trim().match(reg);
-            return (match && match[1]) ? match[1] : (url.trim().length === 11 ? url.trim() : null);
-        }
-
-        function loadDashboard() {
-            // Portfolio Sync
-            onSnapshot(query(collection(db, "portfolio"), orderBy("sortOrder", "asc")), (snap) => {
-                const list = document.getElementById('v-list'); list.innerHTML = "";
-                snap.forEach(d => {
-                    const p = d.data();
-                    const item = document.createElement('div');
-                    item.className = "p-3 bg-black/40 rounded-xl flex justify-between items-center border border-white/5 mb-2";
-                    item.innerHTML = `
-                        <div class="flex items-center gap-3 truncate">
-                            <span class="order-badge">#${p.sortOrder || 0}</span>
-                            <div class="truncate text-[11px] font-bold text-white">${p.title}</div>
-                        </div>
-                        <div class="flex gap-2">
-                            <i class="fas fa-edit text-blue-500 cursor-pointer p-2"></i>
-                            <i class="fas fa-trash text-red-500 cursor-pointer p-2"></i>
-                        </div>`;
-                    
-                    // Attach events inside module
-                    item.querySelector('.fa-edit').onclick = () => startEdit(d.id, p.id, p.title, p.showTitle, p.sortOrder);
-                    item.querySelector('.fa-trash').onclick = () => delItem('portfolio', d.id);
-                    list.appendChild(item);
-                });
-            });
-
-            // Clients Sync
-            onSnapshot(collection(db, "clients_list"), (snap) => {
-                const list = document.getElementById('c-list'); list.innerHTML = "";
-                snap.forEach(d => {
-                    const item = document.createElement('div');
-                    item.className = "relative group bg-white p-2 rounded-xl h-14 flex items-center justify-center";
-                    item.innerHTML = `
-                        <img src="${d.data().url}" class="max-h-full max-w-full object-contain">
-                        <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 cursor-pointer"></i>`;
-                    item.querySelector('.fa-times-circle').onclick = () => delItem('clients_list', d.id);
-                    list.appendChild(item);
-                });
-            });
-        }
-
-        function startEdit(docId, videoId, title, showTitle, sortOrder) {
+        // --- EXPOSE TO WINDOW FOR BUTTONS ---
+        window.auth = auth;
+        window.delItem = async (col, id) => {
+            if(confirm("Confirm deletion?")) await deleteDoc(doc(db, col, id));
+        };
+        window.startEdit = (docId, videoId, title, showTitle, sortOrder) => {
             editingId = docId;
             document.getElementById('v-urls').value = `https://www.youtube.com/watch?v=${videoId}`;
             document.getElementById('v-title').value = title;
@@ -167,28 +114,77 @@
             document.getElementById('add-v-btn').classList.add('btn-update');
             document.getElementById('cancel-edit').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // UI Interactions
+        document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
+        document.getElementById('logout-btn').onclick = () => signOut(auth);
+        document.getElementById('cancel-edit').onclick = resetForm;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === adminEmail) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-content').classList.remove('hidden');
+                loadData();
+            } else if (user) { signOut(auth); alert("Unauthorized Access!"); }
+        });
+
+        function extractID(url) {
+            const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.trim().match(reg);
+            return (match && match[1]) ? match[1] : (url.trim().length === 11 ? url.trim() : null);
         }
 
-        document.getElementById('cancel-edit').onclick = resetForm;
         function resetForm() {
             editingId = null;
             document.getElementById('v-urls').value = "";
             document.getElementById('v-title').value = "";
             document.getElementById('v-sort').value = "";
-            document.getElementById('form-title').innerText = "Add Portfolio Videos";
-            document.getElementById('add-v-btn').innerText = "Sync to Database";
+            document.getElementById('form-title').innerText = "Manage Portfolio";
+            document.getElementById('add-v-btn').innerText = "Save to Website";
             document.getElementById('add-v-btn').classList.remove('btn-update');
             document.getElementById('cancel-edit').classList.add('hidden');
         }
 
+        function loadData() {
+            // Portfolio Sync - ORDER BY sortOrder
+            onSnapshot(query(collection(db, "portfolio"), orderBy("sortOrder", "asc")), (snap) => {
+                const list = document.getElementById('v-list'); list.innerHTML = "";
+                snap.forEach(d => {
+                    const p = d.data();
+                    list.innerHTML += `<div class="p-3 bg-black/40 rounded-xl flex justify-between items-center border border-white/5 mb-2 group">
+                        <div class="flex items-center gap-3 truncate">
+                            <span class="order-badge">#${p.sortOrder || 0}</span>
+                            <div class="truncate text-[11px] font-bold text-white">${p.title}</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <i class="fas fa-edit text-blue-500 cursor-pointer p-2" onclick="startEdit('${d.id}', '${p.id}', '${p.title}', ${p.showTitle}, ${p.sortOrder || 0})"></i>
+                            <i class="fas fa-trash text-red-500 cursor-pointer p-2" onclick="delItem('portfolio','${d.id}')"></i>
+                        </div>
+                    </div>`;
+                });
+            });
+
+            // Clients Sync
+            onSnapshot(collection(db, "clients_list"), (snap) => {
+                const list = document.getElementById('c-list'); list.innerHTML = "";
+                snap.forEach(d => {
+                    list.innerHTML += `<div class="relative group bg-white p-2 rounded-xl h-14 flex items-center justify-center">
+                        <img src="${d.data().url}" class="max-h-full max-w-full object-contain">
+                        <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 cursor-pointer text-xs" onclick="delItem('clients_list','${d.id}')"></i></div>`;
+                });
+            });
+        }
+
         document.getElementById('add-v-btn').onclick = async () => {
             const urls = document.getElementById('v-urls').value.split('\n');
-            const title = document.getElementById('v-title').value || "DFX Work";
+            const title = document.getElementById('v-title').value || "DFX Project";
             const sortOrder = parseInt(document.getElementById('v-sort').value) || 0;
             const showTitle = document.getElementById('v-show-title').checked;
 
             if(editingId) {
                 const vid = extractID(urls[0]);
+                if(!vid) return alert("Invalid Link");
                 await updateDoc(doc(db, "portfolio", editingId), { id: vid, title, showTitle, sortOrder });
                 alert("Updated!"); resetForm();
             } else {
@@ -200,29 +196,23 @@
                         if (check.empty) await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, sortOrder, createdAt: serverTimestamp() });
                     }
                 }
-                document.getElementById('v-urls').value = ""; alert("Added!");
+                document.getElementById('v-urls').value = ""; alert("Synced!");
             }
         };
 
         document.getElementById('add-c-batch').onclick = async () => {
             const files = document.getElementById('c-files').files;
             if(!files.length) return alert("Select images");
-            const sb = document.getElementById('status-box'); sb.style.display="block";
             for(let i=0; i<files.length; i++){
-                sb.innerText = `Uploading ${i+1}/${files.length}...`;
                 const f = new FormData(); f.append("image", files[i]);
                 try {
                     const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: f });
                     const j = await res.json();
                     if(j.success) await addDoc(collection(db, "clients_list"), { url: j.data.url });
-                } catch (e) {}
+                } catch (e) { console.error(e); }
             }
-            sb.style.display="none"; alert("Done!");
+            alert("All Uploaded!");
         };
-
-        async function delItem(col, id) {
-            if(confirm("Delete this?")) await deleteDoc(doc(db, col, id));
-        }
     </script>
 </body>
 </html>
