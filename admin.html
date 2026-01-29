@@ -11,149 +11,58 @@
         :root { --dfx-magenta: #CD1F85; --dfx-purple: #2F1C52; }
         body { background: radial-gradient(circle at top, #1a0b2e 0%, #050505 100%); color: white; font-family: 'Inter', sans-serif; min-height: 100vh; }
         .font-bebas { font-family: 'Bebas Neue', cursive; letter-spacing: 1px; }
-        
-        /* Glassmorphism Cards */
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(15px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            transition: 0.3s ease;
-        }
-        .glass-card:hover { border-color: var(--dfx-magenta); box-shadow: 0 0 30px rgba(205, 31, 133, 0.1); }
-
-        /* Inputs */
-        input, textarea { 
-            background: rgba(0,0,0,0.4) !important; 
-            border: 1px solid rgba(255,255,255,0.1) !important; 
-            color: white !important; 
-            border-radius: 12px !important;
-            transition: 0.3s;
-        }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: 0.3s ease; }
+        .glass-card:hover { border-color: var(--dfx-magenta); }
+        input, textarea { background: rgba(0,0,0,0.4) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; border-radius: 12px !important; }
         input:focus, textarea:focus { border-color: var(--dfx-magenta) !important; box-shadow: 0 0 15px rgba(205, 31, 133, 0.3); outline: none; }
-
-        /* Buttons */
-        .btn-vfx { 
-            background: linear-gradient(135deg, var(--dfx-magenta), #8e145c); 
-            text-transform: uppercase; font-weight: bold; letter-spacing: 1px;
-            box-shadow: 0 10px 20px rgba(205, 31, 133, 0.3);
-            transition: 0.3s;
-        }
-        .btn-vfx:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(205, 31, 133, 0.5); opacity: 0.9; }
-
-        /* Custom Scrollbar */
+        .btn-vfx { background: linear-gradient(135deg, var(--dfx-magenta), #8e145c); text-transform: uppercase; font-weight: bold; transition: 0.3s; }
+        .btn-vfx:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(205, 31, 133, 0.4); }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
-
-        /* Animations */
-        .pulse-magenta { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { text-shadow: 0 0 10px var(--dfx-magenta); } 50% { text-shadow: 0 0 25px var(--dfx-magenta); } 100% { text-shadow: 0 0 10px var(--dfx-magenta); } }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <!-- 1. LOGIN SCREEN -->
     <div id="login-screen" class="flex flex-col items-center justify-center min-h-[80vh]">
-        <img src="Asset/LOGO.png" class="w-24 mb-6 drop-shadow-2xl">
-        <h1 class="text-6xl font-bebas pulse-magenta mb-2">DFX COMMAND</h1>
+        <h1 class="text-6xl font-bebas text-[rgb(205,31,133)] mb-2 drop-shadow-2xl">DFX COMMAND</h1>
         <p class="text-zinc-500 tracking-[5px] uppercase text-xs mb-10">Authorized Personnel Only</p>
         <button id="login-btn" class="btn-vfx px-12 py-4 rounded-full text-lg">Enter Dashboard</button>
     </div>
 
-    <!-- 2. MAIN DASHBOARD -->
     <div id="admin-content" class="hidden max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
-            <div class="flex items-center gap-4">
-                <img src="Asset/LOGO.png" class="w-12">
-                <div>
-                    <h2 class="text-3xl font-bebas tracking-widest text-[rgb(205,31,133)]">BACKEND SYSTEM</h2>
-                    <p class="text-xs text-zinc-500 uppercase" id="admin-info">Active Session: Admin</p>
-                </div>
-            </div>
-            <div class="flex gap-4">
-                <a href="Home.html" target="_blank" class="px-6 py-2 border border-zinc-700 rounded-full hover:bg-white hover:text-black transition font-bebas text-lg">View Live Site</a>
-                <button onclick="auth.signOut()" class="px-6 py-2 bg-red-900/20 border border-red-500/50 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition font-bebas text-lg">Exit</button>
-            </div>
-        </div>
-
-        <!-- Quick Stats Strip -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            <div class="glass-card p-4 text-center">
-                <p class="text-zinc-500 text-[10px] uppercase font-bold">Videos</p>
-                <h3 class="text-3xl font-bebas" id="stat-v">0</h3>
-            </div>
-            <div class="glass-card p-4 text-center">
-                <p class="text-zinc-500 text-[10px] uppercase font-bold">Clients</p>
-                <h3 class="text-3xl font-bebas" id="stat-c">0</h3>
-            </div>
-            <div class="glass-card p-4 text-center">
-                <p class="text-zinc-500 text-[10px] uppercase font-bold">Reviews</p>
-                <h3 class="text-3xl font-bebas" id="stat-r">0</h3>
-            </div>
-            <div class="glass-card p-4 text-center border-magenta-500/30">
-                <p class="text-magenta-500 text-[10px] uppercase font-bold">Status</p>
-                <h3 class="text-xl font-bebas text-green-500">LIVE</h3>
-            </div>
+        <div class="flex justify-between items-center mb-12">
+            <h2 class="text-3xl font-bebas tracking-widest text-[rgb(205,31,133)]">BACKEND SYSTEM</h2>
+            <button onclick="auth.signOut()" class="px-6 py-2 bg-red-900/20 border border-red-500 text-red-500 rounded-full font-bebas text-lg hover:bg-red-500 hover:text-white transition">Exit</button>
         </div>
 
         <div id="status-box" class="hidden mb-6 p-4 rounded-xl bg-magenta-900/20 border border-magenta-500 text-center text-sm"></div>
 
-        <!-- TWO COLUMN CONTROL CENTER -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <!-- LEFT: PORTFOLIO ENGINE -->
+            <!-- PORTFOLIO -->
             <div class="glass-card p-8">
-                <div class="flex items-center gap-3 mb-8">
-                    <i class="fas fa-film text-2xl text-[rgb(205,31,133)]"></i>
-                    <h2 class="text-3xl font-bebas uppercase">Portfolio Engine</h2>
-                </div>
-                
-                <p class="text-xs text-zinc-500 mb-4 italic">Paste YouTube Links (One per line). IDs will be extracted automatically.</p>
-                <textarea id="v-urls" rows="5" class="w-full p-4 mb-4" placeholder="https://youtube.com/watch?v=..."></textarea>
-                
+                <h3 class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Add Portfolio Videos</h3>
+                <textarea id="v-urls" rows="5" class="w-full p-4 mb-4" placeholder="Paste YouTube Links (One per line)"></textarea>
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <input type="text" id="v-title-common" class="p-3" placeholder="Category/Project Name">
+                    <input type="text" id="v-title" class="p-3" placeholder="Category Title">
                     <label class="flex items-center gap-2 cursor-pointer bg-black/40 rounded-xl px-4">
                         <input type="checkbox" id="v-show-title" checked class="w-5 h-5 accent-[rgb(205,31,133)]">
                         <span class="text-xs font-bold opacity-70">Show Title?</span>
                     </label>
                 </div>
-                
-                <button id="add-v-batch" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-10">Sync to Portfolio</button>
-
-                <h4 class="text-xs uppercase font-bold text-zinc-600 mb-4 tracking-widest">Active Database</h4>
-                <div id="v-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-                    <!-- Dynamic Video List -->
-                </div>
+                <button id="add-v-batch" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-6">Batch Sync</button>
+                <div id="v-list" class="space-y-2 max-h-[400px] overflow-y-auto pr-2"></div>
             </div>
 
-            <!-- RIGHT: CLIENT LOGO UPLOADER -->
+            <!-- CLIENTS -->
             <div class="glass-card p-8">
-                <div class="flex items-center gap-3 mb-8">
-                    <i class="fas fa-users text-2xl text-blue-500"></i>
-                    <h2 class="text-3xl font-bebas uppercase">Client Portal</h2>
-                </div>
-
-                <div class="border-2 border-dashed border-zinc-800 rounded-2xl p-10 text-center mb-6 hover:border-blue-500 transition cursor-pointer" onclick="document.getElementById('c-files').click()">
-                    <i class="fas fa-cloud-upload-alt text-4xl text-zinc-600 mb-4"></i>
-                    <p class="text-sm text-zinc-400">Click to Select Multiple Logos</p>
-                    <input type="file" id="c-files" class="hidden" accept="image/*" multiple>
-                </div>
-
-                <button id="add-c-batch" class="w-full py-4 rounded-xl font-bebas text-xl bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-900/20 transition mb-10">Upload to Assets</button>
-
-                <h4 class="text-xs uppercase font-bold text-zinc-600 mb-4 tracking-widest">Client Roster</h4>
-                <div id="c-list" class="grid grid-cols-3 sm:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto pr-2">
-                    <!-- Dynamic Client List -->
-                </div>
+                <h3 class="text-2xl font-bebas mb-6 uppercase text-blue-500">Add Client Logos</h3>
+                <input type="file" id="c-files" class="w-full mb-4" accept="image/*" multiple>
+                <button id="add-c-batch" class="w-full py-4 rounded-xl font-bebas text-xl bg-blue-600 hover:bg-blue-500 shadow-lg transition mb-6">Batch Upload</button>
+                <div id="c-list" class="grid grid-cols-3 gap-3 max-h-[400px] overflow-y-auto"></div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -165,8 +74,7 @@
             projectId: "dfx-reviews",
             storageBucket: "dfx-reviews.firebasestorage.app",
             messagingSenderId: "71883383009",
-            appId: "1:71883383009:web:7fc96391ad98f5cff357a0",
-            measurementId: "G-FEY260SKQJ"
+            appId: "1:71883383009:web:7fc96391ad98f5cff357a0"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -174,7 +82,7 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
         
-        const adminEmail = "your-email@gmail.com"; // <--- আপনার ইমেইল দিন
+        const adminEmail = "bappadey61@gmail.com";
         const IMGBB_KEY = "6c180ea35e97176e79cde2c007894032";
 
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
@@ -183,9 +91,8 @@
             if (user && user.email === adminEmail) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
-                document.getElementById('admin-info').innerText = "Session: " + user.displayName;
-                loadDashboardData();
-            } else if (user) { auth.signOut(); alert("Unrecognized Admin Credentials!"); }
+                loadData();
+            } else if (user) { auth.signOut(); alert("Access Denied!"); }
         });
 
         function extractID(url) {
@@ -194,49 +101,27 @@
             return (match && match[1]) ? match[1] : (url.trim().length === 11 ? url.trim() : null);
         }
 
-        function loadDashboardData() {
-            // Portfolio
+        function loadData() {
             onSnapshot(query(collection(db, "portfolio"), orderBy("createdAt", "desc")), (snap) => {
                 const list = document.getElementById('v-list'); list.innerHTML = "";
-                document.getElementById('stat-v').innerText = snap.size;
                 snap.forEach(d => {
-                    const data = d.data();
-                    list.innerHTML += `
-                        <div class="flex items-center gap-4 p-3 bg-black/40 rounded-2xl border border-white/5 group relative">
-                            <img src="https://img.youtube.com/vi/${data.id}/default.jpg" class="w-16 rounded-lg">
-                            <div class="flex-1 truncate">
-                                <p class="text-sm font-bold truncate">${data.title}</p>
-                                <p class="text-[10px] text-zinc-500 uppercase">${data.showTitle ? 'Visible' : 'Hidden'}</p>
-                            </div>
-                            <button onclick="deleteItem('portfolio','${d.id}')" class="text-red-900 hover:text-red-500 p-2"><i class="fas fa-trash"></i></button>
-                        </div>`;
+                    list.innerHTML += `<div class="p-2 bg-black/40 rounded-lg flex justify-between border border-white/5 mb-1 truncate text-[10px]">
+                        <span>${d.data().title}</span><i class="fas fa-trash text-red-900 cursor-pointer p-1" onclick="del('portfolio','${d.id}')"></i></div>`;
                 });
             });
-
-            // Clients
             onSnapshot(collection(db, "clients_list"), (snap) => {
                 const list = document.getElementById('c-list'); list.innerHTML = "";
-                document.getElementById('stat-c').innerText = snap.size;
                 snap.forEach(d => {
-                    list.innerHTML += `
-                        <div class="relative group bg-white p-2 rounded-xl h-16 flex items-center justify-center">
-                            <img src="${d.data().url}" class="max-h-full max-w-full object-contain">
-                            <div class="absolute inset-0 bg-red-600/90 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition cursor-pointer" onclick="deleteItem('clients_list','${d.id}')">
-                                <i class="fas fa-trash text-white"></i>
-                            </div>
-                        </div>`;
+                    list.innerHTML += `<div class="relative"><img src="${d.data().url}" class="h-12 w-full object-contain bg-white rounded p-1">
+                    <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 cursor-pointer" onclick="del('clients_list','${d.id}')"></i></div>`;
                 });
             });
-
-            // Reviews Stat
-            onSnapshot(collection(db, "dfx_reviews"), (snap) => document.getElementById('stat-r').innerText = snap.size);
         }
 
         document.getElementById('add-v-batch').onclick = async () => {
             const urls = document.getElementById('v-urls').value.split('\n');
-            const title = document.getElementById('v-title-common').value || "DFX Work";
+            const title = document.getElementById('v-title').value || "DFX Work";
             const showTitle = document.getElementById('v-show-title').checked;
-            
             for(let url of urls) {
                 const vid = extractID(url);
                 if(vid) {
@@ -245,26 +130,24 @@
                     if (check.empty) await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, createdAt: serverTimestamp() });
                 }
             }
-            document.getElementById('v-urls').value = ""; alert("Database Synchronized!");
+            document.getElementById('v-urls').value = ""; alert("Portfolio Updated!");
         };
 
         document.getElementById('add-c-batch').onclick = async () => {
             const files = document.getElementById('c-files').files;
-            if(!files.length) return alert("Please select images!");
+            if(!files.length) return;
             const status = document.getElementById('status-box'); status.style.display="block";
-            
             for(let i=0; i<files.length; i++){
-                status.innerText = `UPLOADING LOGO ${i+1}/${files.length}...`;
+                status.innerText = `Uploading Logo ${i+1}/${files.length}...`;
                 const form = new FormData(); form.append("image", files[i]);
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: form });
                 const json = await res.json();
                 if(json.success) await addDoc(collection(db, "clients_list"), { url: json.data.url });
             }
-            status.innerText = "ALL LOGOS SECURED!";
-            setTimeout(()=>status.style.display="none", 3000);
+            status.style.display="none"; alert("Logos Uploaded!");
         };
 
-        window.deleteItem = async (col, id) => { if(confirm("Permanently delete?")) await deleteDoc(doc(db, col, id)); };
+        window.del = async (col, id) => { if(confirm("Delete?")) await deleteDoc(doc(db, col, id)); };
     </script>
 </body>
 </html>
