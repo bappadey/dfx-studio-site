@@ -27,7 +27,7 @@
 
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
 
-        /* 1. Intro Animation - 135% Bigger */
+        /* 1. Intro Animation - 135% Bigger with Glow */
         #intro { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .intro-img { width: 450px; max-width: 90%; height: auto; filter: drop-shadow(0 0 25px var(--dfx-magenta)); }
 
@@ -39,13 +39,13 @@
             color: var(--dfx-magenta) !important; font-family: 'Bebas Neue'; font-size: 1.3rem; padding: 6px 20px; transition: 0.3s;
             border-radius: 50px; border: 2px solid transparent; letter-spacing: 1px;
         }
-        /* Active Pill State - Matching your drawing */
+        /* Active Pill State */
         .nav-link.active {
             background-color: var(--dfx-purple) !important; color: white !important;
             border: 2px solid var(--dfx-magenta) !important; box-shadow: 0 0 15px rgba(205, 31, 133, 0.4);
         }
 
-        /* 3. Hero Cinema Layout (Strict 16:9, No Overlay) */
+        /* 3. Hero Cinema Layout (Strict 16:9, No Interaction) */
         .hero-section { width: 100%; padding-top: 80px; background: #000; display: flex; flex-direction: column; align-items: center; }
         .cinema-frame { width: 100%; max-width: 1440px; aspect-ratio: 16 / 9; position: relative; overflow: hidden; border-bottom: 2px solid var(--dfx-magenta); }
         .hero-video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; pointer-events: none; }
@@ -63,10 +63,10 @@
         .portfolio-card:hover .portfolio-text { opacity: 0; transform: translateY(10px); }
         .portfolio-card:hover img { transform: scale(1.1); filter: grayscale(0) blur(2px); }
 
-        /* 5. Service Tab Buttons */
+        /* 5. Dynamic Service Tabs */
         #service-buttons { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
         #service-buttons::-webkit-scrollbar { display: none; }
-        .service-btn { background: rgba(255,255,255,0.03); color: #777; font-family: 'Bebas Neue'; font-size: 1.2rem; padding: 10px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; white-space: nowrap; flex-shrink: 0; cursor: pointer; }
+        .service-btn { background: rgba(255,255,255,0.03); color: #777; font-family: 'Bebas Neue'; font-size: 1.2rem; padding: 8px 18px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; white-space: nowrap; flex-shrink: 0; cursor: pointer; }
         .service-btn.active { background: var(--dfx-purple); color: #fff; border-color: var(--dfx-magenta); box-shadow: 0 0 15px rgba(205, 31, 133, 0.3); }
         @media (min-width: 1024px) { #service-buttons { flex-direction: column; overflow-x: visible; } .service-btn { font-size: 1.5rem; padding: 12px 25px; border-radius: 12px; } }
         .service-media-box { width: 100%; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; border: 1px solid var(--dfx-purple); box-shadow: 0 0 30px rgba(47, 28, 82, 0.5); background: #080808; }
@@ -78,10 +78,9 @@
         #avg-score { font-size: 5.5rem; font-family: 'Bebas Neue'; color: #fff; line-height: 1; text-shadow: 0 0 30px rgba(205, 31, 133, 0.4); }
         #typewriter-box { min-height: 60px; font-family: 'Bebas Neue'; color: var(--dfx-magenta); font-size: clamp(1.8rem, 8vw, 3.2rem); text-shadow: 0 0 20px rgba(205, 31, 133, 0.6); }
 
-        /* Global UI Controls */
+        /* Global Controls */
         #mobile-menu { display: none; position: fixed; top: 0; right: 0; width: 85%; height: 100vh; background: var(--dfx-purple); z-index: 100; flex-direction: column; justify-content: center; align-items: center; }
         #videoModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 10000; justify-content: center; align-items: center; }
-        
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
     </style>
@@ -91,7 +90,7 @@
     <!-- 1. Intro Animation -->
     <div id="intro"><img src="Asset/DFX LOGO Intro.gif" alt="DFX Intro" class="intro-img"></div>
 
-    <!-- 2. Header -->
+    <!-- 2. Header Navigation -->
     <header class="fixed top-0 w-full p-4 flex justify-between items-center z-50 px-6 md:px-20">
         <div class="flex items-center">
             <img src="Asset/LOGO.png" alt="DFX" class="w-10 h-10 md:w-14 md:h-14 mr-3">
@@ -108,7 +107,7 @@
         <button class="md:hidden text-3xl text-white" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     </header>
 
-    <!-- Mobile Menu -->
+    <!-- Mobile Sidebar -->
     <div id="mobile-menu">
         <button class="absolute top-6 right-6 text-4xl" onclick="toggleMenu()">&times;</button>
         <a href="#hero" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">HOME</a>
@@ -116,7 +115,7 @@
         <a href="#services" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">SERVICE</a>
         <a href="#clients" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">CLIENTS</a>
         <a href="#user-reviews" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">REVIEWS</a>
-        <a href="#contact" class="text-4xl mb-8 font-bebas" onclick="toggleMenu()">CONTACT</a>
+        <a href="#contact" class="text-4xl font-bebas" onclick="toggleMenu()">CONTACT</a>
     </div>
 
     <!-- 3. Hero Cinema Section -->
@@ -134,7 +133,7 @@
         </div>
     </section>
 
-    <!-- 4. Portfolio Section (Dynamic Sorting) -->
+    <!-- 4. Projects Portfolio (Dynamic Sorting) -->
     <section id="work" class="py-20 px-4 md:px-20 bg-black">
         <h2 class="text-4xl md:text-5xl font-bebas mb-12 text-center border-b-2 border-[rgb(47,28,82)] inline-block w-full uppercase tracking-widest text-white">Portfolio</h2>
         <div id="portfolio-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8"></div>
@@ -145,7 +144,7 @@
         <h2 class="text-4xl md:text-5xl font-bebas mb-12 text-center italic uppercase tracking-widest text-white">Our Expertise</h2>
         <div class="max-w-7xl mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12">
             <div id="service-buttons" class="lg:col-span-4 order-1"></div>
-            <div class="lg:col-span-8 order-2">
+            <div class="lg:col-span-8 order-2 text-white">
                 <div id="service-media" class="service-media-box mb-6"></div>
                 <div id="typewriter-box" class="mb-2"></div>
                 <p id="service-desc" class="text-gray-400 text-lg font-rai leading-relaxed border-l-2 border-[rgb(205,31,133)] pl-6"></p>
@@ -153,7 +152,7 @@
         </div>
     </section>
 
-    <!-- 6. Clients Section -->
+    <!-- 6. Clients Section (Dynamic) -->
     <section id="clients" class="py-20 px-6 text-center bg-black">
         <h2 class="text-3xl md:text-4xl font-bebas mb-12 opacity-30 uppercase italic tracking-widest text-white">Our Partners</h2>
         <div id="clients-container" class="flex flex-wrap justify-center items-center gap-6 md:gap-16"></div>
@@ -169,10 +168,10 @@
             <div class="swiper-pagination"></div>
         </div>
         <div id="auth-area">
-            <button id="login-btn" class="nav-link bg-[rgb(205,31,133)] !text-white rounded-full px-12 py-4 hover:bg-white hover:!text-black transition uppercase">Login with Google to Review</button>
+            <button id="login-btn" class="nav-link bg-[rgb(205,31,133)] !text-white rounded-full px-12 py-4 transition uppercase">Login with Google to Review</button>
         </div>
         <div id="review-form" class="hidden max-w-xl mx-auto bg-black p-10 rounded-[40px] border border-[rgb(47,28,82)] shadow-2xl text-left">
-            <div id="user-info" class="mb-6 flex items-center justify-center gap-4">
+            <div id="user-info" class="mb-6 flex items-center gap-4">
                 <img id="user-pic" src="" class="w-14 h-14 rounded-full border-2 border-[rgb(205,31,133)] shadow-lg">
                 <div><span id="user-name" class="font-bebas text-2xl text-white block"></span><span id="form-mode" class="text-xs text-[rgb(205,31,133)] uppercase font-bold tracking-widest">New Story</span></div>
             </div>
@@ -186,7 +185,7 @@
         <h2 class="text-4xl md:text-5xl font-bebas mb-4 italic uppercase tracking-wider text-white">Overall Satisfaction</h2>
         <div class="max-w-md mx-auto bg-[rgb(5,5,5)] p-12 rounded-[40px] border border-[rgb(47,28,82)] shadow-[0_20px_50px_rgba(47,28,82,0.4)]">
             <div id="avg-score">4.98</div>
-            <div class="text-gray-500 font-bebas tracking-[3px] mb-10 text-sm uppercase">Global Rating (<span id="total-votes">131</span> Votes)</div>
+            <div class="text-gray-500 font-bebas tracking-[3px] mb-10 text-sm uppercase">Global Rating (<span id="total-votes">0</span> Votes)</div>
             <div class="flex justify-center gap-4 md:gap-6 mb-10" id="star-input">
                 <div class="star-box cursor-pointer group" data-value="1"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">1</span></div>
                 <div class="star-box cursor-pointer group" data-value="2"><i class="fas fa-star text-3xl md:text-4xl block mb-2 transition-all"></i><span class="font-bebas text-lg">2</span></div>
@@ -206,7 +205,7 @@
             <a href="https://youtube.com/@DFX-studio" target="_blank" class="hover:text-red-500 transition transform hover:scale-125"><i class="fab fa-youtube"></i></a>
             <a href="https://www.instagram.com/dfxanime/" target="_blank" class="hover:text-[rgb(205,31,133)] transition transform hover:scale-125"><i class="fab fa-instagram"></i></a>
             <a href="https://wa.me/+8801738194746" target="_blank" class="hover:text-green-400 transition transform hover:scale-125"><i class="fab fa-whatsapp"></i></a>
-            <a href="tel:+8809639194746" class="hover:text-yellow-500 transition transform hover:scale-125"><i class="fas fa-phone-alt"></i></a>
+            <a href="tel:+8809639194746" class="hover:text-white transition transform hover:scale-125"><i class="fas fa-phone-alt"></i></a>
             <a href="https://mail.google.com/mail/?view=cm&fs=1&to=info@dfxbd.com&su=Inquiry" target="_blank" class="hover:text-yellow-400 transition transform hover:scale-125"><i class="fas fa-envelope"></i></a>
             <a href="https://maps.app.goo.gl/PvRqmnj43F1qQuBe6" target="_blank" class="hover:text-blue-300 transition transform hover:scale-125"><i class="fas fa-map-marker-alt"></i></a>
         </div>
@@ -261,8 +260,9 @@
             renderServiceTabs();
         }
 
+        // --- SPECIFIC SERVICE SERIAL ---
         const services = [ 
-            { file: 'Liquid.mp4', title: 'FLUID SIM', desc: 'Realistic liquid simulations crafted for ads and films.' }, 
+            { file: 'Liquid.mp4', title: 'FLUID SIM', desc: 'Realistic liquid simulations crafted for high-end commercials.' }, 
             { file: '3DAnimation.mp4', title: '3D DESIGN', desc: 'High-quality 3D Product Modeling & stylized animations tailored for global brands.' }, 
             { file: 'VFX.mp4', title: 'VFX', desc: 'Professional visual effects that bring your wildest imaginations to life.' }, 
             { file: 'Composite.mp4', title: 'COMPOSITE', desc: 'Seamlessly blending digital elements with real footage for cinema and series.' }, 
@@ -279,7 +279,7 @@
                 document.getElementById('service-media').innerHTML = `<video autoplay muted loop playsinline class="w-full h-full object-cover"><source src="Asset/service/${services[index].file}" type="video/mp4"></video>`;
                 startTypewriter(index);
             };
-            switchService(0); // Trigger first service immediately
+            switchService(0); // Trigger immediately on load
         }
 
         let twInterval;
@@ -293,7 +293,7 @@
         window.openVideo = (id) => { document.getElementById('videoPlayer').src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`; document.getElementById('videoModal').style.display = 'flex'; };
         window.closeVideo = () => { document.getElementById('videoPlayer').src = ""; document.getElementById('videoModal').style.display = 'none'; };
 
-        // Scroll highlight & Pill effect logic
+        // Navbar Sync Logic
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section, footer');
             const navLinks = document.querySelectorAll('.nav-link');
@@ -304,7 +304,7 @@
             navLinks.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href').includes(curr)) l.classList.add('active'); });
         });
 
-        // Firebase Logic
+        // Firebase Sync Logics
         const statsRef = doc(db, "global_stats", "ratings");
         onSnapshot(statsRef, (snap) => { if (snap.exists()) { const d = snap.data(); let avg = d.totalScore / d.totalVotes; document.getElementById('avg-score').innerText = (avg < 4.85 ? 4.91 : avg).toFixed(2); document.getElementById('total-votes').innerText = d.totalVotes; } });
         
@@ -323,8 +323,7 @@
             const user = auth.currentUser;
             await setDoc(doc(db, "dfx_reviews", user.uid), { uid: user.uid, name: user.displayName, pic: user.photoURL, text: val, time: Date.now() }, { merge: true });
             emailjs.send("service_zkwwe8d", "template_xoc5h28", { from_name: user.displayName, message: val });
-            alert("Success! Your story is live.");
-            signOut(auth).then(() => { document.getElementById('review-form').classList.add('hidden'); document.getElementById('auth-area').classList.remove('hidden'); });
+            alert("Story saved!"); signOut(auth).then(() => { document.getElementById('review-form').classList.add('hidden'); document.getElementById('auth-area').classList.remove('hidden'); });
         };
 
         const qRev = query(collection(db, "dfx_reviews"), orderBy("time", "desc"));
