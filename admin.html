@@ -12,11 +12,13 @@
         body { background: radial-gradient(circle at top, #1a0b2e 0%, #050505 100%); color: white; font-family: 'Inter', sans-serif; min-height: 100vh; }
         .font-bebas { font-family: 'Bebas Neue', cursive; letter-spacing: 1px; }
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: 0.3s ease; }
-        .glass-card:hover { border-color: var(--dfx-magenta); }
         input, textarea { background: rgba(0,0,0,0.4) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; border-radius: 12px !important; }
         input:focus, textarea:focus { border-color: var(--dfx-magenta) !important; box-shadow: 0 0 15px rgba(205, 31, 133, 0.3); outline: none; }
-        .btn-vfx { background: linear-gradient(135deg, var(--dfx-magenta), #8e145c); text-transform: uppercase; font-weight: bold; transition: 0.3s; }
+        .btn-vfx { background: linear-gradient(135deg, var(--dfx-magenta), #8e145c); text-transform: uppercase; font-weight: bold; transition: 0.3s; cursor: pointer; }
         .btn-vfx:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(205, 31, 133, 0.4); }
+        .btn-update { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
+        .delete-btn { color: #ff4444; cursor: pointer; transition: 0.3s; padding: 10px; }
+        .edit-btn { color: #3b82f6; cursor: pointer; transition: 0.3s; padding: 10px; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
     </style>
@@ -38,24 +40,26 @@
         <div id="status-box" class="hidden mb-6 p-4 rounded-xl bg-magenta-900/20 border border-magenta-500 text-center text-sm"></div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- PORTFOLIO -->
+            <!-- PORTFOLIO SECTION -->
             <div class="glass-card p-8">
-                <h3 class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Add Portfolio Videos</h3>
-                <textarea id="v-urls" rows="5" class="w-full p-4 mb-4" placeholder="Paste YouTube Links (One per line)"></textarea>
+                <h3 id="form-title" class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Add Portfolio Videos</h3>
+                <textarea id="v-urls" rows="4" class="w-full p-4 mb-4" placeholder="Paste YouTube Link(s) (One per line)"></textarea>
                 <div class="grid grid-cols-2 gap-4 mb-4">
-                    <input type="text" id="v-title" class="p-3" placeholder="Category Title">
+                    <input type="text" id="v-title" class="p-3" placeholder="Category/Project Title">
                     <label class="flex items-center gap-2 cursor-pointer bg-black/40 rounded-xl px-4">
                         <input type="checkbox" id="v-show-title" checked class="w-5 h-5 accent-[rgb(205,31,133)]">
                         <span class="text-xs font-bold opacity-70">Show Title?</span>
                     </label>
                 </div>
-                <button id="add-v-batch" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-6">Batch Sync</button>
-                <div id="v-list" class="space-y-2 max-h-[400px] overflow-y-auto pr-2"></div>
+                <button id="add-v-btn" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-4">Batch Sync</button>
+                <button id="cancel-edit" class="hidden w-full py-2 mb-6 text-zinc-500 hover:text-white transition text-xs uppercase font-bold">Cancel Edit Mode</button>
+
+                <div id="v-list" class="space-y-2 max-h-[500px] overflow-y-auto pr-2 mt-4"></div>
             </div>
 
-            <!-- CLIENTS -->
+            <!-- CLIENTS SECTION -->
             <div class="glass-card p-8">
-                <h3 class="text-2xl font-bebas mb-6 uppercase text-blue-500">Add Client Logos</h3>
+                <h3 class="text-2xl font-bebas mb-6 uppercase text-blue-500">Client Logos</h3>
                 <input type="file" id="c-files" class="w-full mb-4" accept="image/*" multiple>
                 <button id="add-c-batch" class="w-full py-4 rounded-xl font-bebas text-xl bg-blue-600 hover:bg-blue-500 shadow-lg transition mb-6">Batch Upload</button>
                 <div id="c-list" class="grid grid-cols-3 gap-3 max-h-[400px] overflow-y-auto"></div>
@@ -66,7 +70,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAIX4Al2mFvSeDCgE01FWGXRuuowJwpjXg",
@@ -74,7 +78,8 @@
             projectId: "dfx-reviews",
             storageBucket: "dfx-reviews.firebasestorage.app",
             messagingSenderId: "71883383009",
-            appId: "1:71883383009:web:7fc96391ad98f5cff357a0"
+            appId: "1:71883383009:web:7fc96391ad98f5cff357a0",
+            measurementId: "G-FEY260SKQJ"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -84,6 +89,8 @@
         
         const adminEmail = "bappadey61@gmail.com";
         const IMGBB_KEY = "6c180ea35e97176e79cde2c007894032";
+
+        let editingId = null; // এডিট মুড ট্র্যাক করার জন্য
 
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
 
@@ -105,32 +112,80 @@
             onSnapshot(query(collection(db, "portfolio"), orderBy("createdAt", "desc")), (snap) => {
                 const list = document.getElementById('v-list'); list.innerHTML = "";
                 snap.forEach(d => {
-                    list.innerHTML += `<div class="p-2 bg-black/40 rounded-lg flex justify-between border border-white/5 mb-1 truncate text-[10px]">
-                        <span>${d.data().title}</span><i class="fas fa-trash text-red-900 cursor-pointer p-1" onclick="del('portfolio','${d.id}')"></i></div>`;
+                    const data = d.data();
+                    list.innerHTML += `<div class="p-3 bg-black/40 rounded-xl flex justify-between items-center border border-white/5 mb-2 group">
+                        <div class="flex items-center gap-3 truncate">
+                            <img src="https://img.youtube.com/vi/${data.id}/default.jpg" class="w-12 rounded">
+                            <div class="truncate text-[11px]"><p class="font-bold truncate text-white">${data.title}</p></div>
+                        </div>
+                        <div class="flex gap-1">
+                            <i class="fas fa-edit edit-btn" onclick="startEdit('${d.id}', '${data.id}', '${data.title}', ${data.showTitle})"></i>
+                            <i class="fas fa-trash delete-btn" onclick="del('portfolio','${d.id}')"></i>
+                        </div>
+                    </div>`;
                 });
             });
             onSnapshot(collection(db, "clients_list"), (snap) => {
                 const list = document.getElementById('c-list'); list.innerHTML = "";
                 snap.forEach(d => {
-                    list.innerHTML += `<div class="relative"><img src="${d.data().url}" class="h-12 w-full object-contain bg-white rounded p-1">
-                    <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 cursor-pointer" onclick="del('clients_list','${d.id}')"></i></div>`;
+                    list.innerHTML += `<div class="relative group bg-white p-2 rounded-xl h-14 flex items-center justify-center">
+                        <img src="${d.data().url}" class="max-h-full max-w-full object-contain">
+                        <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 cursor-pointer text-xs" onclick="del('clients_list','${d.id}')"></i></div>`;
                 });
             });
         }
 
-        document.getElementById('add-v-batch').onclick = async () => {
+        // --- এডিট মোড শুরু করার ফাংশন ---
+        window.startEdit = (docId, videoId, title, showTitle) => {
+            editingId = docId;
+            document.getElementById('v-urls').value = `https://www.youtube.com/watch?v=${videoId}`;
+            document.getElementById('v-title').value = title;
+            document.getElementById('v-show-title').checked = showTitle;
+            
+            document.getElementById('form-title').innerText = "Update Existing Project";
+            document.getElementById('add-v-btn').innerText = "Update Now";
+            document.getElementById('add-v-btn').classList.add('btn-update');
+            document.getElementById('cancel-edit').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // --- এডিট মোড থেকে স্বাভাবিক অবস্থায় ফেরা ---
+        document.getElementById('cancel-edit').onclick = resetForm;
+        function resetForm() {
+            editingId = null;
+            document.getElementById('v-urls').value = "";
+            document.getElementById('v-title').value = "";
+            document.getElementById('form-title').innerText = "Add Portfolio Videos";
+            document.getElementById('add-v-btn').innerText = "Batch Sync";
+            document.getElementById('add-v-btn').classList.remove('btn-update');
+            document.getElementById('cancel-edit').classList.add('hidden');
+        }
+
+        // --- অ্যাড এবং আপডেট করার মূল লজিক ---
+        document.getElementById('add-v-btn').onclick = async () => {
             const urls = document.getElementById('v-urls').value.split('\n');
             const title = document.getElementById('v-title').value || "DFX Work";
             const showTitle = document.getElementById('v-show-title').checked;
-            for(let url of urls) {
-                const vid = extractID(url);
-                if(vid) {
-                    const q = query(collection(db, "portfolio"), where("id", "==", vid));
-                    const check = await getDocs(q);
-                    if (check.empty) await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, createdAt: serverTimestamp() });
+
+            if(editingId) {
+                // UPDATE MODE
+                const vid = extractID(urls[0]);
+                if(!vid) return alert("Invalid Link!");
+                await updateDoc(doc(db, "portfolio", editingId), { id: vid, title, showTitle });
+                alert("Updated Successfully!");
+                resetForm();
+            } else {
+                // ADD MODE
+                for(let url of urls) {
+                    const vid = extractID(url);
+                    if(vid) {
+                        const q = query(collection(db, "portfolio"), where("id", "==", vid));
+                        const check = await getDocs(q);
+                        if (check.empty) await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, createdAt: serverTimestamp() });
+                    }
                 }
+                document.getElementById('v-urls').value = ""; alert("Database Updated!");
             }
-            document.getElementById('v-urls').value = ""; alert("Portfolio Updated!");
         };
 
         document.getElementById('add-c-batch').onclick = async () => {
@@ -144,10 +199,10 @@
                 const json = await res.json();
                 if(json.success) await addDoc(collection(db, "clients_list"), { url: json.data.url });
             }
-            status.style.display="none"; alert("Logos Uploaded!");
+            status.style.display="none"; alert("Uploads Finished!");
         };
 
-        window.del = async (col, id) => { if(confirm("Delete?")) await deleteDoc(doc(db, col, id)); };
+        window.del = async (col, id) => { if(confirm("Confirm Delete?")) await deleteDoc(doc(db, col, id)); };
     </script>
 </body>
 </html>
