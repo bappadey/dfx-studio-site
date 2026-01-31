@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DFX | Command Center</title>
+    <title>DFX | Admin Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Drag & Drop Library -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --dfx-magenta: #CD1F85; --dfx-purple: #2F1C52; }
@@ -14,53 +16,46 @@
         .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; transition: 0.3s ease; }
         input, textarea { background: rgba(0,0,0,0.4) !important; border: 1px solid rgba(255,255,255,0.1) !important; color: white !important; border-radius: 12px !important; outline: none; }
         input:focus, textarea:focus { border-color: var(--dfx-magenta) !important; box-shadow: 0 0 15px rgba(205, 31, 133, 0.3); }
-        .btn-vfx { background: linear-gradient(135deg, var(--dfx-magenta), #8e145c); text-transform: uppercase; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .btn-vfx { background: linear-gradient(135deg, var(--dfx-magenta), #8e145c); text-transform: uppercase; font-weight: bold; transition: 0.3s; cursor: pointer; color: white; }
         .btn-update { background: linear-gradient(135deg, #1e3a8a, #3b82f6) !important; }
         .order-badge { background: var(--dfx-magenta); color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        
-        /* Video Preview Styles */
-        #live-v-preview-container { display: none; margin-top: 15px; text-align: center; }
+        .drag-handle { cursor: grab; color: #555; padding-right: 10px; }
+        .drag-handle:active { cursor: grabbing; }
+        #live-v-preview-container { display: none; margin-top: 15px; }
         .live-thumb { width: 100%; max-width: 280px; border-radius: 12px; border: 2px solid var(--dfx-magenta); box-shadow: 0 0 20px rgba(205, 31, 133, 0.4); margin: 0 auto; }
-        #adminPreviewModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10000; align-items: center; justify-content: center; padding: 20px; }
-        .thumb-preview-list { width: 80px; height: 45px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
-
+        .thumb-preview-list { width: 60px; height: 35px; border-radius: 5px; object-fit: cover; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: var(--dfx-magenta); border-radius: 10px; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <!-- LOGIN -->
     <div id="login-screen" class="flex flex-col items-center justify-center min-h-[80vh]">
         <h1 class="text-6xl font-bebas text-[rgb(205,31,133)] mb-2 drop-shadow-2xl">DFX COMMAND</h1>
-        <p class="text-zinc-500 tracking-[5px] uppercase text-xs mb-10">Authorized Personnel Only</p>
         <button id="login-btn" class="btn-vfx px-12 py-4 rounded-full text-lg">Enter Dashboard</button>
     </div>
 
-    <!-- MAIN PANEL -->
     <div id="admin-content" class="hidden max-w-7xl mx-auto">
-        <div class="flex justify-between items-center mb-12">
+        <div class="flex justify-between items-center mb-10">
             <h2 class="text-3xl font-bebas tracking-widest text-[rgb(205,31,133)] uppercase">Backend System</h2>
             <button id="logout-btn" class="px-6 py-2 bg-red-900/20 border border-red-500 text-red-500 rounded-full font-bebas text-lg hover:bg-red-500 hover:text-white transition">Exit</button>
         </div>
 
-        <div id="status-box" class="hidden mb-6 p-4 rounded-xl bg-magenta-900/20 border border-magenta-500 text-center text-sm"></div>
+        <div id="status-box" class="hidden mb-6 p-4 rounded-xl bg-magenta-900/20 border border-magenta-500 text-center text-sm font-bold"></div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- PORTFOLIO ENGINE -->
+            <!-- PORTFOLIO SECTION -->
             <div class="glass-card p-8">
-                <h3 id="form-title" class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Manage Portfolio</h3>
-                <textarea id="v-urls" rows="3" class="w-full p-4 mb-2 text-sm" placeholder="Paste YouTube Link(s)"></textarea>
+                <h3 id="form-title" class="text-2xl font-bebas mb-6 uppercase text-[rgb(205,31,133)]">Portfolio Engine</h3>
+                <textarea id="v-urls" rows="3" class="w-full p-4 mb-2 text-sm" placeholder="Paste YouTube Link(s) - One per line for batch"></textarea>
                 
-                <!-- LIVE PREVIEW IMAGE AFTER PASTE -->
                 <div id="live-v-preview-container">
-                    <p class="text-[10px] text-zinc-500 uppercase mb-2 font-bold tracking-widest">Link Preview</p>
                     <img id="live-v-thumb" src="" class="live-thumb">
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
                     <input type="text" id="v-title" class="p-3 md:col-span-2" placeholder="Project Title">
-                    <input type="number" id="v-sort" class="p-3" placeholder="Order No.">
+                    <input type="number" id="v-sort" class="p-3" placeholder="Sort No.">
                 </div>
 
                 <div class="flex items-center gap-6 mb-6">
@@ -70,28 +65,24 @@
                     </label>
                 </div>
 
-                <button id="add-v-btn" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-4">Save to Website</button>
+                <button id="add-v-btn" class="btn-vfx w-full py-4 rounded-xl font-bebas text-xl mb-4">Sync to Database</button>
                 <button id="cancel-edit" class="hidden w-full py-2 mb-6 text-zinc-500 uppercase font-bold text-xs hover:text-white">Cancel Edit</button>
 
-                <h4 class="text-xs uppercase font-bold text-zinc-600 mb-4 tracking-widest border-b border-zinc-800 pb-2">Active Projects</h4>
-                <div id="v-list" class="space-y-2 max-h-[500px] overflow-y-auto pr-2 mt-4"></div>
+                <h4 class="text-xs uppercase font-bold text-zinc-600 mb-2 tracking-widest flex justify-between">
+                    <span>Active Projects (Drag to re-order)</span>
+                    <span id="saving-indicator" class="text-green-500 hidden italic">Saving Order...</span>
+                </h4>
+                <div id="v-list" class="space-y-2 max-h-[500px] overflow-y-auto pr-2"></div>
             </div>
 
-            <!-- CLIENT PORTAL -->
-            <div class="glass-card p-8">
-                <h3 class="text-2xl font-bebas mb-6 uppercase text-blue-500">Client Logos</h3>
+            <!-- CLIENTS SECTION -->
+            <div class="glass-card p-8 text-center">
+                <h3 class="text-2xl font-bebas mb-6 uppercase text-blue-500">Client Portal</h3>
                 <input type="file" id="c-files" class="w-full mb-4" accept="image/*" multiple>
-                <button id="add-c-batch" class="w-full py-4 rounded-xl font-bebas text-xl bg-blue-600 hover:bg-blue-500 shadow-lg transition mb-6 uppercase">Upload Logos</button>
-                <div id="c-list" class="grid grid-cols-3 gap-3 max-h-[500px] overflow-y-auto pr-2"></div>
+                <button id="add-c-batch" class="w-full py-4 rounded-xl font-bebas text-xl bg-blue-600 hover:bg-blue-500 shadow-lg transition mb-6 uppercase">Upload Multiple Logos</button>
+                <h4 class="text-xs uppercase font-bold text-zinc-600 mb-4 tracking-widest text-left">Logo Roster (Drag to re-order)</h4>
+                <div id="c-list" class="grid grid-cols-3 sm:grid-cols-4 gap-3 max-h-[500px] overflow-y-auto pr-2"></div>
             </div>
-        </div>
-    </div>
-
-    <!-- PREVIEW MODAL -->
-    <div id="adminPreviewModal">
-        <div class="relative w-full max-w-4xl aspect-video glass-card border-none overflow-hidden">
-            <button onclick="closeAdminPreview()" class="absolute top-4 right-4 z-50 text-white text-3xl opacity-50 hover:opacity-100">&times;</button>
-            <iframe id="adminPreviewPlayer" class="w-full h-full" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -120,28 +111,16 @@
 
         let editingId = null;
 
-        // --- GLOBAL EXPOSED FUNCTIONS ---
-        window.auth = auth;
-        window.openAdminPreview = (id) => {
-            document.getElementById('adminPreviewPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-            document.getElementById('adminPreviewModal').style.display = 'flex';
-        };
-        window.closeAdminPreview = () => {
-            document.getElementById('adminPreviewPlayer').src = "";
-            document.getElementById('adminPreviewModal').style.display = 'none';
-        };
+        // --- EXPOSE TO WINDOW ---
         window.delItem = async (col, id) => { if(confirm("Confirm deletion?")) await deleteDoc(doc(db, col, id)); };
-
         window.startEdit = (docId, videoId, title, showTitle, sortOrder) => {
             editingId = docId;
             document.getElementById('v-urls').value = `https://www.youtube.com/watch?v=${videoId}`;
             document.getElementById('v-title').value = title;
-            document.getElementById('v-sort').value = sortOrder || 0;
+            document.getElementById('v-sort').value = sortOrder;
             document.getElementById('v-show-title').checked = showTitle;
-            
-            // Trigger preview for edit mode
-            updateLivePreview(videoId);
-
+            document.getElementById('live-v-thumb').src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+            document.getElementById('live-v-preview-container').style.display = 'block';
             document.getElementById('form-title').innerText = "Update Project";
             document.getElementById('add-v-btn').innerText = "Confirm Update";
             document.getElementById('add-v-btn').classList.add('btn-update');
@@ -149,36 +128,25 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // UI Interactions
+        // UI Setup
         document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
         document.getElementById('logout-btn').onclick = () => signOut(auth);
         document.getElementById('cancel-edit').onclick = resetForm;
 
-        // --- LIVE PREVIEW LOGIC ---
-        const urlInput = document.getElementById('v-urls');
-        urlInput.addEventListener('input', function() {
-            const lines = this.value.split('\n');
-            const id = extractID(lines[0]); // Preview the first link in batch
-            updateLivePreview(id);
-        });
-
-        function updateLivePreview(id) {
+        // Preview Logic
+        document.getElementById('v-urls').addEventListener('input', function() {
+            const id = extractID(this.value.split('\n')[0]);
             const container = document.getElementById('live-v-preview-container');
-            const thumb = document.getElementById('live-v-thumb');
-            if(id) {
-                thumb.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-                container.style.display = 'block';
-            } else {
-                container.style.display = 'none';
-            }
-        }
+            if(id) { document.getElementById('live-v-thumb').src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`; container.style.display = 'block'; }
+            else container.style.display = 'none';
+        });
 
         onAuthStateChanged(auth, (user) => {
             if (user && user.email === adminEmail) {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('admin-content').classList.remove('hidden');
-                loadData();
-            } else if (user) { signOut(auth); alert("Unauthorized Access!"); }
+                loadDashboard();
+            } else if (user) { signOut(auth); alert("Denied!"); }
         });
 
         function extractID(url) {
@@ -189,88 +157,132 @@
 
         function resetForm() {
             editingId = null;
-            document.getElementById('v-urls').value = "";
-            document.getElementById('v-title').value = "";
-            document.getElementById('v-sort').value = "";
-            updateLivePreview(null);
-            document.getElementById('form-title').innerText = "Add Portfolio Videos";
-            document.getElementById('add-v-btn').innerText = "Save to Website";
+            document.getElementById('v-urls').value = ""; document.getElementById('v-title').value = ""; document.getElementById('v-sort').value = "";
+            document.getElementById('live-v-preview-container').style.display = 'none';
+            document.getElementById('form-title').innerText = "Portfolio Engine";
+            document.getElementById('add-v-btn').innerText = "Sync to Database";
             document.getElementById('add-v-btn').classList.remove('btn-update');
             document.getElementById('cancel-edit').classList.add('hidden');
         }
 
-        function loadData() {
+        function loadDashboard() {
+            // Portfolio List with SortableJS
+            const vList = document.getElementById('v-list');
             onSnapshot(query(collection(db, "portfolio"), orderBy("sortOrder", "asc")), (snap) => {
-                const list = document.getElementById('v-list'); list.innerHTML = "";
+                vList.innerHTML = "";
                 snap.forEach(d => {
                     const p = d.data();
                     const item = document.createElement('div');
-                    item.className = "p-3 bg-black/40 rounded-xl flex justify-between items-center border border-white/5 mb-2";
+                    item.className = "p-2 bg-black/40 rounded-xl flex justify-between items-center border border-white/5 mb-2 hover:border-magenta-500/50 transition";
+                    item.setAttribute('data-id', d.id);
                     item.innerHTML = `
                         <div class="flex items-center gap-3 truncate">
-                            <img src="https://img.youtube.com/vi/${p.id}/default.jpg" class="thumb-preview-list" onclick="openAdminPreview('${p.id}')">
-                            <div class="truncate text-[11px] font-bold text-white">
-                                <p class="truncate">${p.title}</p>
+                            <i class="fas fa-grip-lines drag-handle"></i>
+                            <img src="https://img.youtube.com/vi/${p.id}/default.jpg" class="thumb-preview-list">
+                            <div class="truncate text-[10px]">
+                                <p class="font-bold text-white truncate uppercase">${p.title}</p>
                                 <span class="order-badge">#${p.sortOrder || 0}</span>
                             </div>
                         </div>
                         <div class="flex gap-2">
-                            <i class="fas fa-edit text-blue-500 cursor-pointer p-2" onclick="startEdit('${d.id}', '${p.id}', '${p.title}', ${p.showTitle}, ${p.sortOrder || 0})"></i>
+                            <i class="fas fa-edit text-blue-500 cursor-pointer p-2" onclick="startEdit('${d.id}', '${p.id}', '${p.title}', ${p.showTitle}, ${p.sortOrder})"></i>
                             <i class="fas fa-trash text-red-500 cursor-pointer p-2" onclick="delItem('portfolio','${d.id}')"></i>
                         </div>`;
-                    list.appendChild(item);
+                    vList.appendChild(item);
                 });
             });
 
-            onSnapshot(collection(db, "clients_list"), (snap) => {
-                const list = document.getElementById('c-list'); list.innerHTML = "";
+            new Sortable(vList, {
+                handle: '.drag-handle',
+                animation: 150,
+                onEnd: () => updateOrder('portfolio', 'v-list')
+            });
+
+            // Client List with SortableJS
+            const cList = document.getElementById('c-list');
+            onSnapshot(query(collection(db, "clients_list"), orderBy("sortOrder", "asc")), (snap) => {
+                cList.innerHTML = "";
                 snap.forEach(d => {
                     const item = document.createElement('div');
-                    item.className = "relative group bg-white p-2 rounded-xl h-14 flex items-center justify-center";
-                    item.innerHTML = `
-                        <img src="${d.data().url}" class="max-h-full max-w-full object-contain">
-                        <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 cursor-pointer text-xs" onclick="delItem('clients_list','${d.id}')"></i>`;
-                    list.appendChild(item);
+                    item.className = "relative group bg-white p-2 rounded-xl h-14 flex items-center justify-center cursor-move border-2 border-transparent hover:border-magenta-500";
+                    item.setAttribute('data-id', d.id);
+                    item.innerHTML = `<img src="${d.data().url}" class="max-h-full max-w-full object-contain pointer-events-none">
+                        <i class="fas fa-times-circle absolute -top-1 -right-1 text-red-500 text-xs cursor-pointer" onclick="delItem('clients_list','${d.id}')"></i>`;
+                    cList.appendChild(item);
                 });
+            });
+
+            new Sortable(cList, {
+                animation: 150,
+                onEnd: () => updateOrder('clients_list', 'c-list')
             });
         }
 
+        async function updateOrder(col, listId) {
+            document.getElementById('saving-indicator').classList.remove('hidden');
+            const items = document.getElementById(listId).children;
+            for(let i=0; i<items.length; i++){
+                const docId = items[i].getAttribute('data-id');
+                await updateDoc(doc(db, col, docId), { sortOrder: i + 1 });
+            }
+            setTimeout(() => document.getElementById('saving-indicator').classList.add('hidden'), 1000);
+        }
+
+        // ADD / UPDATE PROJECT
         document.getElementById('add-v-btn').onclick = async () => {
             const urls = document.getElementById('v-urls').value.split('\n');
             const title = document.getElementById('v-title').value || "DFX Project";
-            const sortOrder = parseInt(document.getElementById('v-sort').value) || 0;
+            let sortOrder = parseInt(document.getElementById('v-sort').value);
             const showTitle = document.getElementById('v-show-title').checked;
 
             if(editingId) {
+                // Check if number is duplicate (only if changed)
                 const vid = extractID(urls[0]);
-                await updateDoc(doc(db, "portfolio", editingId), { id: vid, title, showTitle, sortOrder });
+                await updateDoc(doc(db, "portfolio", editingId), { id: vid, title, showTitle, sortOrder: sortOrder || 0 });
                 alert("Updated!"); resetForm();
             } else {
+                // Batch Upload Logic
+                const currentProjects = await getDocs(collection(db, "portfolio"));
+                let nextSort = currentProjects.size + 1;
+
                 for(let url of urls) {
                     const vid = extractID(url);
                     if(vid) {
                         const q = query(collection(db, "portfolio"), where("id", "==", vid));
                         const check = await getDocs(q);
-                        if (check.empty) await addDoc(collection(db, "portfolio"), { id: vid, title, showTitle, sortOrder, createdAt: serverTimestamp() });
+                        if (check.empty) {
+                            await addDoc(collection(db, "portfolio"), { 
+                                id: vid, title, showTitle, 
+                                sortOrder: sortOrder || nextSort, 
+                                createdAt: serverTimestamp() 
+                            });
+                            if(!sortOrder) nextSort++;
+                        }
                     }
                 }
-                document.getElementById('v-urls').value = ""; alert("Added!");
-                updateLivePreview(null);
+                document.getElementById('v-urls').value = ""; alert("Batch Sync Complete!");
             }
         };
 
+        // CLIENT UPLOAD
         document.getElementById('add-c-batch').onclick = async () => {
             const files = document.getElementById('c-files').files;
-            if(!files.length) return alert("Select images");
+            if(!files.length) return alert("Select files!");
+            const currentClients = await getDocs(collection(db, "clients_list"));
+            let nextSort = currentClients.size + 1;
+
             for(let i=0; i<files.length; i++){
                 const f = new FormData(); f.append("image", files[i]);
                 try {
                     const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: f });
                     const j = await res.json();
-                    if(j.success) await addDoc(collection(db, "clients_list"), { url: j.data.url });
-                } catch (e) { console.error(e); }
+                    if(j.success) {
+                        await addDoc(collection(db, "clients_list"), { url: j.data.url, sortOrder: nextSort });
+                        nextSort++;
+                    }
+                } catch (e) {}
             }
-            alert("Logos Uploaded!");
+            alert("Upload Complete!");
         };
     </script>
 </body>
