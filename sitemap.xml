@@ -6,19 +6,23 @@
   </url>
 
   <url>
-    <loc>https://dfxbd.com/projects</loc>
+    <loc>https://dfxbd.com/#work</loc>
   </url>
 
   <url>
-    <loc>https://dfxbd.com/services</loc>
+    <loc>https://dfxbd.com/#services</loc>
   </url>
 
   <url>
-    <loc>https://dfxbd.com/clients</loc>
+    <loc>https://dfxbd.com/#clients</loc>
   </url>
 
   <url>
-    <loc>https://dfxbd.com/contact</loc>
+    <loc>https://dfxbd.com/#user-reviews</loc>
+  </url>
+
+  <url>
+    <loc>https://dfxbd.com/#contact</loc>
   </url>
 
 </urlset>
